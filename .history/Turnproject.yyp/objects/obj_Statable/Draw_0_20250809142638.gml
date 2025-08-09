@@ -1,3 +1,6 @@
+// === SHARED COMBAT ENTITY RENDERING ===
+// This handles all common visual elements for Player and Enemy objects
+
 // Check for damage to trigger flash
 if (hp < last_hp) {
     damage_flash = 10; // Flash for 10 frames
@@ -9,10 +12,10 @@ if (damage_flash > 0) {
     damage_flash--;
 }
 
-// Draw the enemy sprite with appropriate tint
+// Draw the sprite with appropriate tint
 var sprite_color = c_white;
 if (state == TURNSTATE.active) {
-    sprite_color = c_purple;  // Yellow tint for active turn
+    sprite_color = c_purple;  // Purple tint for active turn
 }
 
 if (damage_flash > 0) {
@@ -30,9 +33,3 @@ draw_text_transformed(x, y - 20, string(hp) + "/" + string(max_hp), 0.5, 0.5, 0)
 // Reset text alignment
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
-
-
-
-
-
-

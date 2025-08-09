@@ -14,8 +14,8 @@
     "path":"folders/Objects.yy",
   },
   "parentObjectId":{
-    "name":"obj_Statable",
-    "path":"objects/obj_Statable/obj_Statable.yy",
+    "name":"character_base",
+    "path":"objects/character_base/character_base.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -34,7 +34,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":null,
+  "spriteId":{
+    "name":"ch1_down_att",
+    "path":"sprites/ch1_down_att/ch1_down_att.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

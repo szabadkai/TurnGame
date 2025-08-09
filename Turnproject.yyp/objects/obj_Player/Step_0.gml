@@ -30,14 +30,6 @@ if (state == TURNSTATE.active) {
             }
         }
     }
-    
-    if (keyboard_check_pressed(ord("I"))) {
-        if (variable_global_exists("combat_log")) global.combat_log("=== CURRENT WEAPON ===");
-        if (variable_global_exists("combat_log")) global.combat_log("Name: " + weapon_name);
-        if (variable_global_exists("combat_log")) global.combat_log("Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier) + " | Attack: +" + string(weapon_attack_bonus));
-        if (variable_global_exists("combat_log")) global.combat_log("Final Stats: +" + string(attack_bonus) + " attack, +" + string(damage_modifier) + " dmg mod, " + string(defense_score) + " defense");
-        if (variable_global_exists("combat_log")) global.combat_log("Special: " + global.weapons[equipped_weapon_id].description);
-    }
 }
 
 //Move
@@ -182,6 +174,10 @@ if (anim_state == State.ATTACK && is_anim) {
             
             if (target_enemy.hp <= 0) {
                 if (variable_global_exists("combat_log")) global.combat_log(object_get_name(target_enemy.object_index) + " is defeated!");
+                
+                // Award XP to entire party using new distribution system
+                var xp_reward = target_enemy.xp_value;
+                distribute_party_xp(xp_reward);
             }
         }
 		
@@ -204,8 +200,22 @@ if (state == TURNSTATE.active && moves == 0) {
 	alarm[0] = 1;
 }
 
-//death at 0 hp
+// === DEATH HANDLING ===
 if (hp <= 0) {
-	instance_destroy();
-	ds_list_delete(obj_TurnManager.turn_list, ds_list_find_index(obj_TurnManager.turn_list, id))
+    // Log player death
+    if (variable_global_exists("combat_log")) {
+        global.combat_log("*** " + character_name + " HAS DIED! ***");
+    }
+    
+    // Remove from turn list BEFORE destroying instance
+    var turn_index = ds_list_find_index(obj_TurnManager.turn_list, id);
+    if (turn_index >= 0) {
+        ds_list_delete(obj_TurnManager.turn_list, turn_index);
+    }
+    
+    // Destroy the instance
+    instance_destroy();
 }
+
+
+

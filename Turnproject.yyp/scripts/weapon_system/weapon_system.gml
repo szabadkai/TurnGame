@@ -16,8 +16,8 @@ function init_weapons() {
     
     // 1. Basic & Precision Weapons
     global.weapons[0] = create_weapon("Fists", 1, "1d1", 0, "none", "Your bare hands - always deal 1 damage");
-    global.weapons[1] = create_weapon("Rapier", 2, "1d8", 1, "crit_18", "Finesse weapon - Critical hits on 18-20");
-    global.weapons[2] = create_weapon("Assassin's Blade", 1, "1d4", 2, "instant_kill", "Deadly precision - Instant kill on natural 20");
+    global.weapons[1] = create_weapon("Rapier", 2, "1d8", 1, "finesse", "Finesse weapon - Uses DEX for attacks");
+    global.weapons[2] = create_weapon("Assassin's Blade", 1, "1d4", 2, "finesse", "Deadly precision - Uses DEX for attacks");
     
     // 2. Magical Weapons  
     global.weapons[3] = create_weapon("Lightning Staff", 0, "1d6", 2, "chain_lightning", "Magical focus - Chain lightning to adjacent foes");
@@ -47,16 +47,25 @@ function update_combat_stats() {
     weapon_damage_modifier = weapon.damage_modifier;
     weapon_special_type = weapon.special_type;
     
-    // Calculate final combat stats
-    attack_bonus = base_attack_bonus + weapon_attack_bonus;
-    damage_modifier = base_damage_modifier + weapon_damage_modifier;
-    defense_score = base_defense_score + weapon_defense_bonus;
+    // Update ability modifiers (in case they changed from leveling)
+    update_ability_modifiers(self);
+    
+    // Update proficiency bonus based on current level
+    proficiency_bonus = get_proficiency_bonus(level);
+    
+    // Calculate final combat stats using new ability score system
+    // For now, use STR for melee weapons, DEX for finesse weapons
+    var ability_mod = (weapon_special_type == "finesse" || weapon.name == "Rapier") ? dex_mod : str_mod;
+    
+    attack_bonus = proficiency_bonus + ability_mod + weapon_attack_bonus;
+    damage_modifier = ability_mod + weapon_damage_modifier;
+    
+    // Calculate defense (AC = base armor class + DEX mod + special bonuses)
+    defense_score = base_armor_class + dex_mod;
     
     // Special defense bonus for Shield & Sword
     if (weapon_special_type == "defense_boost") {
-        defense_score = base_defense_score + 3;
-    } else {
-        defense_score = base_defense_score;
+        defense_score += 3;
     }
 }
 
@@ -115,7 +124,15 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
             
         case "self_harm":
             attacker.hp -= 1;
-            if (variable_global_exists("combat_log")) global.combat_log("BERSERKER RAGE! " + object_get_name(attacker.object_index) + " takes 1 damage from fury!");
+            if (variable_global_exists("combat_log")) {
+                var attacker_name = (object_get_name(attacker.object_index) == "obj_Player") ? attacker.character_name : object_get_name(attacker.object_index);
+                global.combat_log("BERSERKER RAGE! " + attacker_name + " takes 1 damage from fury! (HP: " + string(attacker.hp) + "/" + string(attacker.max_hp) + ")");
+                
+                // Warning if attacker is getting low on health
+                if (attacker.hp <= 3 && object_get_name(attacker.object_index) == "obj_Player") {
+                    global.combat_log("WARNING: " + attacker_name + " is critically injured from berserker rage!");
+                }
+            }
             break;
     }
     

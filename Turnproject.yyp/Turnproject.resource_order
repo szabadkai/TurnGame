@@ -1,13 +1,17 @@
 {
   "FolderOrderSettings":[],
   "ResourceOrderSettings":[
+    {"name":"character_base","order":1,"path":"objects/character_base/character_base.yy",},
     {"name":"obj_c_graphics","order":5,"path":"objects/obj_c_graphics/obj_c_graphics.yy",},
     {"name":"obj_Enemy","order":3,"path":"objects/obj_Enemy/obj_Enemy.yy",},
-    {"name":"obj_Statable","order":1,"path":"objects/obj_Statable/obj_Statable.yy",},
+    {"name":"obj_LevelUpOverlay","order":7,"path":"objects/obj_LevelUpOverlay/obj_LevelUpOverlay.yy",},
+    {"name":"obj_PlayerDetails","order":6,"path":"objects/obj_PlayerDetails/obj_PlayerDetails.yy",},
     {"name":"obj_TurnManager","order":2,"path":"objects/obj_TurnManager/obj_TurnManager.yy",},
+    {"name":"obj_UIManager","order":8,"path":"objects/obj_UIManager/obj_UIManager.yy",},
     {"name":"damage_text_to_value","order":2,"path":"scripts/damage_text_to_value/damage_text_to_value.yy",},
     {"name":"move","order":3,"path":"scripts/move/move.yy",},
     {"name":"weapon_system","order":4,"path":"scripts/weapon_system/weapon_system.yy",},
+    {"name":"xp_system","order":5,"path":"scripts/xp_system/xp_system.yy",},
     {"name":"ch1_down_att","order":9,"path":"sprites/ch1_down_att/ch1_down_att.yy",},
     {"name":"ch1_down_idle","order":25,"path":"sprites/ch1_down_idle/ch1_down_idle.yy",},
     {"name":"ch1_down_run","order":19,"path":"sprites/ch1_down_run/ch1_down_run.yy",},
