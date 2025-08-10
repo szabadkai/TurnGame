@@ -140,7 +140,7 @@ if (!variable_instance_exists(id, "prev_weapon_button")) {
 var prev_btn_x = text_x + 80;
 var prev_btn_y = weapon_name_y;
 var button_w = 60;
-var button_h = 18;
+var button_h = 16;
 
 prev_weapon_button.x = prev_btn_x;
 prev_weapon_button.y = prev_btn_y;

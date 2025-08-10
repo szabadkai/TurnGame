@@ -195,17 +195,15 @@ if (anim_state == State.ATTACK && is_anim) {
 // ensure whatever
 sprite_index = spr_matrix[dir][anim_state];
 
-//pass to space
-if (state == TURNSTATE.active && moves == 0) {
-	alarm[0] = 1;
-}
-
-// === DEATH HANDLING ===
+// === DEATH HANDLING (CHECK FIRST) ===
 if (hp <= 0) {
     // Log player death
     if (variable_global_exists("combat_log")) {
         global.combat_log("*** " + character_name + " HAS DIED! ***");
     }
+    
+    // If this player was taking its turn, we need to pass the turn
+    var was_active = (state == TURNSTATE.active);
     
     // Remove from turn list BEFORE destroying instance
     var turn_index = ds_list_find_index(obj_TurnManager.turn_list, id);
@@ -213,8 +211,22 @@ if (hp <= 0) {
         ds_list_delete(obj_TurnManager.turn_list, turn_index);
     }
     
+    // If player was active, trigger turn rotation to next character
+    if (was_active) {
+        state = TURNSTATE.inactive;  // Clean up state
+        with(obj_TurnManager) {
+            event_user(0);  // Rotate to next turn
+        }
+    }
+    
     // Destroy the instance
     instance_destroy();
+    exit; // Stop processing this step event
+}
+
+//pass to space
+if (state == TURNSTATE.active && moves == 0) {
+	alarm[0] = 1;
 }
 
 

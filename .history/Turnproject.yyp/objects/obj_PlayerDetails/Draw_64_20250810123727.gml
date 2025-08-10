@@ -138,9 +138,9 @@ if (!variable_instance_exists(id, "prev_weapon_button")) {
 
 // Previous weapon button
 var prev_btn_x = text_x + 80;
-var prev_btn_y = weapon_name_y;
+var prev_btn_y = weapon_name_y + 2;
 var button_w = 60;
-var button_h = 18;
+var button_h = 16;
 
 prev_weapon_button.x = prev_btn_x;
 prev_weapon_button.y = prev_btn_y;
@@ -156,7 +156,7 @@ var prev_hover = (mouse_gui_x >= prev_btn_x && mouse_gui_x <= prev_btn_x + butto
 draw_set_color(prev_hover ? c_yellow : c_ltgray);
 draw_rectangle(prev_btn_x, prev_btn_y, prev_btn_x + button_w, prev_btn_y + button_h, true);
 draw_set_halign(fa_center);
-draw_text(prev_btn_x + button_w/2, prev_btn_y, "◀ PREV");
+draw_text(prev_btn_x + button_w/2, prev_btn_y + 2, "◀ PREV");
 draw_set_halign(fa_left);
 
 // Weapon name
@@ -179,7 +179,7 @@ var next_hover = (mouse_gui_x >= next_btn_x && mouse_gui_x <= next_btn_x + butto
 draw_set_color(next_hover ? c_yellow : c_ltgray);
 draw_rectangle(next_btn_x, next_btn_y, next_btn_x + button_w, next_btn_y + button_h, true);
 draw_set_halign(fa_center);
-draw_text(next_btn_x + button_w/2, next_btn_y , "NEXT ▶");
+draw_text(next_btn_x + button_w/2, next_btn_y + 2, "NEXT ▶");
 draw_set_halign(fa_left);
 draw_set_color(c_white);
 current_y += line_height;

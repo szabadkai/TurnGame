@@ -57,10 +57,15 @@ attack_bonus = proficiency_bonus + str_mod;  // Most enemies use STR for attacks
 damage_modifier = str_mod;
 defense_score = base_armor_class + dex_mod;
 
+// Assign weapon based on enemy type
+var enemy_weapon_ids = [10, 11, 12, 13, 14];  // Rusty Dagger, Club, Bone Claws, Fangs, Bandit Blade
+equipped_weapon_id = enemy_weapon_ids[my_index % array_length(enemy_weapon_ids)];
+
+// Update combat stats with weapon (this sets weapon_damage_dice, etc.)
+update_combat_stats();
+
 // Enemy-specific properties
 enemy_type = "Goblin";
-weapon_name = "Claws";
-weapon_special_type = "none";
 
 // XP value when killed (varies by enemy type) - Increased for faster testing
 var xp_values = [60, 75, 50, 85, 40];  // XP for each enemy type  

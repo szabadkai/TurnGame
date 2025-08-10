@@ -33,6 +33,13 @@ function init_weapons() {
     
     // 5. Risk/Reward Weapons
     global.weapons[9] = create_weapon("Berserker Axe", 2, "1d12", 4, "self_harm", "Brutal weapon - High damage but self-harm");
+    
+    // 6. Enemy Weapons (Always 1 damage)
+    global.weapons[10] = create_weapon("Rusty Dagger", 0, "1d1", 0, "none", "Crude blade - Minimal damage");
+    global.weapons[11] = create_weapon("Crude Club", 0, "1d1", 0, "none", "Simple bludgeon - Basic attack");
+    global.weapons[12] = create_weapon("Bone Claws", 0, "1d1", 0, "none", "Skeletal talons - Scraping damage");
+    global.weapons[13] = create_weapon("Fangs", 0, "1d1", 0, "none", "Natural bite - Quick strikes");
+    global.weapons[14] = create_weapon("Bandit Blade", 0, "1d1", 0, "none", "Worn shortsword - Dulled edge");
 }
 
 function update_combat_stats() {

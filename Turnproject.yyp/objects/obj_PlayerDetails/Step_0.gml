@@ -20,11 +20,59 @@ if (visible) {
         }
     }
     
+    // Handle weapon cycling button clicks
+    if (mouse_check_button_pressed(mb_left) && instance_exists(player_instance)) {
+        var mouse_gui_x = device_mouse_x_to_gui(0);
+        var mouse_gui_y = device_mouse_y_to_gui(0);
+        
+        // Check if buttons exist (they're created in Draw event)
+        if (variable_instance_exists(id, "prev_weapon_button") && variable_instance_exists(id, "next_weapon_button")) {
+            
+            // Previous weapon button
+            if (mouse_gui_x >= prev_weapon_button.x && mouse_gui_x <= prev_weapon_button.x + prev_weapon_button.w &&
+                mouse_gui_y >= prev_weapon_button.y && mouse_gui_y <= prev_weapon_button.y + prev_weapon_button.h) {
+                cycle_weapon(player_instance, -1);
+            }
+            
+            // Next weapon button
+            if (mouse_gui_x >= next_weapon_button.x && mouse_gui_x <= next_weapon_button.x + next_weapon_button.w &&
+                mouse_gui_y >= next_weapon_button.y && mouse_gui_y <= next_weapon_button.y + next_weapon_button.h) {
+                cycle_weapon(player_instance, 1);
+            }
+        }
+    }
+    
     // Safety check: if current player is destroyed, close details or switch to valid player
     if (array_length(player_list) == 0) {
         visible = false;
     } else if (!instance_exists(player_instance) || current_player_index >= array_length(player_list)) {
         current_player_index = 0;
         player_instance = player_list[current_player_index];
+    }
+}
+
+// Function to cycle through player weapons
+function cycle_weapon(player, direction) {
+    if (!instance_exists(player)) return;
+    
+    // Only cycle through player weapons (IDs 0-9), exclude enemy weapons (10-14)
+    var max_player_weapons = 10;
+    
+    if (direction > 0) {
+        // Next weapon
+        player.equipped_weapon_id = (player.equipped_weapon_id + 1) % max_player_weapons;
+    } else {
+        // Previous weapon  
+        player.equipped_weapon_id = (player.equipped_weapon_id - 1 + max_player_weapons) % max_player_weapons;
+    }
+    
+    // Update combat stats with new weapon
+    with(player) {
+        update_combat_stats();
+    }
+    
+    // Log weapon change
+    if (variable_global_exists("combat_log")) {
+        global.combat_log(player.character_name + " equipped: " + player.weapon_name);
     }
 }
