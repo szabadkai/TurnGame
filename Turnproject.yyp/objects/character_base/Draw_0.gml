@@ -12,10 +12,17 @@ if (damage_flash > 0) {
     damage_flash--;
 }
 
-// Draw turn indicator ellipse under character if active
+// Draw turn indicator under character if active
 if (state == TURNSTATE.active) {
+    // Draw a filled, semi-transparent ellipse to look chunkier at zoom scale
     draw_set_color(c_white);
-    draw_ellipse(x - 7, y + 4, x + 7, y + 9, true);  // Outline
+    var x1 = floor(x - 7);
+    var y1 = floor(y + 4);
+    var x2 = floor(x + 7);
+    var y2 = floor(y + 9);
+    draw_set_alpha(0.4);
+    draw_ellipse(x1, y1, x2, y2, false); // filled
+    draw_set_alpha(1);
 }
 
 // Draw the sprite (normal color or red flash)

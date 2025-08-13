@@ -26,5 +26,8 @@
     {"name":"ch1_up_run","order":18,"path":"sprites/ch1_up_run/ch1_up_run.yy",},
     {"name":"dummy","order":21,"path":"sprites/dummy/dummy.yy",},
     {"name":"spr_active","order":22,"path":"sprites/spr_active/spr_active.yy",},
+    {"name":"Sprite15","order":28,"path":"sprites/Sprite15/Sprite15.yy",},
+    {"name":"Sprite16","order":29,"path":"sprites/Sprite16/Sprite16.yy",},
+    {"name":"Sprite17","order":30,"path":"sprites/Sprite17/Sprite17.yy",},
   ],
 }

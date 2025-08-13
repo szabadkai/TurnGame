@@ -9,7 +9,7 @@ window_set_position(display_get_width()/2 - window_width/2, display_get_height()
 surface_resize(application_surface, view_width, view_height);
 
 //zoom setup
-zoom = 4;
+zoom = 1;
 
 
 
