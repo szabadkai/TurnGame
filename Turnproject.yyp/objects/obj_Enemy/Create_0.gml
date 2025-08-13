@@ -70,3 +70,25 @@ enemy_type = "Goblin";
 // XP value when killed (varies by enemy type) - Increased for faster testing
 var xp_values = [60, 75, 50, 85, 40];  // XP for each enemy type  
 xp_value = xp_values[my_index % array_length(xp_values)];
+
+// === SPRITE ANIMATION SYSTEM ===
+// Add sprite animation system like obj_Player
+is_anim = false;
+target_player = 0;
+
+// Initialize enums (defined in scr_enums.gml)
+scr_enums();
+
+// Initialize sprite matrix based on character_index
+// Default to character index based on enemy type if not set from IDE
+global.combat_log(character_index);
+if (character_index == 1) {  // If still default, set based on enemy type
+    var enemy_char_indices = [1, 2, 3, 4, 5, 6];  // Different character sprites for each enemy type
+    character_index = enemy_char_indices[my_index % array_length(enemy_char_indices)];
+}
+
+spr_matrix = init_character_sprite_matrix(character_index);
+
+dir = Dir.DOWN;
+anim_state = State.IDLE;
+image_speed = 1.0;

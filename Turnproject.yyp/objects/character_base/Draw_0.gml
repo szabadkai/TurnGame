@@ -37,7 +37,7 @@ draw_set_color(c_white);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 //draw_text_transformed(x, y - 16, character_name, 0.25, 0.25, 0);
-draw_text_transformed(x, y - 10, string(hp), 0.3, 0.3, 0);
+draw_text_transformed(x, y-10 , string(hp), 0.3, 0.3, 0);
 
 // Reset text alignment
 draw_set_halign(fa_left);

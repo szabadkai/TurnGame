@@ -83,21 +83,11 @@ update_combat_stats();
 is_anim = false;
 target_enemy = 0;
 
-enum Dir {UP,
-			DOWN,
-			LEFT,
-			RIGHT};
+// Initialize enums (defined in scr_enums.gml)
+scr_enums();
 
-enum State {IDLE,
-			RUN,
-			ATTACK};
-
-spr_matrix = [
-    [ch1_up_idle, ch1_up_run, ch1_up_att],
-    [ch1_down_idle, ch1_down_run, ch1_down_att],
-    [ch1_left_idle, ch1_left_run, ch1_left_att],
-    [ch1_right_idle, ch1_right_run, ch1_right_att]
-];
+// Initialize sprite matrix based on character_index
+spr_matrix = init_character_sprite_matrix(character_index);
 
 dir = Dir.DOWN;
 anim_state = State.IDLE;

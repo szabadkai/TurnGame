@@ -8,7 +8,9 @@
   ],
   "managed":true,
   "name":"obj_Enemy",
-  "overriddenProperties":[],
+  "overriddenProperties":[
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"character_base","path":"objects/character_base/character_base.yy",},"propertyId":{"name":"character_index1","path":"objects/character_base/character_base.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"3",},
+  ],
   "parent":{
     "name":"Objects",
     "path":"folders/Objects.yy",
@@ -30,13 +32,15 @@
   "physicsShape":1,
   "physicsShapePoints":[],
   "physicsStartAwake":true,
-  "properties":[],
+  "properties":[
+    {"$GMObjectProperty":"v1","%Name":"character_index","filters":[],"listItems":[],"multiselect":false,"name":"character_index","rangeEnabled":true,"rangeMax":7.0,"rangeMin":2.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"2","varType":1,},
+  ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"dummy",
-    "path":"sprites/dummy/dummy.yy",
+    "name":"chr3_attack_sword_left",
+    "path":"sprites/chr3_attack_sword_left/chr3_attack_sword_left.yy",
   },
   "spriteMaskId":null,
   "visible":true,

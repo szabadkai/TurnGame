@@ -35,6 +35,12 @@ The game implements a sophisticated turn-based system with the following key com
 - **Special mechanics** including freeze, burn, reflection, counter-attacks, and self-harm
 - **Dynamic stats** - Weapons modify attack/damage based on ability scores and proficiency
 
+### Character Sprite System
+- **Multiple character sprites** - Support for chr1 through chr7 sprite sets with full animations
+- **IDE-assignable character_index** - Set character appearance (1-7) directly in GameMaker IDE object properties
+- **Automatic fallback** - Missing sprites fall back to chr1, then to dummy sprite if needed
+- **Full animation support** - Each character has idle, run_sword, and attack_sword animations for all 4 directions
+
 ### UI Management
 - **`obj_UIManager`** - Centralized UI state handling for player details and level-up overlays
 - **`obj_PlayerDetails`** - Character sheet display with full ability score information
@@ -44,6 +50,7 @@ The game implements a sophisticated turn-based system with the following key com
 ### Key Script Systems
 - **`xp_system.gml`** - Complete leveling system with ASI management and party XP distribution
 - **`weapon_system.gml`** - Weapon definitions, special attacks, and combat calculations
+- **`character_sprites.gml`** - Character sprite lookup system supporting chr1-chr7 sprite sets
 - **`scr_enums.gml`** - Core enumerations including TURNSTATE
 - **`move.gml`** - Movement function handling directional movement with speed and animation
 - **`damage_text_to_value.gml`** - Utility for damage calculation and display
@@ -51,15 +58,23 @@ The game implements a sophisticated turn-based system with the following key com
 ## Development Commands
 
 ### GameMaker Studio 2 IDE
-- **Open Project**: Open `Turnproject.yyp/Turnproject.yyp` with GameMaker Studio 2 (2023+)
-- **Run/Test**: Press F5 to launch the default room
+- **Open Project**: Open `Turnproject.yyp/Turnproject.yyp` with GameMaker Studio 2 (2024.13+)
+- **Run/Test**: Press F5 to launch Room1 (main game room)
 - **Debug**: Press F6 and set breakpoints in object events/scripts  
 - **Build**: IDE → Build → Create Executable
 
-### Testing
-- **Manual Testing**: Use test documentation files like `test_level_system.md`
-- **Debug Tools**: Use debugger and on-screen overlays for logs during runs
-- **Test Rooms**: Create temporary test rooms as `rm_test_*` with helper `obj_test_*` objects
+### In-Game Testing Controls
+- **Player Details**: Press 'I' to toggle character sheet with ability scores and combat stats
+- **Level Up Interface**: Press 'I' when ASI (Ability Score Improvement) is available
+- **Weapon Switching**: Use number keys 1-9 to switch between available weapons
+- **Movement**: Arrow keys to move player character
+- **Attack**: Space bar to attack enemies in range
+
+### Testing Documentation
+- **Manual Testing**: Use `test_level_system.md` for comprehensive D&D mechanics testing
+- **Level Up Testing**: XP values adjusted for faster testing (enemies give 40-85 XP)
+- **ASI Testing**: Reach level 4, 8, 12, 16, or 20 to trigger Ability Score Improvement
+- **Debug Tools**: Combat log displays all actions and calculations in real-time
 
 ## Architecture Patterns
 
@@ -83,14 +98,26 @@ The game implements a sophisticated turn-based system with the following key com
 ## Development Notes
 
 ### GameMaker Studio 2 Specifics
-- This is a **converted project** from .yyp format
+- This is a **converted project** from .yyp format (requires GameMaker Studio 2024.13+)
 - Uses GML (GameMaker Language) syntax with event-driven object system
-- Sprite animations use frame-based system with directional naming conventions
-- Global variables manage shared systems (weapons, combat log)
+- Sprite animations use frame-based system with directional naming conventions (`ch1_down_att`, `ch1_left_idle`)
+- Global variables manage shared systems (weapons array, combat log function)
+- Room1 contains all game instances - TurnManager, Player, Enemies, and UI objects
+
+### Critical System Dependencies
+- **`obj_TurnManager`** must exist in Room1 for turn-based combat to function
+- **UI System Failsafe**: TurnManager Alarm[1] creates missing UI objects (PlayerDetails, UIManager, LevelUpOverlay)
+- **Global Systems**: `init_weapons()` and XP system functions must be called during initialization
+- **Combat Log**: Global function `global.combat_log()` provides debugging and player feedback
+
+### Object Instance Management
+- **Layer System**: Objects created on "Instances" layer with fallback to depth-based creation
+- **Singleton UI**: UI objects (PlayerDetails, UIManager, LevelUpOverlay) should have single instances
+- **Character Inheritance**: All combat entities inherit from `character_base` for turn system integration
 
 ### File Structure Patterns
 - **`.gml`** - GameMaker Language script files containing functions and events
-- **`.yy`** - GameMaker resource definition files (JSON format, auto-generated)
+- **`.yy`** - GameMaker resource definition files (JSON format, auto-generated, do not edit manually)
 - **`.png`** - Sprite assets organized by character and animation state
 
 ## Code Conventions
@@ -100,3 +127,35 @@ The game implements a sophisticated turn-based system with the following key com
 - **Sprites**: descriptive naming with state (e.g., `ch1_down_att`, `ch1_left_idle`)
 - **Enums**: UPPERCASE naming (e.g., `TURNSTATE.active`, `TURNSTATE.inactive`)
 - **Functions**: verb_noun pattern where appropriate (e.g., `gain_xp`, `update_combat_stats`)
+
+## Common Development Patterns
+
+### Adding New Weapons
+1. Add weapon definition to `weapon_system.gml` in `init_weapons()` function
+2. Increment the array index and add `create_weapon()` call with special_type
+3. Implement special attack logic in combat resolution functions
+4. Test with weapon switching keys (1-9) in-game
+
+### Using Character Sprite System
+1. **In IDE**: Select obj_Player or obj_Enemy instance, set character_index property (1-7) in object properties
+2. **In Code**: Set `character_index = X` before calling `init_character_sprite_matrix(character_index)`
+3. **Sprite Requirements**: Ensure sprites follow naming pattern `chr[index]_[action]_[direction]` (e.g., `chr3_idle_down`)
+4. **Fallback System**: Missing sprites automatically fall back to chr1 equivalents
+
+### Debugging Combat Issues
+- Check `global.combat_log()` output in real-time during gameplay
+- Verify `character_base` inheritance for new combat entities
+- Ensure `update_combat_stats()` called after ability score changes
+- Use GameMaker debugger to inspect `turn_list` contents
+
+### UI System Issues
+- If UI objects missing: TurnManager Alarm[1] creates them automatically
+- UI overlays controlled by `obj_UIManager` singleton
+- Player details accessible via 'I' key (handled in UIManager Step event)
+- ASI overlay triggers automatically on level-up at ASI levels (4,8,12,16,20)
+
+### Performance Considerations
+- Turn system uses `ds_list` for turn_list management - always clean up with `ds_list_destroy()`
+- Combat log stored as global function to minimize memory allocation
+- Sprite animations cached by GameMaker - avoid frequent sprite swapping
+- Use `alarm` events instead of Step events for delayed actions when possible

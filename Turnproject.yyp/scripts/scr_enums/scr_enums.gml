@@ -5,4 +5,17 @@ enum TURNSTATE {
 	active,
 	inactive
 }
+
+enum Dir {
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+}
+
+enum State {
+	IDLE,
+	RUN,
+	ATTACK
+}
 }

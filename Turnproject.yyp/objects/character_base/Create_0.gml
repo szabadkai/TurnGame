@@ -4,6 +4,7 @@
 // Character identity
 character_name = "Unknown";  // Will be overridden in child objects
 
+
 // Experience system
 xp = 0;
 level = 1;

@@ -46,6 +46,10 @@ if (hp <= 0) {
     exit; // Stop processing this step event
 }
 
+// === SPRITE ANIMATION ===
+// Update sprite based on current state (enemies mostly stay idle)
+sprite_index = spr_matrix[dir][anim_state];
+
 // Enemy AI - attack adjacent player
 if (state == TURNSTATE.active && moves == 0) {
     var target_player = instance_place(x + 16, y, obj_Player);
