@@ -45,7 +45,7 @@ The game implements a sophisticated turn-based system with the following key com
 - **`obj_UIManager`** - Centralized UI state handling for player details and level-up overlays
 - **`obj_PlayerDetails`** - Character sheet display with full ability score information
 - **`obj_LevelUpOverlay`** - Ability Score Improvement interface for level-up management
-- **`obj_CombatLog`** - Scrolling combat log with detailed turn information
+- **`obj_CombatLog`** - Advanced collapsible combat log with scrolling and 3-state display system
 
 ### Key Script Systems
 - **`xp_system.gml`** - Complete leveling system with ASI management and party XP distribution
@@ -69,6 +69,11 @@ The game implements a sophisticated turn-based system with the following key com
 - **Weapon Switching**: Use number keys 1-9 to switch between available weapons
 - **Movement**: Arrow keys to move player character
 - **Attack**: Space bar to attack enemies in range
+- **Combat Log Controls**:
+  - **'L' Key**: Cycle through log states (Full → One-line → Nub → Full)
+  - **Mouse Wheel**: Scroll through message history (when hovering over log in full state)
+  - **Arrow Keys**: Alternative scrolling (Up/Down keys work regardless of mouse position)
+  - **Click Interactions**: Click collapse button to toggle states, click nub to expand
 
 ### Testing Documentation
 - **Manual Testing**: Use `test_level_system.md` for comprehensive D&D mechanics testing
@@ -93,7 +98,12 @@ The game implements a sophisticated turn-based system with the following key com
 ### UI State Management
 - **UIManager** coordinates all interface overlays
 - **Player input** (I key) toggles character details or ASI overlay
-- **Combat log** provides detailed feedback for all actions
+- **Combat Log System** provides advanced feedback with collapsible interface:
+  - **3-State Display**: Full (8 messages + scroll), One-line (latest message), Nub (compact button)
+  - **Scrollable History**: Stores up to 50 messages with mouse wheel and arrow key navigation
+  - **Color-coded Messages**: Green (hits), red (misses), yellow (damage), orange (criticals)
+  - **Smart Auto-scroll**: Automatically follows newest messages when at bottom
+  - **Interactive Controls**: L key cycling, collapse button, clickable nub expansion
 
 ## Development Notes
 
