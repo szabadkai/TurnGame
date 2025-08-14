@@ -156,24 +156,24 @@ if (anim_state == State.ATTACK && is_anim) {
     if (image_index == 3) {
         // Weapon-Based D20 Combat System
         if (variable_global_exists("combat_log")) {
-            if (variable_global_exists("combat_log")) global.combat_log("=== " + object_get_name(object_index) + " Turn ===");
+            if (variable_global_exists("combat_log")) global.combat_log("=== " + character_name + " Turn ===");
         }
         
         var attack_roll = roll_d20();
         var attack_total = attack_roll + attack_bonus;
         var hit = (attack_total >= target_enemy.defense_score);
         
-        if (variable_global_exists("combat_log")) global.combat_log(object_get_name(object_index) + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
+        if (variable_global_exists("combat_log")) global.combat_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
         
         if (hit) {
             var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_name);
             var final_damage = handle_special_attack(self, target_enemy, attack_roll, base_damage);
             
             target_enemy.hp -= final_damage;
-            if (variable_global_exists("combat_log")) global.combat_log(object_get_name(target_enemy.object_index) + " takes " + string(final_damage) + " damage (" + string(target_enemy.hp + final_damage) + " HP → " + string(target_enemy.hp) + " HP)");
+            if (variable_global_exists("combat_log")) global.combat_log(target_enemy.character_name + " takes " + string(final_damage) + " damage (" + string(target_enemy.hp + final_damage) + " HP → " + string(target_enemy.hp) + " HP)");
             
             if (target_enemy.hp <= 0) {
-                if (variable_global_exists("combat_log")) global.combat_log(object_get_name(target_enemy.object_index) + " is defeated!");
+                if (variable_global_exists("combat_log")) global.combat_log(target_enemy.character_name + " is defeated!");
                 
                 // Award XP to entire party using new distribution system
                 var xp_reward = target_enemy.xp_value;
@@ -228,6 +228,5 @@ if (hp <= 0) {
 if (state == TURNSTATE.active && moves == 0) {
 	alarm[0] = 1;
 }
-
 
 

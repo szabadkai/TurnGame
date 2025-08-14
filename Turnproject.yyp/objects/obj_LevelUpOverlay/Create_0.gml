@@ -25,9 +25,7 @@ button_height = 20;
 buttons = [];  // Array of button objects {x, y, w, h, ability, type}
 
 function show_asi_overlay(player) {
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("DEBUG: show_asi_overlay called for " + player.character_name);
-    }
+    show_debug_message("DEBUG: show_asi_overlay called for " + player.character_name);
     
     player_instance = player;
     visible = true;
@@ -44,9 +42,7 @@ function show_asi_overlay(player) {
     // Create button layout
     setup_buttons();
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("DEBUG: ASI overlay now visible = " + string(visible));
-    }
+    show_debug_message("DEBUG: ASI overlay now visible = " + string(visible));
 }
 
 function setup_buttons() {

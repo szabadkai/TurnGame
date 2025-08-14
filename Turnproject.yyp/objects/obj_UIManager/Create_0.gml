@@ -77,7 +77,5 @@ function close_all_ui() {
         level_up_overlay.visible = false;
     }
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("UI Manager: Closed all UI");
-    }
+    show_debug_message("UI Manager: Closed all UI");
 }

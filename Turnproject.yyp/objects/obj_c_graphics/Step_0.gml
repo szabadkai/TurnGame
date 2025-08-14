@@ -10,6 +10,6 @@ if (keyboard_check(vk_alt) && keyboard_check_released(vk_enter)) {
 
 ///Restart Game
 if (keyboard_check_pressed(ord("R"))) {
-	if (variable_global_exists("combat_log")) global.combat_log("=== GAME RESTART ===");
+	show_debug_message("=== GAME RESTART ===");
 	game_restart();
 }

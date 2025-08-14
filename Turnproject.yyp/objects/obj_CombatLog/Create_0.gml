@@ -62,3 +62,14 @@ global.combat_log = function(message) {
         }
     }
 }
+
+// Helper: get display name for any combat entity (prefers character_name)
+global.entity_name = function(inst) {
+    if (instance_exists(inst) && variable_instance_exists(inst, "character_name")) {
+        return inst.character_name;
+    }
+    if (instance_exists(inst)) {
+        return object_get_name(inst.object_index);
+    }
+    return "Unknown";
+}

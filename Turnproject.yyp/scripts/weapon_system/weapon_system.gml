@@ -132,7 +132,7 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
         case "self_harm":
             attacker.hp -= 1;
             if (variable_global_exists("combat_log")) {
-                var attacker_name = (object_get_name(attacker.object_index) == "obj_Player") ? attacker.character_name : object_get_name(attacker.object_index);
+                var attacker_name = global.entity_name(attacker);
                 global.combat_log("BERSERKER RAGE! " + attacker_name + " takes 1 damage from fury! (HP: " + string(attacker.hp) + "/" + string(attacker.max_hp) + ")");
                 
                 // Warning if attacker is getting low on health
@@ -173,7 +173,7 @@ function chain_attack(attacker, target) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
         if (variable_global_exists("combat_log")) global.combat_log("Chain " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        if (variable_global_exists("combat_log")) global.combat_log(object_get_name(target.object_index) + " takes " + string(damage) + " chain damage!");
+        if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(target) + " takes " + string(damage) + " chain damage!");
     }
 }
 
@@ -182,7 +182,7 @@ function area_attack(attacker, target) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
         if (variable_global_exists("combat_log")) global.combat_log("Area " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        if (variable_global_exists("combat_log")) global.combat_log(object_get_name(target.object_index) + " takes " + string(damage) + " area damage!");
+        if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(target) + " takes " + string(damage) + " area damage!");
     }
 }
 
@@ -214,7 +214,7 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
                 if (variable_global_exists("combat_log")) global.combat_log("COUNTER-ATTACK! " + defender.weapon_name + " strikes back!");
                 var counter_damage = roll_damage_simple(1, "Counter");
                 attacker.hp -= counter_damage;
-                if (variable_global_exists("combat_log")) global.combat_log(object_get_name(attacker.object_index) + " takes " + string(counter_damage) + " counter damage!");
+                if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(attacker) + " takes " + string(counter_damage) + " counter damage!");
             }
             break;
             
@@ -224,7 +224,7 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
                 if (reflected > 0) {
                     if (variable_global_exists("combat_log")) global.combat_log("PARRY! " + defender.weapon_name + " reflects " + string(reflected) + " damage back!");
                     attacker.hp -= reflected;
-                    if (variable_global_exists("combat_log")) global.combat_log(object_get_name(attacker.object_index) + " takes " + string(reflected) + " reflected damage!");
+                    if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(attacker) + " takes " + string(reflected) + " reflected damage!");
                 }
             }
             break;

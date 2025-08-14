@@ -23,28 +23,7 @@ var ability_sets = [
     [12, 14, 11, 9, 13, 10],  // Bran: DEX-focused ranger  
     [13, 12, 14, 11, 10, 9],  // Cora: CON-focused tank
     [10, 11, 12, 14, 13, 9],  // Dex: INT-focused strategist
-    [11, 10, 13, 12, 14, 9],   // Erin: WIS-focused cleric
-    [12, 11, 13, 10, 14, 9],   // Finn: STR-focused fighter
-    [13, 12, 11, 10, 14, 9],   // Gia: DEX-focused ranger
-    [14, 11, 12, 10, 13, 9],   // Hank: CON-focused tank
-    [10, 13, 12, 11, 14, 9],   // Ivy: INT-focused strategist
-    [11, 12, 13, 10, 14, 9],   // Jake: WIS-focused cleric
-    [12, 13, 11, 10, 14, 9],   // Kira: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Liam: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Mia: CON-focused tank
-    [10, 14, 12, 11, 13, 9],   // Nora: INT-focused strategist
-    [11, 13, 12, 10, 14, 9],   // Owen: WIS-focused cleric
-    [12, 14, 11, 10, 13, 9],   // Piper: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Quinn: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Riley: CON-focused tank
-    [10, 13, 12, 11, 14, 9],   // Sam: INT-focused strategist
-    [11, 12, 13, 10, 14, 9],   // Tia: WIS-focused cleric
-    [12, 13, 11, 10, 14, 9],   // Uma: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Vince: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Wren: CON-focused tank
-    [10, 14, 12, 11, 13, 9],   // Xander: INT-focused strategist
-    [11, 13, 12, 10, 14, 9],   // Yara: WIS-focused cleric
-    [12, 14, 11, 10, 13, 9],   // Zane: STR-focused fighter
+    [11, 10, 13, 12, 14, 9]   // Erin: WIS-focused cleric
 ];
 
 var my_abilities = ability_sets[my_index % array_length(ability_sets)];
