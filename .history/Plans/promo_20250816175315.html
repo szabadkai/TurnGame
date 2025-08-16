@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Space Exploration Tactics – Promo & Demo Flow</title>
+    <meta name="description" content="A tactical, narrative-driven space exploration game. Explore the void, make consequential choices, and fight to uncover the Prometheus truth." />
+    <style>
+      :root {
+        --bg: #0a0d12;
+        --panel: #111622;
+        --text: #e8eefc;
+        --muted: #a8b3d1;
+        --accent: #7bd8ff;
+        --accent-2: #b47bff;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Inter, Arial, sans-serif; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+      header.hero { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; align-items: center; padding: 40px 0 8px; }
+      header.hero .copy h1 { margin: 0 0 10px; font-size: 44px; line-height: 1.05; letter-spacing: 0.3px; }
+      header.hero .copy p { margin: 0 0 16px; color: var(--muted); font-size: 18px; }
+      header.hero .cta { display: flex; gap: 12px; margin-top: 18px; }
+      .btn { display: inline-block; padding: 12px 16px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #0b0e14; font-weight: 700; }
+      .btn.secondary { background: #1a2233; color: var(--text); border: 1px solid #263252; }
+
+      .panel { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00)); border: 1px solid #1b2438; border-radius: 14px; padding: 18px; }
+      .section { margin: 28px 0; }
+      .section h2 { margin: 0 0 10px; font-size: 26px; letter-spacing: 0.2px; }
+      .section p.lead { margin: 0 0 16px; color: var(--muted); }
+
+      .feature-list { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+      .feature { padding: 14px; border-radius: 12px; background: #0e1421; border: 1px solid #1a2236; }
+      .feature h3 { margin: 0 0 6px; font-size: 18px; }
+      .feature p { margin: 0; color: var(--muted); font-size: 14px; }
+
+      .grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+      .grid.grid-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .grid img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 10px; border: 1px solid #1b2438; }
+
+      .acts { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+      .act { background: #0e1421; border: 1px solid #1a2236; border-radius: 12px; padding: 14px; }
+      .act h3 { margin: 0 0 8px; font-size: 18px; }
+      .act ul { margin: 0; padding-left: 18px; color: var(--muted); }
+      .act li { margin: 6px 0; }
+
+      .flow { display: grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+      .flow .lane { grid-column: 1 / -1; }
+      .lane h3 { margin: 8px 0 8px; font-size: 18px; letter-spacing: 0.2px; }
+      .lane .shots { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 8px; }
+      .shot { position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1b2438; }
+      .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .shot .cap { position: absolute; left: 8px; bottom: 8px; background: rgba(9,12,18,0.7); padding: 4px 6px; border-radius: 6px; font-size: 12px; color: var(--text); border: 1px solid rgba(123,216,255,0.25); }
+
+      footer { color: var(--muted); border-top: 1px solid #1b2438; margin-top: 24px; padding: 18px 0 30px; text-align: center; font-size: 13px; }
+
+      .hero-img { border-radius: 12px; overflow: hidden; border: 1px solid #1b2438; }
+      .hero-img img { width: 100%; height: auto; display: block; }
+
+      @media (max-width: 980px) {
+        header.hero { grid-template-columns: 1fr; }
+        .feature-list, .acts, .grid { grid-template-columns: 1fr; }
+        .lane .shots { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="hero">
+        <div class="copy">
+          <h1>Space Exploration Tactics</h1>
+          <p>Lead a crew beyond known space in a tactical, narrative-driven journey. Make hard choices, survive alien ruins, and confront the Prometheus truth at the edge of the void.</p>
+          <div class="cta">
+            <a class="btn" href="#demo-flow">View Demo Flow</a>
+            <a class="btn secondary" href="#gallery">See Gallery</a>
+          </div>
+        </div>
+        <div class="hero-img">
+          <img src="promo/ChatGPT Image Aug 12, 2025, 10_47_59 PM.png" alt="Hero key art – starship over alien world" />
+        </div>
+      </header>
+
+      <section class="section">
+        <div class="feature-list">
+          <div class="feature">
+            <h3>Branching Narrative</h3>
+            <p>Acts and nodes structure choices with consequences across missions.</p>
+          </div>
+          <div class="feature">
+            <h3>Tactical Encounters</h3>
+            <p>Face pirates, beasts, and void guardians in turn-based fights.</p>
+          </div>
+          <div class="feature">
+            <h3>Void-Bound Mysteries</h3>
+            <p>Unlock Prometheus logs and bargain, resist, or submit to the void.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel" id="acts">
+        <h2>Narrative Overview</h2>
+        <p class="lead">Based on the game acts and nodes, the journey unfolds across three escalating acts. See full outline in <a href="game_acts_and_nodes.md">game_acts_and_nodes.md</a>.</p>
+        <div class="acts">
+          <div class="act">
+            <h3>Act 1 – Into the Unknown</h3>
+            <ul>
+              <li>Departure from Earth Command; chart a safe route or risk shortcuts.</li>
+              <li>Salvage a derelict satellite tangled with crystalline void matter.</li>
+              <li>Investigate a cosmic anomaly or heed its eerie echo.</li>
+              <li>Survive a pirate ambush; fight, stall, or bargain.</li>
+              <li>Make planetfall through stormy skies toward ancient ruins.</li>
+            </ul>
+          </div>
+          <div class="act">
+            <h3>Act 2 – Ruins of the Past</h3>
+            <ul>
+              <li>Scout alien ruins; study mysterious void glyphs or ignore the whispers.</li>
+              <li>Beasts strike from shadows in tense tactical combat.</li>
+              <li>Forked choice: rescue colonists or raid a supply vault.</li>
+              <li>Face corruption whispers and choose who resists.</li>
+              <li>Confront the Crystal Guardian—fight, negotiate, or submit.</li>
+            </ul>
+          </div>
+          <div class="act">
+            <h3>Act 3 – The Prometheus Truth</h3>
+            <ul>
+              <li>Navigate fractured space to reach the Prometheus wreck.</li>
+              <li>With crew divided, parley with void-touched Watchers or engage.</li>
+              <li>Recover Prometheus logs and decide the final approach.</li>
+              <li>Endings: Fight the Void, Submit, or Bargain—each with consequences.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="gallery">
+        <h2>Promo Gallery</h2>
+        <p class="lead">Concepts and in-engine captures. Click any image to open a larger view and browse.</p>
+        <div id="promoGrid" class="grid grid-4"></div>
+        <!-- Lightbox Modal -->
+        <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer" style="display:none;">
+          <button class="lb-close" aria-label="Close (Esc)">×</button>
+          <button class="lb-prev" aria-label="Previous (←)">‹</button>
+          <figure class="lb-figure">
+            <img id="lbImage" alt="" />
+            <figcaption id="lbCaption"></figcaption>
+          </figure>
+          <button class="lb-next" aria-label="Next (→)">›</button>
+        </div>
+      </section>
+
+      <section class="section panel" id="demo-flow">
+        <h2>Demo Game Flow</h2>
+        <p class="lead">A quick visual walkthrough of the demo beats. Screens are representative and may change.</p>
+        <div class="flow">
+          <div class="lane">
+            <h3>Act 1 – Departure to Planetfall</h3>
+            <div class="shots">
+              <div class="shot"><img src="demogame/Act1-0.png" alt="Act 1 – Departure"><div class="cap">Departure</div></div>
+              <div class="shot"><img src="demogame/Act1-1.png" alt="Act 1 – Derelict Satellite"><div class="cap">Derelict Satellite</div></div>
+              <div class="shot"><img src="demogame/Act1-2.png" alt="Act 1 – Cosmic Anomaly"><div class="cap">Cosmic Anomaly</div></div>
+              <div class="shot"><img src="demogame/Act1-5A.png" alt="Act 1 – Pirate Ambush"><div class="cap">Pirate Ambush</div></div>
+              <div class="shot"><img src="demogame/Act1-6.png" alt="Act 1 – Planetfall"><div class="cap">Planetfall</div></div>
+              <div class="shot"><img src="demogame/Act1-Final.png" alt="Act 1 – Jungle Ruins"><div class="cap">Jungle Ruins</div></div>
+            </div>
+          </div>
+          <div class="lane">
+            <h3>Act 2 – Ruins & Guardian</h3>
+            <div class="shots">
+              <div class="shot"><img src="demogame/Act2-1.png" alt="Act 2 – Landing Zone"><div class="cap">Landing Zone</div></div>
+              <div class="shot"><img src="demogame/Act2-2.png" alt="Act 2 – Alien Glyphs"><div class="cap">Alien Glyphs</div></div>
+              <div class="shot"><img src="demogame/Act2-3.png" alt="Act 2 – Beast Ambush"><div class="cap">Beast Ambush</div></div>
+              <div class="shot"><img src="demogame/Act2-4.png" alt="Act 2 – Rescue or Raid"><div class="cap">Rescue or Raid</div></div>
+              <div class="shot"><img src="demogame/Act2-6Fight.png" alt="Act 2 – Crystal Guardian Fight"><div class="cap">Crystal Guardian</div></div>
+              <div class="shot"><img src="demogame/Act2-Final.png" alt="Act 2 – Collapse Escape"><div class="cap">Collapse Escape</div></div>
+            </div>
+          </div>
+          <div class="lane">
+            <h3>Act 3 – Prometheus & Endings</h3>
+            <div class="shots">
+              <div class="shot"><img src="demogame/Act3-1.png" alt="Act 3 – Fractured Space"><div class="cap">Fractured Space</div></div>
+              <div class="shot"><img src="demogame/Act3-2.png" alt="Act 3 – Crew Fracture"><div class="cap">Crew Fracture</div></div>
+              <div class="shot"><img src="demogame/Act3-3.png" alt="Act 3 – The Watchers"><div class="cap">The Watchers</div></div>
+              <div class="shot"><img src="demogame/Act3-Final.png" alt="Act 3 – Final Outcome"><div class="cap">Final Outcome</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel" id="dialogs">
+        <h2>Dialog Player</h2>
+        <p class="lead">Click through sample scenes from the demo. For deeper context on systems and branching, see the <a href="Space%20Exploration%20Game%20-%20Core%20Narrative%20%26%20Branching%20Quests.pdf" target="_blank" rel="noopener">Game Design Document (PDF)</a>.</p>
+
+        <div class="feature" style="margin-bottom:12px;">
+          <label for="sceneSelect" style="display:block; font-weight:600; margin-bottom:6px;">Select Scene</label>
+          <select id="sceneSelect" style="width:100%; padding:10px; border-radius:8px; background:#0e1421; color:var(--text); border:1px solid #1a2236;"></select>
+        </div>
+
+        <div id="dialogBox" class="dialog-box" style="display:none;">
+          <div class="dialog-header">
+            <div class="speaker" id="dlgSpeaker">Speaker</div>
+          </div>
+          <div class="dialog-text" id="dlgText">…</div>
+          <div class="choices" id="dlgChoices"></div>
+          <div class="nav" id="dlgNav"></div>
+        </div>
+        <div id="dialogNotice" style="color:var(--muted); font-size:14px; margin-top:8px;"></div>
+      </section>
+
+      <!-- Baked-in dialogs.json for offline file access -->
+      <script id="dialogs-data" type="application/json">
+$(cat dialogs.json)
+      </script>
+
+      <script>
+        // Gallery data and lightbox
+        const galleryImages = [
+          "promo/ChatGPT Image Aug 11, 2025, 02_48_21 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_48_27 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_48_36 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_48_42 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_48_53 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_49_05 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_49_11 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_49_17 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_51_54 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 02_53_47 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 03_03_16 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 03_06_24 PM.png",
+          "promo/ChatGPT Image Aug 11, 2025, 05_42_31 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 03_58_44 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 08_18_56 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 08_19_16 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 08_26_02 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 09_02_51 AM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 09_45_06 AM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 09_48_03 PM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 09_56_32 AM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 10_06_31 AM.png",
+          "promo/ChatGPT Image Aug 12, 2025, 10_47_59 PM.png",
+          "promo/ChatGPT Image Aug 13, 2025, 02_39_30 PM.png",
+          "promo/ChatGPT Image Aug 13, 2025, 07_09_19 AM.png",
+          "promo/ChatGPT Image Aug 13, 2025, 07_21_28 AM.png",
+          "promo/ChatGPT Image Aug 13, 2025, 07_23_59 AM.png",
+          "promo/ChatGPT Image Aug 13, 2025, 08_03_55 AM.png",
+        ];
+
+        (function addLightboxStyles(){
+          const css = `
+          .lightbox{position:fixed;inset:0;background:rgba(5,8,13,0.92);display:flex;align-items:center;justify-content:center;gap:12px;z-index:50}
+          .lightbox .lb-figure{margin:0;max-width:min(92vw,1280px);max-height:min(88vh,900px);display:flex;flex-direction:column;align-items:center}
+          .lightbox img{max-width:100%;max-height:80vh;border-radius:8px;border:1px solid #24324f;box-shadow:0 10px 30px rgba(0,0,0,0.4)}
+          .lightbox figcaption{color:#a8b3d1;margin-top:8px;font-size:13px}
+          .lightbox .lb-close,.lightbox .lb-prev,.lightbox .lb-next{position:absolute;background:#111a2c;color:#e8eefc;border:1px solid #263252;border-radius:10px;padding:8px 10px;cursor:pointer}
+          .lightbox .lb-close{top:16px;right:16px;font-size:20px;line-height:1}
+          .lightbox .lb-prev{left:16px}
+          .lightbox .lb-next{right:16px}
+          .grid img{cursor:pointer}
+          `;
+          const s=document.createElement('style');s.textContent=css;document.head.appendChild(s);
+        })();
+
+        function niceCaption(path){
+          const name = path.split('/').pop().replace(/\.png$/i,'');
+          return name.replace(/ChatGPT Image /,'').replace(/_/g,':').replace(/\s+/g,' ');
+        }
+
+        function renderGallery(){
+          const grid = document.getElementById('promoGrid');
+          if(!grid) return;
+          grid.innerHTML = '';
+          galleryImages.forEach((src, i) => {
+            const img = document.createElement('img');
+            img.loading = 'lazy';
+            img.alt = niceCaption(src);
+            img.src = src;
+            img.dataset.index = String(i);
+            img.addEventListener('click', () => openLightbox(i));
+            grid.appendChild(img);
+          });
+        }
+
+        let lbIndex = 0;
+        function openLightbox(i){
+          lbIndex = i;
+          const lb = document.getElementById('lightbox');
+          const img = document.getElementById('lbImage');
+          const cap = document.getElementById('lbCaption');
+          img.src = galleryImages[lbIndex];
+          img.alt = niceCaption(galleryImages[lbIndex]);
+          cap.textContent = niceCaption(galleryImages[lbIndex]);
+          lb.style.display = 'flex';
+          lb.setAttribute('aria-hidden','false');
+        }
+        function closeLightbox(){
+          const lb = document.getElementById('lightbox');
+          lb.style.display = 'none';
+          lb.setAttribute('aria-hidden','true');
+        }
+        function nextLightbox(){ lbIndex = (lbIndex + 1) % galleryImages.length; openLightbox(lbIndex); }
+        function prevLightbox(){ lbIndex = (lbIndex - 1 + galleryImages.length) % galleryImages.length; openLightbox(lbIndex); }
+
+        function wireLightbox(){
+          const lb = document.getElementById('lightbox');
+          lb.querySelector('.lb-close').addEventListener('click', closeLightbox);
+          lb.querySelector('.lb-next').addEventListener('click', nextLightbox);
+          lb.querySelector('.lb-prev').addEventListener('click', prevLightbox);
+          document.addEventListener('keydown', (e) => {
+            if(lb.getAttribute('aria-hidden') === 'true') return;
+            if(e.key === 'Escape') closeLightbox();
+            else if(e.key === 'ArrowRight') nextLightbox();
+            else if(e.key === 'ArrowLeft') prevLightbox();
+          });
+          // Click outside image closes
+          lb.addEventListener('click', (e) => {
+            const fig = lb.querySelector('.lb-figure');
+            if(!fig.contains(e.target)) closeLightbox();
+          });
+        }
+        // Render gallery ASAP
+        renderGallery();
+        wireLightbox();
+
+        // Minimal styles for dialog UI (inline for single-file portability)
+        (function addDialogStyles(){
+          const css = `
+          .dialog-box{border:1px solid #1b2438;border-radius:12px;background:#0e1421;padding:14px}
+          .dialog-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+          .dialog-header .speaker{font-weight:700;color:var(--accent)}
+          .dialog-text{font-size:16px;line-height:1.45;margin:6px 0 12px;color:var(--text)}
+          .choices{display:grid;grid-template-columns:1fr;gap:8px}
+          .choice-btn,.nav-btn{padding:10px 12px;border-radius:10px;border:1px solid #1a2236;background:#121a2b;color:var(--text);text-align:left}
+          .choice-meta{display:inline-block;margin-left:8px;color:var(--muted);font-size:12px}
+          .nav{margin-top:8px}
+          .nav-btn{display:inline-block;text-align:center;background:#1a2233}
+          .choice-btn:hover,.nav-btn:hover{border-color:#263252}
+          `;
+          const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+        })();
+
+        const state = {
+          data: null,
+          scene: null,
+          nodeIndex: {},
+          currentId: null,
+        };
+
+        const els = {
+          select: document.getElementById('sceneSelect'),
+          box: document.getElementById('dialogBox'),
+          speaker: document.getElementById('dlgSpeaker'),
+          text: document.getElementById('dlgText'),
+          choices: document.getElementById('dlgChoices'),
+          nav: document.getElementById('dlgNav'),
+          notice: document.getElementById('dialogNotice'),
+        };
+
+        function titleCaseId(id){
+          if(!id) return '';
+          return id.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function indexNodes(scene){
+          const map = {};
+          scene.nodes.forEach(n => { map[n.id] = n; });
+          return map;
+        }
+
+        function setScene(key){
+          state.scene = state.data.dialogs[key];
+          state.nodeIndex = indexNodes(state.scene);
+          // Start at first node in list as default entry
+          state.currentId = state.scene.nodes[0]?.id || null;
+          els.box.style.display = state.currentId ? 'block' : 'none';
+          if(!state.currentId){ els.notice.textContent = 'No nodes in this scene.'; return; }
+          renderNode();
+        }
+
+        function renderNode(){
+          const node = state.nodeIndex[state.currentId];
+          if(!node){
+            els.speaker.textContent = '';
+            els.text.textContent = 'End of scene';
+            els.choices.innerHTML = '';
+            els.nav.innerHTML = '';
+            return;
+          }
+          els.speaker.textContent = titleCaseId(node.speaker || '');
+          els.text.textContent = node.text || '';
+
+          // Choices
+          els.choices.innerHTML = '';
+          els.nav.innerHTML = '';
+          if(Array.isArray(node.choices) && node.choices.length){
+            node.choices.forEach(ch => {
+              const btn = document.createElement('button');
+              btn.className = 'choice-btn';
+              btn.textContent = ch.text || '(choice)';
+              // Simple annotation for conditions/skill checks
+              const hints = [];
+              if(ch.conditions){ hints.push('Requires'); }
+              if(ch.skill_check){ hints.push(`${ch.skill_check.type ?? 'check'} ${ch.skill_check.difficulty ?? ''}`.trim()); }
+              if(hints.length){
+                const meta = document.createElement('span');
+                meta.className = 'choice-meta';
+                meta.textContent = `(${hints.join(' · ')})`;
+                btn.appendChild(meta);
+              }
+              btn.addEventListener('click', () => goNext(ch.next));
+              els.choices.appendChild(btn);
+            });
+          } else if(node.next){
+            const cont = document.createElement('button');
+            cont.className = 'nav-btn';
+            cont.textContent = 'Continue';
+            cont.addEventListener('click', () => goNext(node.next));
+            els.nav.appendChild(cont);
+          } else {
+            // Terminal node
+            const end = document.createElement('div');
+            end.style.color = 'var(--muted)';
+            end.textContent = 'End of scene';
+            els.nav.appendChild(end);
+          }
+        }
+
+        function goNext(nextId){
+          if(!nextId || nextId === 'end_scene'){
+            state.currentId = null;
+            els.speaker.textContent = '';
+            els.text.textContent = 'End of scene';
+            els.choices.innerHTML = '';
+            els.nav.innerHTML = '';
+            return;
+          }
+          state.currentId = nextId;
+          renderNode();
+        }
+
+        async function initDialogs(){
+          try {
+            const inline = document.getElementById('dialogs-data');
+            if (inline && inline.textContent) {
+              state.data = JSON.parse(inline.textContent);
+            } else {
+              const res = await fetch('dialogs.json');
+              if(!res.ok) throw new Error('HTTP ' + res.status);
+              state.data = await res.json();
+            }
+            const keys = Object.keys(state.data.dialogs || {});
+            els.select.innerHTML = '';
+            keys.forEach(k => {
+              const opt = document.createElement('option');
+              const label = state.data.dialogs[k].id || k;
+              opt.value = k; opt.textContent = label.replace(/_/g,' ');
+              els.select.appendChild(opt);
+            });
+            if(keys.length){ setScene(keys[0]); }
+            els.select.addEventListener('change', e => setScene(e.target.value));
+            els.notice.textContent = '';
+          } catch (err){
+            els.notice.innerHTML = 'Could not load dialogs data.';
+          }
+        }
+
+        // Lazy-init after page load
+        window.addEventListener('DOMContentLoaded', initDialogs);
+      </script>
+
+      <footer>
+        © Space Exploration Tactics – Demo materials for internal and promotional use.
+      </footer>
+    </div>
+  </body>
+  </html>
