@@ -85,5 +85,34 @@ if (state == TURNSTATE.active && moves == 0) {
     alarm[0] = 1;
 }
 
+// === HOVER COLOR SYSTEM ===
+// Check if mouse is hovering over this enemy
+var mouse_hovering = position_meeting(mouse_x, mouse_y, self);
+
+// Check if any player has pistol equipped and is active
+var pistol_active = false;
+var active_player = noone;
+
+with (obj_Player) {
+    if (state == TURNSTATE.active && weapon_special_type == "ranged") {
+        pistol_active = true;
+        active_player = self;
+        break;
+    }
+}
+
+// Set sprite color based on hover and pistol state
+if (pistol_active && active_player != noone && mouse_hovering) {
+    // Only show color when actually hovering over enemy
+    // Use the exact same calculation as is_enemy_in_pistol_range()
+    if (is_enemy_in_pistol_range(active_player, self)) {
+        sprite_color = c_lime; // Green for in range (including line of sight)
+    } else {
+        sprite_color = c_dkgray;  // Dark gray for out of range or blocked  
+    }
+} else {
+    sprite_color = c_white; // Default white color (no hover feedback)
+}
+
 
 

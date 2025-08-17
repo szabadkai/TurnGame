@@ -30,6 +30,54 @@ if (state == TURNSTATE.active) {
             }
         }
     }
+    
+    // Special key for weapon 10 (Pistol) - use minus key
+    if (keyboard_check_pressed(ord("-"))) {
+        var weapon_id = 10;
+        if (weapon_id < array_length(global.weapons)) {
+            equipped_weapon_id = weapon_id;
+            update_combat_stats();
+            if (variable_global_exists("combat_log")) global.combat_log("Equipped: " + weapon_name);
+            if (variable_global_exists("combat_log")) global.combat_log("Attack: +" + string(weapon_attack_bonus) + " | Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier));
+            if (variable_global_exists("combat_log")) global.combat_log("Special: " + global.weapons[weapon_id].description);
+        }
+    }
+}
+
+//Mouse Click Attack (for Ranged Weapons)
+// === MOUSE ATTACK INPUT ===
+if (state == TURNSTATE.active && moves > 0 && !is_anim && mouse_check_button_pressed(mb_left)) {
+    // Only use mouse attacks for ranged weapons
+    if (weapon_special_type == "ranged") {
+        
+        // Check if clicked on an enemy
+        var clicked_enemy = instance_position(mouse_x, mouse_y, obj_Enemy);
+        if (clicked_enemy != noone) {
+            // Check if enemy is in range
+            if (is_enemy_in_pistol_range(self, clicked_enemy)) {
+                target_enemy = clicked_enemy;
+                
+                // Calculate direction to face the target
+                var dx = clicked_enemy.x - x;
+                var dy = clicked_enemy.y - y;
+                
+                if (abs(dx) > abs(dy)) {
+                    dir = (dx > 0) ? Dir.RIGHT : Dir.LEFT;
+                } else {
+                    dir = (dy > 0) ? Dir.DOWN : Dir.UP;
+                }
+                
+                anim_state = State.ATTACK;
+                sprite_index = spr_matrix[dir][anim_state];
+                image_index = 0;
+                image_speed = 1.0;
+                is_anim = true;
+                depth = -100;
+            } else {
+                if (variable_global_exists("combat_log")) global.combat_log("Target out of range! (Max 4 tiles)");
+            }
+        }
+    }
 }
 
 //Move

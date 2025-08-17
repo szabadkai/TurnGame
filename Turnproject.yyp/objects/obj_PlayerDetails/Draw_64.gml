@@ -102,7 +102,7 @@ draw_set_color(c_white);
 // Calculate attack ability modifier based on weapon type
 var attack_ability_name = "STR";
 var attack_mod = player.str_mod;
-if (player.weapon_special_type == "finesse" || player.weapon_name == "Rapier") {
+if (player.weapon_special_type == "finesse" || player.weapon_special_type == "ranged" || player.weapon_name == "Rapier") {
     attack_ability_name = "DEX";
     attack_mod = player.dex_mod;
 }
@@ -235,7 +235,7 @@ draw_text(text_x, viewport_h - 90, "CONTROLS:");
 draw_set_color(c_white);
 draw_text(text_x, viewport_h - 75, "ESC - Close this window");
 draw_text(text_x, viewport_h - 60, "Click PREV/NEXT buttons - Change weapons");
-draw_text(text_x, viewport_h - 45, "0-9 (during combat) - Quick weapon switch");
+draw_text(text_x, viewport_h - 45, "0-9, - (during combat) - Quick weapon switch");
 if (array_length(player_list) > 1) {
     draw_set_color(c_ltgray);
     draw_text(text_x, viewport_h - 30, "← → - Switch between players");

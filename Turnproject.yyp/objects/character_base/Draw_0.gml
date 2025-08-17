@@ -25,11 +25,11 @@ if (state == TURNSTATE.active) {
     draw_set_alpha(1);
 }
 
-// Draw the sprite (normal color or red flash)
+// Draw the sprite (normal color, red flash, or custom color)
 if (damage_flash > 0) {
     draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_red, image_alpha);
 } else {
-    draw_self();
+    draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, sprite_color, image_alpha);
 }
 
 // Draw character name and HP above character (small font)

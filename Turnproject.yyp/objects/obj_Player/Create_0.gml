@@ -107,8 +107,8 @@ target_enemy = 0;
 // Initialize enums (defined in scr_enums.gml)
 scr_enums();
 
-// Initialize sprite matrix based on character_index
-spr_matrix = init_character_sprite_matrix(character_index);
+// Initialize sprite matrix based on character_index and weapon type
+spr_matrix = init_character_sprite_matrix(character_index, weapon_special_type);
 
 dir = Dir.DOWN;
 anim_state = State.IDLE;

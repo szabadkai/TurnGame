@@ -55,8 +55,8 @@ if (visible) {
 function cycle_weapon(player, direction) {
     if (!instance_exists(player)) return;
     
-    // Only cycle through player weapons (IDs 0-9), exclude enemy weapons (10-14)
-    var max_player_weapons = 10;
+    // Only cycle through player weapons (IDs 0-10), exclude enemy weapons (11-15)
+    var max_player_weapons = 11;
     
     if (direction > 0) {
         // Next weapon

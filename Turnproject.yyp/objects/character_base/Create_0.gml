@@ -62,4 +62,5 @@ burn_turns = 0;
 
 // Visual effects
 damage_flash = 0;
+sprite_color = c_white;  // Default sprite color (can be overridden by child objects)
 
