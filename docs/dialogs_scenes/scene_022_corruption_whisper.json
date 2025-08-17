@@ -1,0 +1,57 @@
+{
+  "id": "scene_022_corruption_whisper",
+  "location": "ruins_shadow_hall",
+  "triggers": [
+    "void_whisper_event"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "science_officer_kim",
+    "first_officer_torres"
+  ],
+  "nodes": [
+    {
+      "id": "whisper_001",
+      "speaker": "ship_ai_maya",
+      "text": "Biofeedback spike on a crew member. Whisper signatures detected. Intervention recommended.",
+      "choices": [
+        {
+          "id": "choice_whisper_resist",
+          "text": "[Willpower] Talk them through it.",
+          "skill_check": {
+            "type": "willpower",
+            "difficulty": 14
+          },
+          "next": "whisper_resist_outcome"
+        },
+        {
+          "id": "choice_whisper_submit",
+          "text": "Let them listen—just for a moment.",
+          "next": "whisper_submit_outcome"
+        }
+      ]
+    },
+    {
+      "id": "whisper_resist_outcome",
+      "speaker": "science_officer_kim",
+      "text": "They steadied. The hum receded. It responds when we assert ourselves.",
+      "effects": {
+        "corruption": -1,
+        "crew_morale": 1,
+        "resisted_whisper": true
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "whisper_submit_outcome",
+      "speaker": "first_officer_torres",
+      "text": "Their eyes glazed for a heartbeat. They’re back… different. Focused, but colder.",
+      "effects": {
+        "void_corruption": 1,
+        "void_knowledge": 1
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

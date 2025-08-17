@@ -1,0 +1,146 @@
+{
+    "id": "scene_013_wreck_confrontation",
+    "location": "prometheus_wreck_core",
+    "triggers": [
+        "boarded_prometheus_core"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "void_manifest"
+    ],
+    "nodes": [
+        {
+            "id": "wreck_001",
+            "speaker": "void_manifest",
+            "text": "Your steps are chords upon a broken instrument. Will you tune, will you quiet, or will you join?",
+            "choices": [
+                {
+                    "id": "choice_wreck_fight",
+                    "text": "Fight the Void.",
+                    "next": "wreck_fight_setup"
+                },
+                {
+                    "id": "choice_wreck_submit",
+                    "text": "Submit to the Choir.",
+                    "next": "wreck_submit"
+                },
+                {
+                    "id": "choice_wreck_negotiate",
+                    "text": "[Diplomacy] Bargain for time and space.",
+                    "skill_check": {
+                        "type": "diplomacy",
+                        "difficulty": 17
+                    },
+                    "next": "wreck_pact_attempt"
+                },
+                {
+                    "id": "choice_wreck_negotiate_resonance",
+                    "text": "[Chorus Resonance] Harmonize terms for a truce.",
+                    "conditions": {
+                        "status_buff": "chorus_resonance"
+                    },
+                    "skill_check": {
+                        "type": "diplomacy",
+                        "difficulty": 13
+                    },
+                    "next": "wreck_pact_attempt"
+                },
+                {
+                    "id": "choice_wreck_engineer_stabilize",
+                    "text": "[Engineering + Beacon Access] Stabilize the core and sever tendrils.",
+                    "conditions": {
+                        "flags": {
+                            "beacon_access": true
+                        }
+                    },
+                    "skill_check": {
+                        "type": "engineering",
+                        "difficulty": 15
+                    },
+                    "next": "wreck_stabilize"
+                },
+                {
+                    "id": "choice_wreck_dampen_fight",
+                    "text": "[Void Dampening] Project cancellation and strike.",
+                    "conditions": {
+                        "status": "void_dampening"
+                    },
+                    "next": "wreck_fight_setup",
+                    "effects": {
+                        "first_strike": true
+                    }
+                },
+                {
+                    "id": "choice_wreck_invert",
+                    "text": "[Core Inversion] Target the inversion nodes marked in logs.",
+                    "conditions": {
+                        "flags": {
+                            "weakness_unlocked": "core_inversion_nodes"
+                        }
+                    },
+                    "skill_check": {
+                        "type": "intelligence",
+                        "difficulty": 14
+                    },
+                    "next": "wreck_invert"
+                }
+            ]
+        },
+        {
+            "id": "wreck_fight_setup",
+            "speaker": "ship_ai_maya",
+            "text": "Weapons hot. Targeting tendril junctions. Captain, this will be brutal.",
+            "next": "wreck_fight_outcome"
+        },
+        {
+            "id": "wreck_fight_outcome",
+            "speaker": "ship_ai_maya",
+            "text": "Core resonance collapsing. The wake is receding. We did it.",
+            "effects": {
+                "ending_victory": true,
+                "void_turbulence_reduced": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_submit",
+            "speaker": "void_manifest",
+            "text": "You loosen the hand upon your own name. Welcome to the wideness.",
+            "effects": {
+                "ending_assimilation": true,
+                "void_corruption": 2
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_pact_attempt",
+            "speaker": "void_manifest",
+            "text": "A bargain is a shape of silence. We will wait, and you will carry our echo.",
+            "effects": {
+                "ending_pact": true,
+                "hidden_corruption": 1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_stabilize",
+            "speaker": "ship_ai_maya",
+            "text": "Beacon sync holding. Severing the largest tendrils—now! Field is stabilizing. It’s working.",
+            "effects": {
+                "ending_victory": true,
+                "beacon_access": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_invert",
+            "speaker": "science_officer_kim",
+            "text": "Inversion points matched. Firing pattern… The Song is canceling itself. Hold it—hold it—",
+            "effects": {
+                "ending_victory": true,
+                "gate_resistance": 1
+            },
+            "next": "end_scene"
+        }
+    ]
+}

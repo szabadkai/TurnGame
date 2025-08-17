@@ -1,0 +1,74 @@
+{
+    "id": "scene_008_earth_debrief_victory",
+    "location": "earth_command_console",
+    "triggers": [
+        "ending_victory"
+    ],
+    "npcs": [
+        "earth_commander_holt",
+        "ship_ai_maya"
+    ],
+    "nodes": [
+        {
+            "id": "holt_001",
+            "speaker": "earth_commander_holt",
+            "text": "This is Earth Command. Your transmission shows a stabilized gate signature and the Prometheus beacon. Report, Captain.",
+            "choices": [
+                {
+                    "id": "choice_debrief_victory_full",
+                    "text": "Full report. Recommend controlled shutdown protocols fleet-wide.",
+                    "next": "holt_002a",
+                    "effects": {
+                        "earth_reputation": 2,
+                        "followed_protocol": true
+                    }
+                },
+                {
+                    "id": "choice_debrief_victory_partial",
+                    "text": "Partial report. Holding critical details until debrief.",
+                    "next": "holt_002b",
+                    "effects": {
+                        "independent_path": 1
+                    }
+                },
+                {
+                    "id": "choice_debrief_victory_conspiracy",
+                    "text": "Prometheus disappearance was no accident. Request secure channel.",
+                    "next": "holt_002c",
+                    "effects": {
+                        "conspiracy_awareness": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "holt_002a",
+            "speaker": "earth_commander_holt",
+            "text": "Acknowledged. Your data will inform new protocols. Earth owes you.",
+            "effects": {
+                "reward": "commendation",
+                "lore_unlocked": "gate_shutdown_protocols"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "holt_002b",
+            "speaker": "earth_commander_holt",
+            "text": "You’ll deliver everything at dock, Captain. Don’t make me chase ghosts.",
+            "effects": {
+                "earth_reputation": -1,
+                "kept_secrets": 1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "holt_002c",
+            "speaker": "earth_commander_holt",
+            "text": "Secure line open. If you’re right, we’re sitting on a powder keg.",
+            "effects": {
+                "operation_unlocked": "internal_inquiry"
+            },
+            "next": "end_scene"
+        }
+    ]
+}

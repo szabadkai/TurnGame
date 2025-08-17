@@ -1,0 +1,132 @@
+{
+    "id": "scene_004_alien_glyphs",
+    "location": "jungle_ruins_chamber",
+    "triggers": [
+        "found_glyphs"
+    ],
+    "npcs": [
+        "science_officer_kim"
+    ],
+    "nodes": [
+        {
+            "id": "kim_001",
+            "speaker": "science_officer_kim",
+            "text": "Captain, these wall markings resonate when we approach. The patterns match subharmonics from the gates.",
+            "choices": [
+                {
+                    "id": "choice_glyphs_001a",
+                    "text": "Study the glyphs carefully.",
+                    "skill_check": {
+                        "type": "intelligence",
+                        "difficulty": 14
+                    },
+                    "next": "kim_study_outcome",
+                    "effects": {
+                        "research_focus": true
+                    }
+                },
+                {
+                    "id": "choice_glyphs_001b",
+                    "text": "We’re wasting time. Move on.",
+                    "next": "end_scene",
+                    "effects": {
+                        "opportunity_missed": true
+                    }
+                },
+                {
+                    "id": "choice_glyphs_001c",
+                    "text": "[Void Touched] The glyphs are a warning in reverse.",
+                    "conditions": {
+                        "background": "void_touched"
+                    },
+                    "next": "kim_void_listen",
+                    "effects": {
+                        "void_awareness": 1,
+                        "crew_fear": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "kim_study_outcome",
+            "speaker": "science_officer_kim",
+            "text": "I can map the sequence. It’s a lattice—if we invert these nodes, the resonance cancels. We could dampen gate bleed temporarily.",
+            "choices": [
+                {
+                    "id": "choice_glyphs_study_success",
+                    "text": "Apply the pattern to our field emitters.",
+                    "skill_check": {
+                        "type": "engineering",
+                        "difficulty": 12
+                    },
+                    "next": "kim_apply_success",
+                    "effects": {
+                        "gate_resistance": 1
+                    }
+                },
+                {
+                    "id": "choice_glyphs_study_fail",
+                    "text": "It’s too risky. Log it and leave.",
+                    "next": "end_scene",
+                    "effects": {
+                        "lore_unlocked": "glyph_lattice_theory"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "kim_apply_success",
+            "speaker": "science_officer_kim",
+            "text": "Field calibration holding. Background whisper reduced by eighteen percent. Captain, this might actually help.",
+            "effects": {
+                "status_buff": "void_dampening",
+                "crew_morale": 1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "kim_void_listen",
+            "speaker": "science_officer_kim",
+            "text": "Captain... are you hearing that? The pattern isn’t language; it’s a decision tree. It’s asking what we will become.",
+            "choices": [
+                {
+                    "id": "choice_void_listen_accept",
+                    "text": "Answer: we remain ourselves.",
+                    "next": "kim_void_resist",
+                    "effects": {
+                        "willpower": 1,
+                        "corruption": -1
+                    }
+                },
+                {
+                    "id": "choice_void_listen_submit",
+                    "text": "Answer: we join the Choir.",
+                    "next": "kim_void_submit",
+                    "effects": {
+                        "void_corruption": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "kim_void_resist",
+            "speaker": "science_officer_kim",
+            "text": "The resonance recoiled. The glyphs dimmed. I think... it respected the refusal.",
+            "effects": {
+                "resisted_whisper": true,
+                "crew_morale": 1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "kim_void_submit",
+            "speaker": "science_officer_kim",
+            "text": "Captain. Your eyes— The pattern is inside us now. The walls are singing.",
+            "effects": {
+                "status_debuff": "whisper_marked",
+                "crew_fear": 2
+            },
+            "next": "end_scene"
+        }
+    ]
+}

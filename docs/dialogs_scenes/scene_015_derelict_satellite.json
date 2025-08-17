@@ -1,0 +1,76 @@
+{
+  "id": "scene_015_derelict_satellite",
+  "location": "void_tangled_satellite_orbit",
+  "triggers": [
+    "derelict_satellite_found"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "sat_001",
+      "speaker": "ship_ai_maya",
+      "text": "Drifting satellite ahead, partially encased in crystalline void matter. Power trace is near zero.",
+      "choices": [
+        {
+          "id": "choice_sat_salvage_careful",
+          "text": "[Engineering] Salvage carefully for fuel and parts.",
+          "skill_check": {
+            "type": "engineering",
+            "difficulty": 12
+          },
+          "next": "sat_careful_outcome"
+        },
+        {
+          "id": "choice_sat_force",
+          "text": "Force salvage. We need supplies now.",
+          "next": "sat_force_outcome",
+          "effects": {
+            "hull_stress": 1
+          }
+        },
+        {
+          "id": "choice_sat_scan",
+          "text": "Scan first. Look for traps or transmissions.",
+          "next": "kim_scan_outcome",
+          "effects": {
+            "intel_gained": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sat_careful_outcome",
+      "speaker": "science_officer_kim",
+      "text": "We bypassed the crystal veins and secured the fuel cells. Minimal contamination detected.",
+      "effects": {
+        "fuel_gained": 2,
+        "risk_reduced": true
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "sat_force_outcome",
+      "speaker": "ship_ai_maya",
+      "text": "Pry successful, but the lattice sang. Residual hum detected in the cargo bay.",
+      "effects": {
+        "fuel_gained": 3,
+        "void_corruption": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "kim_scan_outcome",
+      "speaker": "science_officer_kim",
+      "text": "There’s a data ping repeating an old fleet checksum. I’ve captured it—could be coordinates or a warning.",
+      "effects": {
+        "lore_unlocked": "satellite_checksum_echo",
+        "intel_gained": 1
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

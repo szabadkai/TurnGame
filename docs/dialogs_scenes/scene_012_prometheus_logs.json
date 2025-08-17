@@ -1,0 +1,116 @@
+{
+    "id": "scene_012_prometheus_logs",
+    "location": "debris_field_datapods",
+    "triggers": [
+        "prometheus_logs_detected"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "science_officer_kim"
+    ],
+    "nodes": [
+        {
+            "id": "logs_001",
+            "speaker": "ship_ai_maya",
+            "text": "Data pods detected in the debris field. Encryption is old fleet-standard with anomalous checksum tails.",
+            "choices": [
+                {
+                    "id": "choice_logs_access",
+                    "text": "Access the logs.",
+                    "next": "logs_002_access"
+                },
+                {
+                    "id": "choice_logs_ignore",
+                    "text": "Ignore. It’s a trap waiting to sing.",
+                    "next": "end_scene",
+                    "effects": {
+                        "risk_avoided": true
+                    }
+                },
+                {
+                    "id": "choice_logs_secure",
+                    "text": "[Engineering] Secure pods with hardline and Faraday cage.",
+                    "skill_check": {
+                        "type": "engineering",
+                        "difficulty": 13
+                    },
+                    "next": "logs_002_engineer"
+                },
+                {
+                    "id": "choice_logs_void_listen",
+                    "text": "[Void Touched] Listen first, then decide.",
+                    "conditions": {
+                        "background": "void_touched"
+                    },
+                    "next": "logs_002_void"
+                }
+            ]
+        },
+        {
+            "id": "logs_002_access",
+            "speaker": "science_officer_kim",
+            "text": "Playback online. Captain’s Log, UES Prometheus: ‘We found the gate’s other side. Half the crew hears music. The other half hears warning.’",
+            "choices": [
+                {
+                    "id": "choice_logs_pull_more",
+                    "text": "Pull more entries.",
+                    "next": "logs_003_more",
+                    "effects": {
+                        "intel_gained": 1
+                    }
+                },
+                {
+                    "id": "choice_logs_stop",
+                    "text": "That’s enough. Catalog and move on.",
+                    "next": "end_scene",
+                    "effects": {
+                        "lore_unlocked": "prometheus_first_contact"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "logs_002_engineer",
+            "speaker": "ship_ai_maya",
+            "text": "Pods isolated. Signal bleed minimized. Proceeding with controlled decryption.",
+            "next": "logs_003_more",
+            "effects": {
+                "risk_reduced": true
+            }
+        },
+        {
+            "id": "logs_002_void",
+            "speaker": "ship_ai_maya",
+            "text": "The pods resonated to your biometrics. They… stopped humming.",
+            "next": "logs_003_more",
+            "effects": {
+                "void_knowledge": 1
+            }
+        },
+        {
+            "id": "logs_003_more",
+            "speaker": "science_officer_kim",
+            "text": "Final entry: ‘We inverted the lattice to silence the Song. It worked—briefly. Then it sang back through us.’ Coordinates appended and a schematic—Captain, a weakness in the core!",
+            "choices": [
+                {
+                    "id": "choice_logs_mark_weakness",
+                    "text": "Mark the core inversion points.",
+                    "next": "end_scene",
+                    "effects": {
+                        "weakness_unlocked": "core_inversion_nodes",
+                        "lore_unlocked": "prometheus_final_log"
+                    }
+                },
+                {
+                    "id": "choice_logs_broadcast",
+                    "text": "Broadcast a warning to nearby traffic.",
+                    "next": "end_scene",
+                    "effects": {
+                        "earth_reputation": 1,
+                        "broadcast_warning_sent": true
+                    }
+                }
+            ]
+        }
+    ]
+}

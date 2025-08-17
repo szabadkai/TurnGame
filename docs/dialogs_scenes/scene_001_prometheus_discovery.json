@@ -1,0 +1,129 @@
+{
+    "id": "scene_001_prometheus_discovery",
+    "location": "space_sector_7",
+    "triggers": [
+        "prometheus_scan"
+    ],
+    "npcs": [
+        "navigator_chen",
+        "first_officer_torres"
+    ],
+    "nodes": [
+        {
+            "id": "chen_001",
+            "speaker": "navigator_chen",
+            "text": "Captain, we're picking up a massive energy signature. It's... wait, these readings match our fleet registry. It's the UES Prometheus!",
+            "choices": [
+                {
+                    "id": "choice_001a",
+                    "text": "The flagship? After twenty years? All crew, battle stations.",
+                    "next": "chen_002a",
+                    "effects": {
+                        "crew_alert": "high",
+                        "torres_trust": -1
+                    }
+                },
+                {
+                    "id": "choice_001b",
+                    "text": "That's impossible. Double-check those readings.",
+                    "next": "chen_002b",
+                    "effects": {
+                        "chen_trust": -1
+                    }
+                },
+                {
+                    "id": "choice_001c",
+                    "text": "Finally. Set course immediately, but approach with caution.",
+                    "next": "chen_002a",
+                    "effects": {
+                        "crew_morale": 1
+                    }
+                },
+                {
+                    "id": "choice_001d",
+                    "text": "[Void Touched] I can feel the death echoing from it even here.",
+                    "conditions": {
+                        "background": "void_touched"
+                    },
+                    "next": "chen_002c",
+                    "effects": {
+                        "void_awareness": 1,
+                        "crew_fear": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "chen_002a",
+            "speaker": "navigator_chen",
+            "text": "Sir, I'm not detecting any active systems. She's dead in the water. But... the hull is intact. No signs of combat damage.",
+            "next": "torres_001"
+        },
+        {
+            "id": "chen_002b",
+            "speaker": "navigator_chen",
+            "text": "I've triple-checked, Captain. It's definitely the Prometheus. Energy signature, hull configuration, even the registration beacon - though it's barely functioning.",
+            "next": "torres_001"
+        },
+        {
+            "id": "chen_002c",
+            "speaker": "navigator_chen",
+            "text": "Captain... you're scaring the crew. But you're right - zero life signs. It's a tomb.",
+            "next": "torres_001"
+        },
+        {
+            "id": "torres_001",
+            "speaker": "first_officer_torres",
+            "text": "Captain, I'm required to remind you that salvage protocol dictates we report this to Earth Command before boarding.",
+            "choices": [
+                {
+                    "id": "choice_002a",
+                    "text": "We're reporting nothing until we know what happened.",
+                    "next": "end_scene",
+                    "effects": {
+                        "earth_reputation": -2,
+                        "torres_trust": -1,
+                        "independent_path": 1
+                    }
+                },
+                {
+                    "id": "choice_002b",
+                    "text": "Send the report. But we're going in first.",
+                    "next": "end_scene",
+                    "effects": {
+                        "earth_reputation": 1,
+                        "followed_protocol": true
+                    }
+                },
+                {
+                    "id": "choice_002c",
+                    "text": "Torres, how much do you think Earth Command really wants us to find them?",
+                    "next": "torres_002",
+                    "effects": {
+                        "torres_doubt": 1,
+                        "conspiracy_awareness": 1
+                    }
+                },
+                {
+                    "id": "choice_002d",
+                    "text": "[Lie] Of course. Send a report... after we've secured any sensitive materials.",
+                    "skill_check": {
+                        "type": "deception",
+                        "difficulty": 12
+                    },
+                    "next": "end_scene",
+                    "effects": {
+                        "torres_trust": -2,
+                        "kept_secrets": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "torres_002",
+            "speaker": "first_officer_torres",
+            "text": "...Sir, are you suggesting Earth Command expected them to disappear? That's... that's treason to even consider.",
+            "next": "end_scene"
+        }
+    ]
+}

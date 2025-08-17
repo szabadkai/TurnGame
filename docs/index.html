@@ -403,6 +403,7 @@ $(cat dialogs.json)
           scene: null,
           nodeIndex: {},
           currentId: null,
+          history: [],
         };
 
         const els = {
@@ -430,6 +431,7 @@ $(cat dialogs.json)
           state.scene = state.data.dialogs[key];
           state.nodeIndex = indexNodes(state.scene);
           // Start at first node in list as default entry
+          state.history = [];
           state.currentId = state.scene.nodes[0]?.id || null;
           els.box.style.display = state.currentId ? 'block' : 'none';
           if(!state.currentId){ els.notice.textContent = 'No nodes in this scene.'; return; }
@@ -451,6 +453,14 @@ $(cat dialogs.json)
           // Choices
           els.choices.innerHTML = '';
           els.nav.innerHTML = '';
+          // Back button (if we have history)
+          if (state.history.length > 0) {
+            const backBtn = document.createElement('button');
+            backBtn.className = 'nav-btn';
+            backBtn.textContent = 'Back';
+            backBtn.addEventListener('click', goBack);
+            els.nav.appendChild(backBtn);
+          }
           if(Array.isArray(node.choices) && node.choices.length){
             node.choices.forEach(ch => {
               const btn = document.createElement('button');
@@ -486,15 +496,39 @@ $(cat dialogs.json)
 
         function goNext(nextId){
           if(!nextId || nextId === 'end_scene'){
+            // End of scene view, preserve history so user can go back
+            if (state.currentId) state.history.push(state.currentId);
             state.currentId = null;
             els.speaker.textContent = '';
             els.text.textContent = 'End of scene';
             els.choices.innerHTML = '';
             els.nav.innerHTML = '';
+            if (state.history.length > 0) {
+              const backBtn = document.createElement('button');
+              backBtn.className = 'nav-btn';
+              backBtn.textContent = 'Back';
+              backBtn.addEventListener('click', goBack);
+              els.nav.appendChild(backBtn);
+            }
             return;
           }
+          if (state.currentId) state.history.push(state.currentId);
           state.currentId = nextId;
           renderNode();
+        }
+
+        function goBack(){
+          if (state.history.length === 0) return;
+          state.currentId = state.history.pop() || null;
+          if (state.currentId) {
+            renderNode();
+          } else {
+            // If back to null (shouldn't usually happen), clear UI
+            els.speaker.textContent = '';
+            els.text.textContent = '';
+            els.choices.innerHTML = '';
+            els.nav.innerHTML = '';
+          }
         }
 
         async function initDialogs(){
@@ -947,8 +981,56 @@ $(cat dialogs.json)
           }
         }
 
+        // Dynamic loader: fetch manifest and scene files from dialogs_scenes
+        async function initDialogsDynamic(){
+          els.notice.textContent = 'Loading scenes…';
+          try {
+            const manRes = await fetch('dialogs_scenes/_index.json');
+            if (!manRes.ok) throw new Error('manifest missing');
+            const manifest = await manRes.json();
+            const files = Array.isArray(manifest.scenes) ? manifest.scenes : [];
+            const dialogs = {};
+            await Promise.all(files.map(async (path) => {
+              try {
+                const r = await fetch(path);
+                if(!r.ok) return;
+                const j = await r.json();
+                if (j && j.id) dialogs[j.id] = j;
+              } catch (_) { /* ignore */ }
+            }));
+            state.data = { dialogs };
+          } catch (e) {
+            // Fallback 1: inline JSON in #dialogs-data
+            let loaded = false;
+            try {
+              const inline = document.getElementById('dialogs-data');
+              if (inline && inline.textContent && inline.textContent.trim().startsWith('{')) {
+                state.data = JSON.parse(inline.textContent);
+                loaded = true;
+              }
+            } catch (_) {}
+            // Fallback 2: dialogs.json
+            if (!loaded) {
+              const res = await fetch('dialogs.json');
+              if(!res.ok) throw new Error('fallback dialogs.json missing');
+              state.data = await res.json();
+            }
+          }
+          const keys = Object.keys(state.data.dialogs || {}).sort();
+          els.select.innerHTML = '';
+          keys.forEach(k => {
+            const opt = document.createElement('option');
+            const label = state.data.dialogs[k].id || k;
+            opt.value = k; opt.textContent = (label || k).replace(/_/g,' ');
+            els.select.appendChild(opt);
+          });
+          if(keys.length){ setScene(keys[0]); }
+          els.select.addEventListener('change', e => setScene(e.target.value));
+          els.notice.textContent = '';
+        }
+
         // Lazy-init after page load
-        window.addEventListener('DOMContentLoaded', initDialogs);
+        window.addEventListener('DOMContentLoaded', initDialogsDynamic);
       </script>
 
       <footer>

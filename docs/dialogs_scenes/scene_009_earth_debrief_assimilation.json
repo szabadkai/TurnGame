@@ -1,0 +1,29 @@
+{
+    "id": "scene_009_earth_debrief_assimilation",
+    "location": "earth_command_console",
+    "triggers": [
+        "ending_assimilation"
+    ],
+    "npcs": [
+        "watcher_chorus",
+        "earth_tech_operator"
+    ],
+    "nodes": [
+        {
+            "id": "assim_001",
+            "speaker": "earth_tech_operator",
+            "text": "We’re receiving a signal from the Meridian—no, from inside the static. It’s the crew channel but it’s… choral.",
+            "next": "assim_002"
+        },
+        {
+            "id": "assim_002",
+            "speaker": "watcher_chorus",
+            "text": "We are more now. Your names are inside us. Do not fear; the song is wide.",
+            "effects": {
+                "ending_recorded": "assimilation",
+                "lore_unlocked": "choir_manifest"
+            },
+            "next": "end_scene"
+        }
+    ]
+}

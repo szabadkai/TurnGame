@@ -1,0 +1,158 @@
+{
+    "id": "scene_002_keth_mori_threshold",
+    "location": "threshold_archive",
+    "triggers": [
+        "approach_archive"
+    ],
+    "npcs": [
+        "shal_thyss"
+    ],
+    "nodes": [
+        {
+            "id": "shal_001",
+            "speaker": "shal_thyss",
+            "text": "[crystalline harmonics translate] Human vessel. You approach the Threshold Archive. Your kind were warned. The void-touched one among you knows the danger.",
+            "choices": [
+                {
+                    "id": "choice_001a",
+                    "text": "We mean no harm. We're searching for our lost fleet.",
+                    "next": "shal_002a",
+                    "effects": {
+                        "keth_mori_reputation": 1,
+                        "diplomatic_path": 1
+                    }
+                },
+                {
+                    "id": "choice_001b",
+                    "text": "We go where we please. Stand aside.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "keth_mori_reputation": -3,
+                        "warrior_path": 1
+                    }
+                },
+                {
+                    "id": "choice_001c",
+                    "text": "You know about the Prometheus? Tell us what happened.",
+                    "next": "shal_002b",
+                    "effects": {
+                        "information_seeking": 1
+                    }
+                },
+                {
+                    "id": "choice_001d",
+                    "text": "[Void Touched] The void speaks of ancient failures. Are you running out of time?",
+                    "conditions": {
+                        "crew_has": "void_touched"
+                    },
+                    "next": "shal_002c",
+                    "effects": {
+                        "keth_mori_reputation": 2,
+                        "void_knowledge": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "shal_002a",
+            "speaker": "shal_thyss",
+            "text": "Your resonance suggests truth. But searching for the lost often leads to joining them. The Archive remembers all who pass.",
+            "next": "shal_003"
+        },
+        {
+            "id": "shal_002b",
+            "speaker": "shal_thyss",
+            "text": "The Prometheus crew opened doors that should remain sealed. They heard the Song of Unmaking. Half embraced it. Half fled. All are lost.",
+            "next": "shal_003"
+        },
+        {
+            "id": "shal_002c",
+            "speaker": "shal_thyss",
+            "text": "[frequency shifts to sorrow] You perceive clearly. We are fading. The gates we built now unmake us.",
+            "next": "shal_003"
+        },
+        {
+            "id": "shal_003",
+            "speaker": "shal_thyss",
+            "text": "Will you still enter the Archive, knowing it may show you truths that cannot be unlearned?",
+            "choices": [
+                {
+                    "id": "choice_003a",
+                    "text": "Help us understand. We don't want to repeat their mistakes.",
+                    "next": "shal_004a",
+                    "effects": {
+                        "keth_mori_reputation": 2,
+                        "gained_warning": true
+                    }
+                },
+                {
+                    "id": "choice_003b",
+                    "text": "Cryptic warnings won't stop us. Give us real answers or move.",
+                    "next": "shal_004b",
+                    "effects": {
+                        "keth_mori_reputation": -1
+                    }
+                },
+                {
+                    "id": "choice_003c",
+                    "text": "The Song of Unmaking? Is that what's happening to the gates?",
+                    "next": "shal_004c",
+                    "effects": {
+                        "lore_gates": 1
+                    }
+                },
+                {
+                    "id": "choice_003d",
+                    "text": "[Intelligence] You're dying, aren't you? Your whole species.",
+                    "skill_check": {
+                        "type": "intelligence",
+                        "difficulty": 15
+                    },
+                    "next": "shal_004d",
+                    "effects": {
+                        "keth_mori_reputation": 1,
+                        "keth_mori_secret": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "shal_004a",
+            "speaker": "shal_thyss",
+            "text": "Then we shall resonate together. Enter. But know that knowledge, like the void, consumes.",
+            "effects": {
+                "archive_access": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "shal_004b",
+            "speaker": "shal_thyss",
+            "text": "Impatience. So very human. The Archive will judge your worth. Enter if you dare.",
+            "effects": {
+                "archive_access": true,
+                "archive_hostile": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "shal_004c",
+            "speaker": "shal_thyss",
+            "text": "The gates sing now with frequencies we never intended. Reality bends. Probability bleeds. The Song grows louder each cycle.",
+            "effects": {
+                "lore_unlocked": "song_of_unmaking"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "shal_004d",
+            "speaker": "shal_thyss",
+            "text": "We are the last generation. When we built the gates, we did not know they were doors for THEM. Now we guard what remains, waiting for the final resonance.",
+            "effects": {
+                "keth_mori_alliance_possible": true,
+                "lore_unlocked": "keth_mori_extinction"
+            },
+            "next": "end_scene"
+        }
+    ]
+}

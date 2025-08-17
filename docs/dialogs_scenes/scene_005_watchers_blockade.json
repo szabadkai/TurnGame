@@ -1,0 +1,155 @@
+{
+    "id": "scene_005_watchers_blockade",
+    "location": "choir_perimeter",
+    "triggers": [
+        "approach_watchers_fleet"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "watcher_chorus"
+    ],
+    "nodes": [
+        {
+            "id": "maya_watchers_001",
+            "speaker": "ship_ai_maya",
+            "text": "Multiple vessels ahead—hulls pitted, drives slaved to a common signal. They form a cordon around the void sphere.",
+            "choices": [
+                {
+                    "id": "choice_watchers_001a",
+                    "text": "Hail them. Find a frequency they’ll answer.",
+                    "next": "chorus_001",
+                    "effects": {
+                        "diplomatic_path": 1
+                    }
+                },
+                {
+                    "id": "choice_watchers_001b",
+                    "text": "Arm batteries. We break the line.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "warrior_path": 1,
+                        "watchers_hostile": true
+                    }
+                },
+                {
+                    "id": "choice_watchers_001c",
+                    "text": "[Void Touched] Let me speak without words.",
+                    "conditions": {
+                        "crew_has": "void_touched"
+                    },
+                    "next": "chorus_void_entrance",
+                    "effects": {
+                        "void_knowledge": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "chorus_001",
+            "speaker": "watcher_chorus",
+            "text": "We are the kept and the keepers. The path closes. Turn back, warm ones.",
+            "choices": [
+                {
+                    "id": "choice_chorus_001a",
+                    "text": "We seek the Prometheus. Grant passage.",
+                    "next": "chorus_002a",
+                    "effects": {
+                        "respectful_request": true
+                    }
+                },
+                {
+                    "id": "choice_chorus_001b",
+                    "text": "Stand aside or be scattered.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "watchers_hostile": true
+                    }
+                },
+                {
+                    "id": "choice_chorus_001c",
+                    "text": "Offer data on gate failures in exchange for transit.",
+                    "next": "chorus_002b",
+                    "effects": {
+                        "intel_spent": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "chorus_002a",
+            "speaker": "watcher_chorus",
+            "text": "Your quarry sang first. Its echo gnaws our hulls. Passage costs more than breath. What do you pay?",
+            "choices": [
+                {
+                    "id": "choice_chorus_pay_morale",
+                    "text": "Risk the crew’s resolve. Proceed under their gaze.",
+                    "next": "chorus_passage_given",
+                    "effects": {
+                        "crew_morale": -1
+                    }
+                },
+                {
+                    "id": "choice_chorus_pay_fuel",
+                    "text": "Bleed fuel to mask our heat.",
+                    "next": "chorus_passage_given",
+                    "effects": {
+                        "fuel": -2
+                    }
+                }
+            ]
+        },
+        {
+            "id": "chorus_002b",
+            "speaker": "watcher_chorus",
+            "text": "Patterns aligned. Your truth buys a corridor. Do not linger in the wake.",
+            "effects": {
+                "safe_passage": true,
+                "watchers_debt": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "chorus_void_entrance",
+            "speaker": "watcher_chorus",
+            "text": "You carry the hush between notes. Speak in the quiet.",
+            "choices": [
+                {
+                    "id": "choice_void_merge",
+                    "text": "Merge our intent with theirs.",
+                    "next": "chorus_accord",
+                    "effects": {
+                        "void_corruption": 1,
+                        "safe_passage": true
+                    }
+                },
+                {
+                    "id": "choice_void_refuse",
+                    "text": "Hold the boundary. Ask for room only.",
+                    "next": "chorus_passage_given",
+                    "effects": {
+                        "willpower": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "chorus_accord",
+            "speaker": "watcher_chorus",
+            "text": "For one cycle we are many with you. Pass and remember the cost.",
+            "effects": {
+                "status_buff": "chorus_resonance",
+                "safe_passage": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "chorus_passage_given",
+            "speaker": "ship_ai_maya",
+            "text": "Vector received. A narrow lane through the blockade. We won’t get a second chance.",
+            "effects": {
+                "safe_passage": true
+            },
+            "next": "end_scene"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+  "scenes": [
+    "dialogs_scenes/scene_001_prometheus_discovery.json",
+    "dialogs_scenes/scene_002_keth_mori_threshold.json",
+    "dialogs_scenes/scene_003_pirate_ambush.json",
+    "dialogs_scenes/scene_004_alien_glyphs.json",
+    "dialogs_scenes/scene_005_watchers_blockade.json",
+    "dialogs_scenes/scene_006_loop_discovery.json",
+    "dialogs_scenes/scene_007_crystal_guardian.json",
+    "dialogs_scenes/scene_008_earth_debrief_victory.json",
+    "dialogs_scenes/scene_009_earth_debrief_assimilation.json",
+    "dialogs_scenes/scene_010_earth_debrief_pact.json",
+    "dialogs_scenes/scene_011_prometheus_wreck_approach.json",
+    "dialogs_scenes/scene_012_prometheus_logs.json",
+    "dialogs_scenes/scene_013_wreck_confrontation.json",
+    "dialogs_scenes/scene_014_departure_earth_launch.json",
+    "dialogs_scenes/scene_015_derelict_satellite.json",
+    "dialogs_scenes/scene_016_cosmic_anomaly.json",
+    "dialogs_scenes/scene_017_broken_probe.json",
+    "dialogs_scenes/scene_018_planetfall_descent.json",
+    "dialogs_scenes/scene_019_landing_zone.json",
+    "dialogs_scenes/scene_020_beast_ambush.json",
+    "dialogs_scenes/scene_021_rescue_or_raid.json",
+    "dialogs_scenes/scene_022_corruption_whisper.json",
+    "dialogs_scenes/scene_023_collapse_escape.json",
+    "dialogs_scenes/scene_024_fractured_space_entry.json",
+    "dialogs_scenes/scene_025_crew_fracture.json"
+  ]
+}
+

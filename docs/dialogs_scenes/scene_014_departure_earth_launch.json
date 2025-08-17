@@ -1,0 +1,66 @@
+{
+  "id": "scene_014_departure_earth_launch",
+  "location": "earth_launch_bay",
+  "triggers": [
+    "campaign_start"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "first_officer_torres",
+    "navigator_chen"
+  ],
+  "nodes": [
+    {
+      "id": "maya_depart_001",
+      "speaker": "ship_ai_maya",
+      "text": "Launch stack green across the board. Frontier charts loaded. Captain, set initial course?",
+      "choices": [
+        {
+          "id": "choice_depart_safe",
+          "text": "Chart the safe route. Minimize unknowns.",
+          "next": "torres_depart_safe",
+          "effects": {
+            "risk_reduced": true,
+            "fuel_spent": 1
+          }
+        },
+        {
+          "id": "choice_depart_risky",
+          "text": "Risk shortcuts through sparse gates.",
+          "next": "chen_depart_risky",
+          "effects": {
+            "fuel_saved": 1,
+            "hull_stress": 1
+          }
+        },
+        {
+          "id": "choice_depart_consult",
+          "text": "Consult the crew before we commit.",
+          "next": "torres_depart_consult",
+          "effects": {
+            "crew_morale": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "torres_depart_safe",
+      "speaker": "first_officer_torres",
+      "text": "Acknowledged. Broadcasting departure clearance. We'll take the long arc around the rifts.",
+      "next": "end_scene"
+    },
+    {
+      "id": "chen_depart_risky",
+      "speaker": "navigator_chen",
+      "text": "Threading the needle between drift clusters. If the gates hiccup, we’ll feel it.",
+      "next": "end_scene"
+    },
+    {
+      "id": "torres_depart_consult",
+      "speaker": "first_officer_torres",
+      "text": "Crew briefed. Engineering prefers caution. Ops wants speed. Your call stands, Captain.",
+      "next": "end_scene"
+    }
+  ]
+}
+

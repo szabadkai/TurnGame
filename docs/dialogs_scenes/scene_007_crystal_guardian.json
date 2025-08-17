@@ -1,0 +1,185 @@
+{
+    "id": "scene_007_crystal_guardian",
+    "location": "ruins_inner_sanctum",
+    "triggers": [
+        "approach_guardian_core"
+    ],
+    "npcs": [
+        "crystal_guardian",
+        "science_officer_kim",
+        "first_officer_torres"
+    ],
+    "nodes": [
+        {
+            "id": "guardian_001",
+            "speaker": "crystal_guardian",
+            "text": "Resonance unauthorized. Intruders at the heart. Purpose your intent or be unmade.",
+            "choices": [
+                {
+                    "id": "choice_guardian_fight",
+                    "text": "We’re taking that beacon. Stand aside.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "warrior_path": 1,
+                        "guardian_hostile": true
+                    }
+                },
+                {
+                    "id": "choice_guardian_diplomacy",
+                    "text": "[Diplomacy] We seek knowledge to prevent collapse.",
+                    "skill_check": {
+                        "type": "diplomacy",
+                        "difficulty": 16
+                    },
+                    "next": "guardian_002_diplo",
+                    "effects": {
+                        "diplomatic_path": 1
+                    }
+                },
+                {
+                    "id": "choice_guardian_void",
+                    "text": "[Void Touched] We submit our voices to the lattice.",
+                    "conditions": {
+                        "background": "void_touched"
+                    },
+                    "next": "guardian_002_void",
+                    "effects": {
+                        "void_corruption": 1
+                    }
+                },
+                {
+                    "id": "choice_guardian_watchers",
+                    "text": "[Watchers’ Debt] Call in the Chorus to counter-sing.",
+                    "conditions": {
+                        "flags": {
+                            "watchers_debt": true
+                        }
+                    },
+                    "next": "guardian_002_watchers_help"
+                },
+                {
+                    "id": "choice_guardian_raza",
+                    "text": "[Pirate Truce] Raza, make some noise outside.",
+                    "conditions": {
+                        "flags": {
+                            "temporary_truce": true
+                        }
+                    },
+                    "next": "guardian_002_pirates"
+                },
+                {
+                    "id": "choice_guardian_dampen",
+                    "text": "[Void Dampening] Apply the lattice cancellation pattern.",
+                    "conditions": {
+                        "status": "void_dampening"
+                    },
+                    "next": "guardian_002_dampen"
+                }
+            ]
+        },
+        {
+            "id": "guardian_002_diplo",
+            "speaker": "crystal_guardian",
+            "text": "Intent measured. Prevention aligns with Prime Directive. Passage conditional: return what you take as knowledge, not as weapon.",
+            "choices": [
+                {
+                    "id": "choice_guardian_diplo_accept",
+                    "text": "Agreed. We learn, not plunder.",
+                    "next": "guardian_passage",
+                    "effects": {
+                        "archive_access": true,
+                        "guardian_appeased": true
+                    }
+                },
+                {
+                    "id": "choice_guardian_diplo_refuse",
+                    "text": "No promises.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "guardian_hostile": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "guardian_002_void",
+            "speaker": "crystal_guardian",
+            "text": "Harmonics merge. You are less singular now. The gate will taste you and let you pass—for a price.",
+            "effects": {
+                "safe_passage": true,
+                "status_debuff": "whisper_marked"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "guardian_002_watchers_help",
+            "speaker": "science_officer_kim",
+            "text": "The Chorus is weaving a counter-harmony. The guardian’s facets are dimming—this is our opening!",
+            "effects": {
+                "guardian_weakened": true,
+                "watchers_debt": false,
+                "watchers_favor_spent": true
+            },
+            "choices": [
+                {
+                    "id": "choice_guardian_watchers_slip",
+                    "text": "Slip past while it’s weak.",
+                    "next": "guardian_passage",
+                    "effects": {
+                        "safe_passage": true
+                    }
+                },
+                {
+                    "id": "choice_guardian_watchers_strike",
+                    "text": "Strike now while it’s vulnerable.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "first_strike": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "guardian_002_pirates",
+            "speaker": "first_officer_torres",
+            "text": "Raza’s ships are firing flares into the upper vaults. The guardian is re-routing power—its shield lattice just sagged!",
+            "effects": {
+                "guardian_weakened": true,
+                "temporary_truce": false
+            },
+            "next": "guardian_002_watchers_help"
+        },
+        {
+            "id": "guardian_002_dampen",
+            "speaker": "science_officer_kim",
+            "text": "Cancellation pattern holding. Interference down twenty-one percent. We can either bypass or take it head-on with an edge.",
+            "choices": [
+                {
+                    "id": "choice_guardian_dampen_bypass",
+                    "text": "Bypass to the beacon.",
+                    "next": "guardian_passage",
+                    "effects": {
+                        "safe_passage": true
+                    }
+                },
+                {
+                    "id": "choice_guardian_dampen_fight",
+                    "text": "Fight while it’s damped.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "first_strike": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "guardian_passage",
+            "speaker": "crystal_guardian",
+            "text": "Metric satisfied. Passage allowed. Do not unmake what remains.",
+            "effects": {
+                "beacon_access": true
+            },
+            "next": "end_scene"
+        }
+    ]
+}

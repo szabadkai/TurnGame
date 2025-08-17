@@ -1,0 +1,241 @@
+{
+    "id": "scene_011_prometheus_wreck_approach",
+    "location": "prometheus_wreck_perimeter",
+    "triggers": [
+        "approach_prometheus_wreck"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "first_officer_torres",
+        "navigator_chen"
+    ],
+    "nodes": [
+        {
+            "id": "maya_prom_001",
+            "speaker": "ship_ai_maya",
+            "text": "Visual contact. The Prometheus is half-interred in the void’s wake. Hull stress harmonics peaking. One wrong vector and we shear apart.",
+            "choices": [
+                {
+                    "id": "choice_prom_use_lane",
+                    "text": "Use the passage corridor we earned.",
+                    "conditions": {
+                        "flags": {
+                            "safe_passage": true
+                        }
+                    },
+                    "next": "maya_prom_lane_result",
+                    "effects": {
+                        "approach_vector_locked": true
+                    }
+                },
+                {
+                    "id": "choice_prom_sync_beacon",
+                    "text": "[Beacon Access] Sync with the beacon and ride its wake.",
+                    "conditions": {
+                        "flags": {
+                            "beacon_access": true
+                        }
+                    },
+                    "next": "maya_prom_beacon_sync"
+                },
+                {
+                    "id": "choice_prom_harmonize_chorus",
+                    "text": "[Chorus Resonance] Harmonize our hull to the Choir.",
+                    "conditions": {
+                        "status_buff": "chorus_resonance"
+                    },
+                    "next": "maya_prom_chorus_pass"
+                },
+                {
+                    "id": "choice_prom_dampen_field",
+                    "text": "[Void Dampening] Project the lattice cancellation field.",
+                    "conditions": {
+                        "status": "void_dampening"
+                    },
+                    "next": "maya_prom_dampen_result"
+                },
+                {
+                    "id": "choice_prom_direct",
+                    "text": "Direct approach. Full power. Trust the math.",
+                    "next": "maya_prom_direct_check"
+                },
+                {
+                    "id": "choice_prom_listen_void",
+                    "text": "[Void Touched] Listen to the wake before we move.",
+                    "conditions": {
+                        "background": "void_touched"
+                    },
+                    "next": "void_echo_001"
+                }
+            ]
+        },
+        {
+            "id": "maya_prom_lane_result",
+            "speaker": "ship_ai_maya",
+            "text": "Course plotted through the cordon. Minimal drift. The wreck’s docking spines are reachable.",
+            "effects": {
+                "safe_passage": true,
+                "route_revealed": "prometheus_spines"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "maya_prom_beacon_sync",
+            "speaker": "ship_ai_maya",
+            "text": "Beacon handshake achieved. The wake is parting locally—like it remembers us.",
+            "effects": {
+                "void_turbulence_reduced": true,
+                "intel_gained": 1,
+                "prometheus_hail_unlocked": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "maya_prom_chorus_pass",
+            "speaker": "ship_ai_maya",
+            "text": "Harmonics aligned. The Choir acknowledges our signature. Passing… do not linger in the nulls, Captain.",
+            "effects": {
+                "safe_passage": true,
+                "void_corruption": 1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "maya_prom_dampen_result",
+            "speaker": "navigator_chen",
+            "text": "Field steady. Wake noise dropped below threshold. We can thread the gap to the dorsal bay.",
+            "choices": [
+                {
+                    "id": "choice_prom_dampen_proceed",
+                    "text": "Proceed to the dorsal bay.",
+                    "next": "maya_prom_dampen_proceed",
+                    "effects": {
+                        "safe_passage": true
+                    }
+                },
+                {
+                    "id": "choice_prom_dampen_hold",
+                    "text": "Hold position and scan for weaknesses.",
+                    "next": "maya_prom_scan",
+                    "effects": {
+                        "intel_gained": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "maya_prom_dampen_proceed",
+            "speaker": "ship_ai_maya",
+            "text": "Approach nominal. The wake presses, but the lattice holds. Docking soon.",
+            "effects": {
+                "approach_vector_locked": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "maya_prom_scan",
+            "speaker": "first_officer_torres",
+            "text": "Thermals show a calmer eddy near the auxiliary hangar. It’s tighter but safer.",
+            "choices": [
+                {
+                    "id": "choice_prom_scan_aux",
+                    "text": "Take the auxiliary hangar route.",
+                    "next": "maya_prom_aux_route",
+                    "effects": {
+                        "risk_reduced": true
+                    }
+                },
+                {
+                    "id": "choice_prom_scan_main",
+                    "text": "Stick with dorsal bay—faster.",
+                    "next": "maya_prom_dampen_proceed"
+                }
+            ]
+        },
+        {
+            "id": "maya_prom_aux_route",
+            "speaker": "ship_ai_maya",
+            "text": "Rotating to auxiliary hangar vector. Holding the lattice. This will work.",
+            "effects": {
+                "safe_passage": true,
+                "approach_vector_locked": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "maya_prom_direct_check",
+            "speaker": "ship_ai_maya",
+            "text": "Warning: stress exceeds hull safety by 12%. We can still thread it with precise burns.",
+            "choices": [
+                {
+                    "id": "choice_prom_direct_burns",
+                    "text": "Execute precision burns.",
+                    "skill_check": {
+                        "type": "engineering",
+                        "difficulty": 15
+                    },
+                    "next": "maya_prom_direct_outcome"
+                },
+                {
+                    "id": "choice_prom_direct_abort",
+                    "text": "Abort. Reassess options.",
+                    "next": "maya_prom_001"
+                }
+            ]
+        },
+        {
+            "id": "maya_prom_direct_outcome",
+            "speaker": "navigator_chen",
+            "text": "Burns executed. Vector nominal—barely. The hull groaned but we’re through.",
+            "effects": {
+                "hull_damage": 1,
+                "crew_morale": -1,
+                "safe_passage": true
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "void_echo_001",
+            "speaker": "ship_ai_maya",
+            "text": "Captain? Your vitals just spiked. The wake is… answering you.",
+            "choices": [
+                {
+                    "id": "choice_void_echo_answer",
+                    "text": "Answer back: we come as one and many.",
+                    "next": "void_echo_outcome_join",
+                    "effects": {
+                        "void_corruption": 1
+                    }
+                },
+                {
+                    "id": "choice_void_echo_refuse",
+                    "text": "Hold the line. We are ourselves.",
+                    "next": "void_echo_outcome_refuse",
+                    "effects": {
+                        "willpower": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "void_echo_outcome_join",
+            "speaker": "ship_ai_maya",
+            "text": "The wake’s pressure shifted—like a door opening. We can slip by now.",
+            "effects": {
+                "safe_passage": true,
+                "status_debuff": "whisper_marked"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "void_echo_outcome_refuse",
+            "speaker": "first_officer_torres",
+            "text": "Whatever that was, it backed off. Stay focused, Captain.",
+            "effects": {
+                "safe_passage": true,
+                "crew_morale": 1
+            },
+            "next": "end_scene"
+        }
+    ]
+}

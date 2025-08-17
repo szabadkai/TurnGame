@@ -1,0 +1,75 @@
+{
+  "id": "scene_025_crew_fracture",
+  "location": "meridian_bridge_afterglow",
+  "triggers": [
+    "crew_conflict_event"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "fracture_crew_001",
+      "speaker": "first_officer_torres",
+      "text": "With respect, Captain—this path gets us all killed. We need to turn back.",
+      "choices": [
+        {
+          "id": "choice_crew_restrain",
+          "text": "[Willpower] Hold the line. Stay focused.",
+          "skill_check": {
+            "type": "willpower",
+            "difficulty": 15
+          },
+          "next": "crew_restrain_outcome"
+        },
+        {
+          "id": "choice_crew_appeal",
+          "text": "[Diplomacy] We’re close. Trust gets us through.",
+          "skill_check": {
+            "type": "diplomacy",
+            "difficulty": 14
+          },
+          "next": "crew_appeal_outcome"
+        },
+        {
+          "id": "choice_crew_cede",
+          "text": "Let them lead for a leg of the journey.",
+          "next": "crew_cede_outcome"
+        }
+      ]
+    },
+    {
+      "id": "crew_restrain_outcome",
+      "speaker": "ship_ai_maya",
+      "text": "Command authority reasserted. Vitals stabilizing. The bridge quiets.",
+      "effects": {
+        "crew_morale": 1,
+        "torres_trust": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "crew_appeal_outcome",
+      "speaker": "science_officer_kim",
+      "text": "We breathe, together. One step, then the next. We proceed.",
+      "effects": {
+        "crew_morale": 1,
+        "risk_reduced": true
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "crew_cede_outcome",
+      "speaker": "ship_ai_maya",
+      "text": "Course adjusted. Consensus reached, but at a cost to momentum.",
+      "effects": {
+        "fuel_spent": 1,
+        "mutiny_risk_reduced": true
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

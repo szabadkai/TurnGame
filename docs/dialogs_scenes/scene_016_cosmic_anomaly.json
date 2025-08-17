@@ -1,0 +1,77 @@
+{
+  "id": "scene_016_cosmic_anomaly",
+  "location": "purple_rift_vicinity",
+  "triggers": [
+    "cosmic_anomaly_detected"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "anomaly_001",
+      "speaker": "ship_ai_maya",
+      "text": "Spatial rift ahead. Lightning within the void seam. Instruments drift out of calibration every few seconds.",
+      "choices": [
+        {
+          "id": "choice_anom_study",
+          "text": "Study the anomaly from a safe distance.",
+          "next": "kim_anom_study",
+          "effects": {
+            "intel_gained": 1
+          }
+        },
+        {
+          "id": "choice_anom_bypass",
+          "text": "Bypass. No reason to tempt fate.",
+          "next": "maya_anom_bypass",
+          "effects": {
+            "risk_avoided": true
+          }
+        },
+        {
+          "id": "choice_anom_listen",
+          "text": "[Void Touched] Listen to the echo.",
+          "conditions": {
+            "background": "void_touched"
+          },
+          "next": "maya_anom_listen",
+          "effects": {
+            "void_knowledge": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "kim_anom_study",
+      "speaker": "science_officer_kim",
+      "text": "Waveforms suggest a repeating failure pattern in gate harmonics. Mapping a safer corridor around similar seams.",
+      "effects": {
+        "route_revealed": "anomaly_safe_arc",
+        "risk_reduced": true
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_anom_bypass",
+      "speaker": "ship_ai_maya",
+      "text": "Course offset by 0.7 AU. We’ll lose time, but avoid the shear.",
+      "effects": {
+        "fuel_spent": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_anom_listen",
+      "speaker": "ship_ai_maya",
+      "text": "Your presence damped the spike. The rift ‘looked’ away. That shouldn’t be possible.",
+      "effects": {
+        "void_corruption": 1,
+        "risk_reduced": true
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

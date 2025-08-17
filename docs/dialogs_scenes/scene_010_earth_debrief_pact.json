@@ -1,0 +1,74 @@
+{
+    "id": "scene_010_earth_debrief_pact",
+    "location": "earth_command_console",
+    "triggers": [
+        "ending_pact"
+    ],
+    "npcs": [
+        "earth_commander_holt",
+        "ship_ai_maya"
+    ],
+    "nodes": [
+        {
+            "id": "pact_001",
+            "speaker": "earth_commander_holt",
+            "text": "Your biosigns are erratic and the gate signature persists. What did you do out there?",
+            "choices": [
+                {
+                    "id": "choice_pact_admit",
+                    "text": "We bargained. It bought time.",
+                    "next": "pact_002a",
+                    "effects": {
+                        "pact_known": true,
+                        "earth_reputation": -2
+                    }
+                },
+                {
+                    "id": "choice_pact_conceal",
+                    "text": "We stabilized the situation. Details follow.",
+                    "next": "pact_002b",
+                    "effects": {
+                        "hidden_corruption": 1
+                    }
+                },
+                {
+                    "id": "choice_pact_warn",
+                    "text": "Advise quarantine protocols now.",
+                    "next": "pact_002c",
+                    "effects": {
+                        "operation_unlocked": "quarantine_net"
+                    }
+                }
+            ]
+        },
+        {
+            "id": "pact_002a",
+            "speaker": "earth_commander_holt",
+            "text": "You made a pact with an unknown intelligence. Command will convene an emergency council.",
+            "effects": {
+                "status_flag": "under_inquiry",
+                "earth_reputation": -1
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "pact_002b",
+            "speaker": "ship_ai_maya",
+            "text": "Telemetry redacted per Captain’s order. Upload queued to secure buffer.",
+            "effects": {
+                "kept_secrets": 1,
+                "maya_loyalty": "absolute"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "pact_002c",
+            "speaker": "earth_commander_holt",
+            "text": "Acknowledged. Quarantine net authority requested. This better not be too late.",
+            "effects": {
+                "operation_status": "quarantine_pending"
+            },
+            "next": "end_scene"
+        }
+    ]
+}

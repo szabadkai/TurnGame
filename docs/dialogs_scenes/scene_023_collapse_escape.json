@@ -1,0 +1,58 @@
+{
+  "id": "scene_023_collapse_escape",
+  "location": "ruins_escape_corridor",
+  "triggers": [
+    "ruins_collapse_triggered"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "escape_001",
+      "speaker": "ship_ai_maya",
+      "text": "Seismic spike! The chamber lattice is failing. We need to move now.",
+      "choices": [
+        {
+          "id": "choice_escape_fast",
+          "text": "Take the fastest route. Don’t stop.",
+          "next": "escape_fast_outcome",
+          "effects": {
+            "risk": 1
+          }
+        },
+        {
+          "id": "choice_escape_stabilize",
+          "text": "[Engineering] Stabilize supports, then move.",
+          "skill_check": {
+            "type": "engineering",
+            "difficulty": 13
+          },
+          "next": "escape_stabilize_outcome"
+        }
+      ]
+    },
+    {
+      "id": "escape_fast_outcome",
+      "speaker": "first_officer_torres",
+      "text": "Go, go! We made it—barely. A crate and a railing didn’t.",
+      "effects": {
+        "resources_lost": 1,
+        "crew_injury": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "escape_stabilize_outcome",
+      "speaker": "ship_ai_maya",
+      "text": "Temporary buttresses placed. Collapse delayed. We exit clean.",
+      "effects": {
+        "risk_reduced": true,
+        "crew_morale": 1
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

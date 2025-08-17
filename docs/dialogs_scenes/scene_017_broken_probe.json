@@ -1,0 +1,64 @@
+{
+  "id": "scene_017_broken_probe",
+  "location": "high_orbit_probe_drift",
+  "triggers": [
+    "broken_probe_found"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "navigator_chen"
+  ],
+  "nodes": [
+    {
+      "id": "probe_001",
+      "speaker": "navigator_chen",
+      "text": "A broken probe is drifting off-axis. Solar panels cracked, data dish intact.",
+      "choices": [
+        {
+          "id": "choice_probe_fuel",
+          "text": "Recover fuel reserves.",
+          "next": "maya_probe_fuel",
+          "effects": {
+            "fuel_gained": 1
+          }
+        },
+        {
+          "id": "choice_probe_decrypt",
+          "text": "Decrypt the signal and pull logs.",
+          "next": "maya_probe_decrypt",
+          "effects": {
+            "intel_gained": 1
+          }
+        },
+        {
+          "id": "choice_probe_ignore",
+          "text": "Ignore it. Time is worth more.",
+          "next": "end_scene",
+          "effects": {
+            "risk_avoided": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "maya_probe_fuel",
+      "speaker": "ship_ai_maya",
+      "text": "Fuel bladder secured. Minimal risk.",
+      "effects": {
+        "fuel_gained": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_probe_decrypt",
+      "speaker": "ship_ai_maya",
+      "text": "Telemetry suggests increased pirate presence along the trade lane—and a weak SOS near jungle coordinates.",
+      "effects": {
+        "route_revealed": "jungle_ruins_site",
+        "pirate_activity_warning": true
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

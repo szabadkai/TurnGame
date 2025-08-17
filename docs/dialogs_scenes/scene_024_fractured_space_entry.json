@@ -1,0 +1,73 @@
+{
+  "id": "scene_024_fractured_space_entry",
+  "location": "void_sphere_periphery",
+  "triggers": [
+    "enter_fractured_space"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "navigator_chen"
+  ],
+  "nodes": [
+    {
+      "id": "fracture_001",
+      "speaker": "ship_ai_maya",
+      "text": "Asteroids and dead sats orbit a black sphere that eats light. The path ahead fractures into eddies.",
+      "choices": [
+        {
+          "id": "choice_frac_safe",
+          "text": "Plot a safe approach around the eddies.",
+          "next": "chen_frac_safe",
+          "effects": {
+            "risk_reduced": true
+          }
+        },
+        {
+          "id": "choice_frac_direct",
+          "text": "Direct approach. Keep power steady.",
+          "next": "maya_frac_direct",
+          "effects": {
+            "hull_stress": 1
+          }
+        },
+        {
+          "id": "choice_frac_signal",
+          "text": "Ping the perimeter. See who answers.",
+          "next": "maya_frac_ping",
+          "effects": {
+            "watchers_attention": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "chen_frac_safe",
+      "speaker": "navigator_chen",
+      "text": "Course plotted to skirt shear zones. It’ll take longer, but we’ll live to complain about it.",
+      "effects": {
+        "route_revealed": "watchers_perimeter"
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_frac_direct",
+      "speaker": "ship_ai_maya",
+      "text": "Vector locked. If we push through, the Choir will notice.",
+      "effects": {
+        "route_revealed": "watchers_perimeter",
+        "watchers_hostile": true
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_frac_ping",
+      "speaker": "ship_ai_maya",
+      "text": "Response received. Multiple ships… harmonized. They form a cordon and request we turn back.",
+      "effects": {
+        "watchers_encounter_unlocked": true
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

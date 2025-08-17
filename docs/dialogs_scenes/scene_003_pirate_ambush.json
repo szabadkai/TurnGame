@@ -1,0 +1,168 @@
+{
+    "id": "scene_003_pirate_ambush",
+    "location": "outer_rim_trade_lane",
+    "triggers": [
+        "pirate_ambush"
+    ],
+    "npcs": [
+        "first_officer_torres",
+        "pirate_captain_raza"
+    ],
+    "nodes": [
+        {
+            "id": "torres_pirates_001",
+            "speaker": "first_officer_torres",
+            "text": "Contacts emerging from the dust belt—pirate signatures. They’re locking targeting solutions on us.",
+            "choices": [
+                {
+                    "id": "choice_pirates_001a",
+                    "text": "Open fire. We don’t negotiate with raiders.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "pirate_reputation": -3,
+                        "warrior_path": 1,
+                        "crew_alert": "high"
+                    }
+                },
+                {
+                    "id": "choice_pirates_001b",
+                    "text": "Open a channel. Let’s talk first.",
+                    "next": "raza_001",
+                    "effects": {
+                        "diplomatic_path": 1
+                    }
+                },
+                {
+                    "id": "choice_pirates_001c",
+                    "text": "Dump decoys and stall for time.",
+                    "skill_check": {
+                        "type": "deception",
+                        "difficulty": 13
+                    },
+                    "next": "torres_stall_outcome",
+                    "effects": {
+                        "intel_gained": 1
+                    }
+                },
+                {
+                    "id": "choice_pirates_001d",
+                    "text": "[Engineering] Spike their target locks with a burst.",
+                    "skill_check": {
+                        "type": "engineering",
+                        "difficulty": 14
+                    },
+                    "next": "torres_engineering_outcome",
+                    "effects": {
+                        "systems_stress": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "raza_001",
+            "speaker": "pirate_captain_raza",
+            "text": "Well now, a shiny hull lost on the wrong drift. Tribute buys safety, Captain. Refuse, and we carve you into shares.",
+            "choices": [
+                {
+                    "id": "choice_raza_001a",
+                    "text": "We can pay. Credits for safe passage.",
+                    "next": "raza_002_paid",
+                    "effects": {
+                        "credits": -2,
+                        "pirate_reputation": 1
+                    }
+                },
+                {
+                    "id": "choice_raza_001b",
+                    "text": "Information instead. We’re hunting the Prometheus.",
+                    "next": "raza_002_info",
+                    "effects": {
+                        "intel_spent": 1,
+                        "pirate_reputation": 1
+                    }
+                },
+                {
+                    "id": "choice_raza_001c",
+                    "text": "Walk away, Raza. We’ve beaten worse fleets than yours.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "pirate_reputation": -2,
+                        "warrior_path": 1
+                    }
+                },
+                {
+                    "id": "choice_raza_001d",
+                    "text": "[Diplomacy] We can cut you in on salvage if you stand down.",
+                    "skill_check": {
+                        "type": "diplomacy",
+                        "difficulty": 15
+                    },
+                    "next": "raza_002_bargain",
+                    "effects": {
+                        "diplomatic_path": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "raza_002_paid",
+            "speaker": "pirate_captain_raza",
+            "text": "Smooth sailing then. Word of advice: void sings loud past Meridian. Don’t listen long.",
+            "effects": {
+                "safe_passage": true,
+                "rumor_unlocked": "void_song_meridian"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "raza_002_info",
+            "speaker": "pirate_captain_raza",
+            "text": "Prometheus? Saw her wake near the black choir, half in and half out. If you’re smart, you’ll turn around before it starts singing back.",
+            "effects": {
+                "intel_gained": 2,
+                "route_revealed": "choir_perimeter"
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "raza_002_bargain",
+            "speaker": "pirate_captain_raza",
+            "text": "A cut of ghost-ship salvage? Tempting. You get a head start. We’ll be watching your trail, Captain.",
+            "effects": {
+                "temporary_truce": true,
+                "pirate_reputation": 2
+            },
+            "next": "end_scene"
+        },
+        {
+            "id": "torres_stall_outcome",
+            "speaker": "first_officer_torres",
+            "text": "Decoys deployed. We’ve bought a minute, sir—enough to jump or to line up a first strike.",
+            "choices": [
+                {
+                    "id": "choice_stall_jump",
+                    "text": "Jump now.",
+                    "next": "end_scene",
+                    "effects": {
+                        "fuel": -1,
+                        "avoided_conflict": true
+                    }
+                },
+                {
+                    "id": "choice_stall_attack",
+                    "text": "Take the shot while they’re blind.",
+                    "next": "combat_encounter",
+                    "effects": {
+                        "first_strike": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "torres_engineering_outcome",
+            "speaker": "first_officer_torres",
+            "text": "Their locks are scrambled. It won’t last. Your call, Captain.",
+            "next": "torres_stall_outcome"
+        }
+    ]
+}

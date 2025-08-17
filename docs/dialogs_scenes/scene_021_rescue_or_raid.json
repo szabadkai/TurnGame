@@ -1,0 +1,77 @@
+{
+  "id": "scene_021_rescue_or_raid",
+  "location": "ruins_fork_chamber",
+  "triggers": [
+    "ruins_fork_encounter"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "fork_001",
+      "speaker": "science_officer_kim",
+      "text": "Split ahead: to the left, colonist signals under rubble; right, a vault with supplies humming faintly.",
+      "choices": [
+        {
+          "id": "choice_fork_rescue",
+          "text": "Rescue the colonists.",
+          "next": "fork_rescue_check"
+        },
+        {
+          "id": "choice_fork_raid",
+          "text": "Raid the vault for supplies.",
+          "next": "fork_raid_outcome"
+        }
+      ]
+    },
+    {
+      "id": "fork_rescue_check",
+      "speaker": "first_officer_torres",
+      "text": "Leverage and lift. On three!",
+      "choices": [
+        {
+          "id": "choice_rescue_athletics",
+          "text": "[Athletics] Clear the rubble.",
+          "skill_check": {
+            "type": "athletics",
+            "difficulty": 14
+          },
+          "next": "fork_rescue_success"
+        },
+        {
+          "id": "choice_rescue_engineering",
+          "text": "[Engineering] Use jacks and brace the ceiling.",
+          "skill_check": {
+            "type": "engineering",
+            "difficulty": 12
+          },
+          "next": "fork_rescue_success"
+        }
+      ]
+    },
+    {
+      "id": "fork_rescue_success",
+      "speaker": "science_officer_kim",
+      "text": "They’re breathing. We got them out. They speak of tremors deeper in.",
+      "effects": {
+        "earth_reputation": 1,
+        "colonists_rescued": true,
+        "intel_gained": 1
+      },
+      "next": "end_scene"
+    },
+    {
+      "id": "fork_raid_outcome",
+      "speaker": "first_officer_torres",
+      "text": "Vault cracked. Supplies secured—but the rumble’s getting worse.",
+      "effects": {
+        "supplies_gained": 2,
+        "earth_reputation": -1
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

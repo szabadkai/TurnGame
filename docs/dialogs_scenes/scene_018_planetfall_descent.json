@@ -1,0 +1,49 @@
+{
+  "id": "scene_018_planetfall_descent",
+  "location": "stormy_atmosphere_entry",
+  "triggers": [
+    "approach_ruins_planet"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "first_officer_torres"
+  ],
+  "nodes": [
+    {
+      "id": "planetfall_001",
+      "speaker": "ship_ai_maya",
+      "text": "Atmosphere is turbulent. Lightning traces along the crystal spires. Prepare landing procedures?",
+      "choices": [
+        {
+          "id": "choice_planetfall_prepare",
+          "text": "Prepare the landing party and gear.",
+          "next": "torres_planetfall_prepare",
+          "effects": {
+            "landing_party_prepared": true
+          }
+        },
+        {
+          "id": "choice_planetfall_direct",
+          "text": "Go in hot. We’ll improvise on the ground.",
+          "next": "maya_planetfall_direct",
+          "effects": {
+            "hull_stress": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "torres_planetfall_prepare",
+      "speaker": "first_officer_torres",
+      "text": "Loadouts checked. Ropes, breather masks, dampeners. We’re ready, Captain.",
+      "next": "end_scene"
+    },
+    {
+      "id": "maya_planetfall_direct",
+      "speaker": "ship_ai_maya",
+      "text": "Descent vector locked. Expect crosswinds and micro-shards. Touchdown in three.",
+      "next": "end_scene"
+    }
+  ]
+}
+

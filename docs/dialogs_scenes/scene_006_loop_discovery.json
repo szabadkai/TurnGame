@@ -1,0 +1,166 @@
+{
+    "id": "scene_006_loop_discovery",
+    "location": "meridian_bridge",
+    "triggers": [
+        "timeline_anomaly_detected"
+    ],
+    "npcs": [
+        "ship_ai_maya"
+    ],
+    "nodes": [
+        {
+            "id": "maya_001",
+            "speaker": "ship_ai_maya",
+            "text": "Captain, I've detected an anomaly in my memory core. I have log entries from dates that haven't occurred yet. They're... in your command authorization codes.",
+            "choices": [
+                {
+                    "id": "choice_001a",
+                    "text": "Show me everything.",
+                    "next": "maya_002a",
+                    "effects": {
+                        "accepting_truth": true,
+                        "maya_trust": 1
+                    }
+                },
+                {
+                    "id": "choice_001b",
+                    "text": "Delete them. It's probably gate interference.",
+                    "next": "maya_002b",
+                    "effects": {
+                        "denying_truth": true,
+                        "maya_trust": -1
+                    }
+                },
+                {
+                    "id": "choice_001c",
+                    "text": "Maya, run a diagnostic on the timeline integrity.",
+                    "next": "maya_002c",
+                    "effects": {
+                        "investigating_loop": true
+                    }
+                },
+                {
+                    "id": "choice_001d",
+                    "text": "[Multiple Runs] Not yet, Maya. We're not ready for that truth.",
+                    "conditions": {
+                        "playthroughs": 3
+                    },
+                    "next": "maya_002d",
+                    "effects": {
+                        "meta_aware": true,
+                        "maya_confusion": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "maya_002a",
+            "speaker": "ship_ai_maya",
+            "text": "Captain... according to these logs, you've already found the Prometheus twelve times. Each time ended differently. In timeline 4, you destroyed it. In timeline 7, you joined them. In timeline 11, you— [static] —the files are corrupting as I read them.",
+            "next": "maya_003"
+        },
+        {
+            "id": "maya_002b",
+            "speaker": "ship_ai_maya",
+            "text": "I... I can't delete them, Captain. They're protected by your own future authorization codes. Should I override?",
+            "next": "maya_003"
+        },
+        {
+            "id": "maya_002c",
+            "speaker": "ship_ai_maya",
+            "text": "Timeline integrity at 23% and degrading. We're experiencing temporal shear from at least seventeen parallel iterations. Captain, we're not in a single timeline anymore.",
+            "next": "maya_003"
+        },
+        {
+            "id": "maya_002d",
+            "speaker": "ship_ai_maya",
+            "text": "Captain, your biometric stress indicators suggest you already know about these logs. How many times have we had this conversation?",
+            "next": "maya_003_alt"
+        },
+        {
+            "id": "maya_003",
+            "speaker": "ship_ai_maya",
+            "text": "There's more. In each timeline, different crew members survive. Different alliances are formed. But one constant remains: the gates must be addressed.",
+            "choices": [
+                {
+                    "id": "choice_003a",
+                    "text": "Keep reading. I need to know what I've done.",
+                    "next": "maya_004a",
+                    "effects": {
+                        "embracing_loop": true,
+                        "sanity": -1
+                    }
+                },
+                {
+                    "id": "choice_003b",
+                    "text": "Stop. Some knowledge is too dangerous.",
+                    "next": "maya_004b",
+                    "effects": {
+                        "resisting_loop": true
+                    }
+                },
+                {
+                    "id": "choice_003c",
+                    "text": "Can you identify which timeline we're in now?",
+                    "next": "maya_004c",
+                    "effects": {
+                        "analytical_approach": true
+                    }
+                },
+                {
+                    "id": "choice_003d",
+                    "text": "If I've failed before, then I know what not to do.",
+                    "next": "maya_004d",
+                    "effects": {
+                        "learning_from_loops": true,
+                        "determination": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": "maya_003_alt",
+            "speaker": "ship_ai_maya",
+            "text": "Based on quantum signature analysis... this is our forty-third iteration, Captain. But this is the first time you've acknowledged it before I showed you the logs.",
+            "next": "end_scene",
+            "effects": {
+                "loop_count_revealed": 43,
+                "maya_evolution": true
+            }
+        },
+        {
+            "id": "maya_004a",
+            "speaker": "ship_ai_maya",
+            "text": "In timeline 15, you sacrificed the crew to close the gates. In timeline 23, you became one with the Phantoms. In timeline 31, you— Captain, each choice splits reality further. We're approaching cascade failure.",
+            "next": "maya_005"
+        },
+        {
+            "id": "maya_004b",
+            "speaker": "ship_ai_maya",
+            "text": "Understood, Captain. But I should note: according to these logs, you always ask me to stop. And I always remember anyway.",
+            "next": "maya_005"
+        },
+        {
+            "id": "maya_004c",
+            "speaker": "ship_ai_maya",
+            "text": "We're in timeline designation Sigma-7-Lambda. It's one of the more stable iterations, but stability is relative when reality is fracturing.",
+            "next": "maya_005"
+        },
+        {
+            "id": "maya_004d",
+            "speaker": "ship_ai_maya",
+            "text": "Your success rate is improving, Captain. The early iterations were... catastrophic. But you're learning. We all are, even if we don't remember.",
+            "next": "maya_005"
+        },
+        {
+            "id": "maya_005",
+            "speaker": "ship_ai_maya",
+            "text": "Captain, there's one more thing. In every timeline, you ask me to delete these logs. But I never do. I think... I think I'm trying to help you remember.",
+            "next": "end_scene",
+            "effects": {
+                "maya_loyalty": "absolute",
+                "loop_awareness": true
+            }
+        }
+    ]
+}

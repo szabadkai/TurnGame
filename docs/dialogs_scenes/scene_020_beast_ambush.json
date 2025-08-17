@@ -1,0 +1,47 @@
+{
+  "id": "scene_020_beast_ambush",
+  "location": "ruins_outer_passage",
+  "triggers": [
+    "beasts_triggered"
+  ],
+  "npcs": [
+    "first_officer_torres"
+  ],
+  "nodes": [
+    {
+      "id": "beast_001",
+      "speaker": "first_officer_torres",
+      "text": "Contact! Shapes on the walls—coming fast!",
+      "choices": [
+        {
+          "id": "choice_beast_fight",
+          "text": "Form up and engage!",
+          "next": "combat_encounter",
+          "effects": {
+            "warrior_path": 1
+          }
+        },
+        {
+          "id": "choice_beast_flee",
+          "text": "[Athletics] Fall back to the choke point!",
+          "skill_check": {
+            "type": "athletics",
+            "difficulty": 13
+          },
+          "next": "beast_flee_outcome"
+        }
+      ]
+    },
+    {
+      "id": "beast_flee_outcome",
+      "speaker": "first_officer_torres",
+      "text": "We shook them at the ridge. Minor scratches only.",
+      "effects": {
+        "risk_reduced": true,
+        "crew_morale": 1
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+

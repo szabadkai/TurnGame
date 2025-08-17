@@ -1,0 +1,44 @@
+{
+  "id": "scene_019_landing_zone",
+  "location": "jungle_lz_perimeter",
+  "triggers": [
+    "landed_near_ruins"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "lz_001",
+      "speaker": "first_officer_torres",
+      "text": "Perimeter’s quiet for now. Ruin entrance is 300 meters east.",
+      "choices": [
+        {
+          "id": "choice_lz_scout",
+          "text": "Scout the perimeter first.",
+          "next": "kim_lz_scout",
+          "effects": {
+            "ambush_chance_reduced": true
+          }
+        },
+        {
+          "id": "choice_lz_enter",
+          "text": "Enter the ruins directly.",
+          "next": "end_scene"
+        }
+      ]
+    },
+    {
+      "id": "kim_lz_scout",
+      "speaker": "science_officer_kim",
+      "text": "Tracks in the mud—something big. We’ll avoid the nests if we stick to the ridge.",
+      "effects": {
+        "route_revealed": "ridge_path",
+        "risk_reduced": true
+      },
+      "next": "end_scene"
+    }
+  ]
+}
+
