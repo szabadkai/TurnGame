@@ -1,0 +1,64 @@
+{
+  "id": "scene_026_loop_awareness_progression",
+  "location": "meridian_bridge",
+  "triggers": ["loop_awareness", "post_loop_event"],
+  "npcs": ["ship_ai_maya"],
+  "nodes": [
+    {
+      "id": "maya_intro",
+      "speaker": "ship_ai_maya",
+      "text": "Captain, your decisions across iterations are coalescing patterns. May I propose an adjustment?",
+      "choices": [
+        {
+          "id": "c_accept",
+          "text": "Proceed, Maya. I trust your judgment.",
+          "conditions": { "vars": { "maya_trust": { "min": 2 } } },
+          "next": "maya_plan",
+          "effects": { "inc": { "determination": 1 }, "scope": "run" }
+        },
+        {
+          "id": "c_probe",
+          "text": "How many loops have we endured?",
+          "conditions": { "playthroughs": 2, "flags": { "loop_awareness": true } },
+          "next": "maya_count",
+          "effects": { "flags": { "seeking_truth": true }, "scope": "run" }
+        },
+        {
+          "id": "c_once",
+          "text": "Mark this as our anchor iteration.",
+          "conditions": { "once_per_loop": true },
+          "next": "maya_anchor",
+          "effects": { "loop_flags": { "anchor_set": true } }
+        },
+        {
+          "id": "c_basic",
+          "text": "Stand by. We'll revisit after the next jump.",
+          "next": "end_scene",
+          "effects": { "flags": { "postponed": true } }
+        }
+      ]
+    },
+    {
+      "id": "maya_plan",
+      "speaker": "ship_ai_maya",
+      "text": "Aggregating across runs suggests we pursue Sigma-7-Lambda vectors and avoid Phantom routes for now.",
+      "next": "end_scene",
+      "effects": { "loop_flags": { "preferred_vector": "sigma_7_lambda" }, "inc": { "maya_awareness": 1 } }
+    },
+    {
+      "id": "maya_count",
+      "speaker": "ship_ai_maya",
+      "text": "By my best estimate, this is iteration ",
+      "next": "end_scene",
+      "effects": { "flags": { "count_acknowledged": true }, "scope": "run" }
+    },
+    {
+      "id": "maya_anchor",
+      "speaker": "ship_ai_maya",
+      "text": "Anchor set. I will compare future deviations against this state across loops.",
+      "next": "end_scene",
+      "effects": { "loop_flags": { "anchor_confirmed": true } }
+    }
+  ]
+}
+

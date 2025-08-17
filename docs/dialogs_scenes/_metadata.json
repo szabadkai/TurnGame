@@ -1,6 +1,6 @@
 {
-    "version": "1.3",
-    "total_scenes": 25,
+    "version": "1.4",
+    "total_scenes": 26,
     "branching_type": "multi_path",
     "save_compatibility": [
         "timeline_aware",
