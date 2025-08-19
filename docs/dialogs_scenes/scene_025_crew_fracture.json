@@ -13,63 +13,175 @@
     {
       "id": "fracture_crew_001",
       "speaker": "first_officer_torres",
-      "text": "With respect, Captain—this path gets us all killed. We need to turn back.",
+      "body_language": "Torres has their hand on their sidearm. Their face is a mask of grim resolve.",
+      "text": "Captain, this has to stop. We've been following your 'instincts' through collapsing ruins and phantom fleets. Now you want to dive into the heart of that... anomaly. It's suicide. I am relieving you of command.",
+      "emotional_state": {"torres_doubt": 5, "kim_loyalty": 2, "player_stress": 0},
       "choices": [
         {
-          "id": "choice_crew_restrain",
-          "text": "[Willpower] Hold the line. Stay focused.",
-          "skill_check": {
-            "type": "willpower",
-            "difficulty": 15
-          },
-          "next": "crew_restrain_outcome"
+          "id": "c_ask_maya",
+          "text": "[Reconnaissance] Maya, give me a crew stress and loyalty analysis. Now.",
+          "next": "fracture_maya_analysis_002"
         },
         {
-          "id": "choice_crew_appeal",
-          "text": "[Diplomacy] We’re close. Trust gets us through.",
-          "skill_check": {
-            "type": "diplomacy",
-            "difficulty": 14
-          },
-          "next": "crew_appeal_outcome"
+          "id": "c_confront_torres",
+          "text": "You're relieving me of command? That's mutiny, Torres.",
+          "next": "fracture_confront_torres_003"
         },
         {
-          "id": "choice_crew_cede",
-          "text": "Let them lead for a leg of the journey.",
-          "next": "crew_cede_outcome"
+          "id": "c_appeal_kim",
+          "text": "Kim, you've seen what I've seen. Back me up here.",
+          "next": "fracture_appeal_kim_004"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Shared Memory] \"Torres, the last time we stood here, you said the same thing. And we died. The time before that, we turned back, and we died. This is the only path.\"",
+          "conditions": { "loop_count": ">10", "shared_memory_unlocked": true },
+          "next": "fracture_meta_appeal_005"
         }
       ]
     },
     {
-      "id": "crew_restrain_outcome",
+      "id": "fracture_maya_analysis_002",
       "speaker": "ship_ai_maya",
-      "text": "Command authority reasserted. Vitals stabilizing. The bridge quiets.",
-      "effects": {
-        "crew_morale": 1,
-        "torres_trust": 1
-      },
-      "next": "end_scene"
+      "text": "Analysis: First Officer Torres is exhibiting extreme stress responses, but their loyalty metrics remain high. They believe they are acting in the crew's best interest. Science Officer Kim's loyalty is... fluctuating. They are caught between protocol and the evidence of their senses. The rest of the crew is looking to you.",
+      "effects": {"inc": {"intel": 1}},
+      "next": "fracture_main_choice_006"
     },
     {
-      "id": "crew_appeal_outcome",
+      "id": "fracture_confront_torres_003",
+      "speaker": "first_officer_torres",
+      "text": "Call it what you want. I call it saving our lives. I won't let you lead us into the abyss.",
+      "effects": {"inc": {"torres_doubt": 1, "player_stress": 1}},
+      "next": "fracture_main_choice_006"
+    },
+    {
+      "id": "fracture_appeal_kim_004",
       "speaker": "science_officer_kim",
-      "text": "We breathe, together. One step, then the next. We proceed.",
-      "effects": {
-        "crew_morale": 1,
-        "risk_reduced": true
-      },
-      "next": "end_scene"
+      "body_language": "Kim looks torn, unable to meet your gaze or Torres's.",
+      "text": "Captain... I... The data doesn't support this course of action. But I also know that the data has been wrong before. I don't know what to believe.",
+      "effects": {"dec": {"kim_loyalty": 1}},
+      "next": "fracture_main_choice_006"
     },
     {
-      "id": "crew_cede_outcome",
-      "speaker": "ship_ai_maya",
-      "text": "Course adjusted. Consensus reached, but at a cost to momentum.",
-      "effects": {
-        "fuel_spent": 1,
-        "mutiny_risk_reduced": true
-      },
-      "next": "end_scene"
-    }
+      "id": "fracture_meta_appeal_005",
+      "speaker": "first_officer_torres",
+      "body_language": "Torres pales, their hand dropping from their sidearm. A flicker of a memory not their own crosses their face.",
+      "text": "What... how did you... I remember... a flash of light... a scream... my scream. Captain... what is happening to us?",
+      "effects": {"set": {"torres_loyalty": "absolute"}, "inc": {"maya_awareness": 2}},
+      "next": "end_scene_meta_unity"
+    },
+    {
+      "id": "fracture_main_choice_006",
+      "speaker": "SYSTEM",
+      "text": "The bridge is silent and tense. Torres stands defiant. Kim is wavering. The crew is watching you. This is a tipping point.",
+      "choices": [
+        {
+          "id": "choice_crew_restrain",
+          "text": "[Willpower] \"I am the Captain of this ship. You will stand down, First Officer.\"",
+          "skill_check": {
+            "type": "willpower",
+            "difficulty": 17,
+            "reputation_modifier": {"earth": ">5"}
+          },
+          "next": "fracture_restrain_outcome_007"
+        },
+        {
+          "id": "choice_crew_appeal",
+          "text": "[Diplomacy] \"We are a crew. We don't do this. Let's talk it through.\"",
+          "skill_check": {
+            "type": "diplomacy",
+            "difficulty": 16
+          },
+          "next": "fracture_appeal_outcome_008"
+        },
+        {
+          "id": "c_contradiction",
+          "text": "[Paradox] \"You're right, Torres. The plan is flawed. And that's why we must proceed.\"",
+          "conditions": {"has_flag": "contradicting_self"},
+          "next": "fracture_paradox_choice_011"
+        },
+        {
+          "id": "c_loyalty_check",
+          "text": "[Relationship] \"Torres. Look at me. Have I ever led you wrong?\"",
+          "conditions": {"relationship": {"torres_loyalty": "absolute"}},
+          "next": "fracture_loyalty_appeal_012"
+        }
+      ]
+    },
+    {
+      "id": "fracture_restrain_outcome_007",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "success"},
+      "body_language": "After a long, tense moment, Torres slowly nods, their posture slumping in defeat.",
+      "text": "Aye, Captain. I... stand down.",
+      "effects": {"inc": {"crew_morale": -1, "player_stress": -1}, "dec": {"torres_doubt": 2}},
+      "next": "end_scene_tense_truce"
+    },
+    {
+      "id": "fracture_restrain_fail",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "\"Your words are hollow, Captain. Security, escort the Captain to their quarters. They are not fit for command.\"",
+      "effects": {"scaling_effect": {"type": "mutiny_count", "scale_factor": 1}},
+      "next": "end_scene_mutiny"
+    },
+    {
+      "id": "fracture_appeal_outcome_008",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Let's lower the temperature. We've all been through hell. Let's not create a new one here. We can find a compromise.",
+      "next": "fracture_compromise_node_013"
+    },
+    {
+      "id": "fracture_appeal_fail",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "\"Talk is cheap. Action is what's required. And the Captain's actions are leading us to our doom.\"",
+      "next": "fracture_restrain_fail"
+    },
+    {
+      "id": "fracture_paradox_choice_011",
+      "speaker": "first_officer_torres",
+      "text": "What? That makes no sense... unless... [Subtext: They know something they can't say.] ...Unless the obvious path is the trap. You're testing us. Testing our faith.",
+      "effects": {"inc": {"torres_loyalty": 2, "chen_anxiety": 1}},
+      "next": "end_scene_tense_truce"
+    },
+    {
+      "id": "fracture_loyalty_appeal_012",
+      "speaker": "first_officer_torres",
+      "text": "No, Captain. You never have. Forgive me. I let the fear get to me. I'm with you. To the end.",
+      "effects": {"set": {"torres_doubt": 0}},
+      "next": "end_scene_unity"
+    },
+    {
+      "id": "fracture_compromise_node_013",
+      "speaker": "SYSTEM",
+      "text": "A tense negotiation begins. Torres wants to turn back. You want to press on. Kim acts as a mediator.",
+      "choices": [
+        {
+            "id": "c_cede_command",
+            "text": "Fine. Torres, you have the conn. Get us through the next sector. Then I take it back.",
+            "next": "end_scene_cede_command"
+        },
+        {
+            "id": "c_group_check",
+            "text": "We find a third way. Together. Maya, all crew data. Let's build a new path from scratch.",
+            "skill_check": {"type": "group_check", "skills": ["diplomacy", "engineering", "piloting"], "difficulty": 18},
+            "next": "fracture_group_check_outcome"
+        }
+      ]
+    },
+    {
+        "id": "fracture_group_check_outcome",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "success"},
+        "text": "A new path has been forged from the combined expertise of the crew. It is... elegant. A high-risk, high-reward route that utilizes a gravitational slingshot maneuver. It is dangerous, but it is a path you all chose together.",
+        "next": "end_scene_unity"
+    },
+    { "id": "end_scene_unity", "speaker": "SYSTEM", "text": "The crisis is averted. The challenge has forged you into a more cohesive unit.", "effects": {"inc": {"crew_morale": 2}}, "choices": [] },
+    { "id": "end_scene_tense_truce", "speaker": "SYSTEM", "text": "You reasserted your command, but the underlying tensions remain. The crew is fractured.", "effects": {"set": {"crew_state": "fractured"}}, "choices": [] },
+    { "id": "end_scene_mutiny", "speaker": "SYSTEM", "text": "You have been relieved of command. You are a prisoner on your own ship.", "effects": {"set": {"player_state": "prisoner"}}, "choices": [] },
+    { "id": "end_scene_cede_command", "speaker": "SYSTEM", "text": "You yielded command to avoid bloodshed. Torres is now in charge, for now.", "effects": {"set": {"acting_captain": "torres"}}, "choices": [] },
+    { "id": "end_scene_meta_unity", "speaker": "SYSTEM", "text": "Your shared memories of a past failure unite you in a way nothing else could.", "effects": {"inc": {"crew_morale": 3}}, "choices": [] }
   ]
 }
-

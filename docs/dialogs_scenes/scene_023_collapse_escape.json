@@ -6,53 +6,230 @@
   ],
   "npcs": [
     "first_officer_torres",
-    "ship_ai_maya"
+    "ship_ai_maya",
+    "engineer_chen"
   ],
   "nodes": [
     {
       "id": "escape_001",
       "speaker": "ship_ai_maya",
-      "text": "Seismic spike! The chamber lattice is failing. We need to move now.",
+      "text": "Seismic alert! The primary chamber's support lattice is failing. Structural collapse is imminent. Multiple egress routes are available, but degrading rapidly.",
+      "emotional_state": {"torres_stress": 0, "chen_confidence": 5},
       "choices": [
         {
-          "id": "choice_escape_fast",
-          "text": "Take the fastest route. Don’t stop.",
-          "next": "escape_fast_outcome",
-          "effects": {
-            "risk": 1
-          }
+          "id": "c_ask_maya",
+          "text": "[Reconnaissance] Maya, project the routes. Give me probabilities.",
+          "next": "escape_recon_maya_002"
         },
         {
-          "id": "choice_escape_stabilize",
-          "text": "[Engineering] Stabilize supports, then move.",
-          "skill_check": {
-            "type": "engineering",
-            "difficulty": 13
-          },
-          "next": "escape_stabilize_outcome"
+          "id": "c_ask_chen",
+          "text": "Chen, what's your assessment? Can we shore it up?",
+          "next": "escape_chen_plan_003"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"Forget the main routes. There's a maintenance conduit behind that altar. It'll hold.\"",
+          "conditions": { "loop_count": ">2", "remembered_death": "ruins_collapse" },
+          "next": "escape_meta_route_004",
+          "effects": {"inc": {"maya_awareness": 1}}
         }
       ]
     },
     {
-      "id": "escape_fast_outcome",
-      "speaker": "first_officer_torres",
-      "text": "Go, go! We made it—barely. A crate and a railing didn’t.",
-      "effects": {
-        "resources_lost": 1,
-        "crew_injury": 1
-      },
-      "next": "end_scene"
+      "id": "escape_recon_maya_002",
+      "speaker": "ship_ai_maya",
+      "text": "Projecting. Route Alpha: direct, but crosses a primary stress fracture. 60% chance of further collapse. Route Beta: longer, through the old servitor tunnels. Slower, but structurally more sound. High probability of encountering dormant security mechs.",
+      "next": "escape_main_choice_005"
     },
     {
-      "id": "escape_stabilize_outcome",
-      "speaker": "ship_ai_maya",
-      "text": "Temporary buttresses placed. Collapse delayed. We exit clean.",
+      "id": "escape_chen_plan_003",
+      "speaker": "engineer_chen",
+      "body_language": "Chen is already running calculations on their datapad, face grim.",
+      "text": "Shore it up? Negative, Captain. It's a cascade failure. We could try to divert power to the secondary supports, create a temporary bottleneck to slow the collapse rate, but it would take time and—",
+      "choices": [
+        {
+          "id": "c_interrupt_chen",
+          "text": "[Interrupt] We don't have time for 'maybes', Chen. Give me an escape route, now!",
+          "effects": {"dec": {"chen_confidence": 2}, "inc": {"torres_stress": 1}},
+          "next": "escape_main_choice_005"
+        },
+        {
+          "id": "c_let_chen_finish",
+          "text": "[Remain Silent] Let him finish.",
+          "next": "escape_chen_full_plan_006"
+        }
+      ]
+    },
+    {
+      "id": "escape_meta_route_004",
+      "speaker": "first_officer_torres",
+      "text": "A conduit? How do you know that, Captain? Never mind. If you're sure, we follow. Let's move!",
+      "effects": {"inc": {"torres_loyalty": 1}},
+      "next": "end_scene_meta_success"
+    },
+    {
+      "id": "escape_main_choice_005",
+      "speaker": "first_officer_torres",
+      "text": "The ground is shaking, Captain! Dust is raining from the ceiling. We need to go!",
+      "choices": [
+        {
+          "id": "choice_escape_fast",
+          "text": "[Athletics] We're taking the direct route. Everyone, run!",
+          "skill_check": {
+            "type": "group_athletics",
+            "difficulty": 15,
+            "crew_modifier": "navigator_chen"
+          },
+          "next": "escape_fast_outcome_007"
+        },
+        {
+          "id": "choice_escape_careful",
+          "text": "[Engineering] The servitor tunnels. Chen, lead the way. Clear any obstructions.",
+          "skill_check": {
+            "type": "engineering",
+            "difficulty": 14
+          },
+          "next": "escape_careful_outcome_008"
+        },
+        {
+            "id": "c_crew_combo",
+            "text": "[Crew: Torres+Chen] Torres, you lay down suppressing fire on the ceiling to slow the debris fall. Chen, you guide us through the safest path. Move!",
+            "conditions": {"crew_has": ["first_officer_torres", "engineer_chen"]},
+            "next": "escape_combo_outcome_012"
+        }
+      ]
+    },
+    {
+      "id": "escape_chen_full_plan_006",
+      "speaker": "engineer_chen",
+      "text": "...it would require rerouting main power, which would leave us without scanners or internal comms for the duration of the escape. It's risky, but it's the 'safest' option in terms of avoiding the collapse itself.",
+      "effects": {"inc": {"chen_confidence": 1}},
+      "choices": [
+        {
+            "id": "c_accept_chen_plan",
+            "text": "Do it. The silence will be unnerving, but better than being crushed.",
+            "next": "escape_chen_power_reroute_013"
+        },
+        {
+            "id": "c_reject_chen_plan",
+            "text": "No, I'm not running blind. We'll find another way.",
+            "next": "escape_main_choice_005"
+        }
+      ]
+    },
+    {
+      "id": "escape_fast_outcome_007",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "success"},
+      "text": "We made it! That was too close. Adrenaline's pumping, but we're clear!",
       "effects": {
-        "risk_reduced": true,
-        "crew_morale": 1
+        "inc": {"crew_morale": 1},
+        "effect_chance": {"probability": 0.3, "effect": "found_salvage_fast"}
       },
-      "next": "end_scene"
-    }
+      "next": "end_scene_fast_success"
+    },
+    {
+        "id": "escape_fast_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "Warning! The stress fracture gave way! Torres is hit! Heavy debris!",
+        "effects": {"inc": {"torres_stress": 3}, "set": {"torres_injury": "broken_leg"}},
+        "next": "escape_fast_fail_choice_014"
+    },
+    {
+      "id": "escape_careful_outcome_008",
+      "speaker": "engineer_chen",
+      "conditions": {"skill_check_result": "success"},
+      "text": "The final bulkhead is open. We are through. The main chamber has completely collapsed behind us. My route was effective.",
+      "effects": {"inc": {"chen_confidence": 1}},
+      "next": "end_scene_careful_success"
+    },
+    {
+        "id": "escape_careful_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "The servitor tunnels are not as stable as anticipated. A dormant security turret has activated due to the vibrations!",
+        "next": "escape_turret_confrontation_015"
+    },
+    {
+      "id": "escape_combo_outcome_012",
+      "speaker": "SYSTEM",
+      "text": "Torres's covering fire strategically weakens the ceiling, diverting the main collapse, while Chen's guidance allows you to weave through the falling debris with expert precision.",
+      "effects": {"inc": {"torres_loyalty": 1, "chen_confidence": 1, "crew_morale": 2}},
+      "next": "end_scene_combo_success"
+    },
+    {
+      "id": "escape_chen_power_reroute_013",
+      "speaker": "engineer_chen",
+      "text": "Rerouting now. Comms and sensors going dark... mark. May God have mercy on our souls. Follow the light of my torch.",
+      "skill_check": {
+        "type": "contested_check",
+        "skill": "engineering",
+        "difficulty": 15,
+        "vs": "collapse_rate",
+        "vs_difficulty": 16
+      },
+      "next": "escape_chen_power_reroute_outcome_016"
+    },
+    {
+      "id": "escape_fast_fail_choice_014",
+      "speaker": "first_officer_torres",
+      "body_language": "Torres is pinned under a massive rock, their leg bent at an unnatural angle.",
+      "text": "Aargh! Don't... don't wait for me! Get out of here, Captain!",
+      "choices": [
+        {
+            "id": "c_rescue_torres",
+            "text": "[Strength] Not leaving you behind! Lift!",
+            "skill_check": {"type": "strength", "difficulty": 18},
+            "next": "escape_rescue_torres_outcome_017"
+        },
+        {
+            "id": "c_leave_torres",
+            "text": "[Second Thoughts] I'm sorry, Torres. I can't risk the rest of the crew.",
+            "effects": {"set": {"crew_lost": "first_officer_torres"}, "inc": {"player_stress": 5, "crew_morale": -5}},
+            "next": "end_scene_failure_left_behind"
+        }
+      ]
+    },
+    {
+      "id": "escape_turret_confrontation_015",
+      "speaker": "first_officer_torres",
+      "text": "Contact! Automated turret, ten o'clock! It's locking on!",
+      "choices": [
+        {
+            "id": "c_fight_turret",
+            "text": "[Combat] Open fire!",
+            "next": "end_scene_failure_turret"
+        },
+        {
+            "id": "c_hack_turret",
+            "text": "[Tech] Chen, can you disable it?",
+            "skill_check": {"type": "tech", "difficulty": 16},
+            "next": "escape_careful_outcome_008"
+        }
+      ]
+    },
+    {
+        "id": "escape_chen_power_reroute_outcome_016",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "success"},
+        "text": "Power returning. We are clear of the collapse zone. Chen's gambit paid off.",
+        "next": "end_scene_chen_plan_success"
+    },
+    {
+        "id": "escape_rescue_torres_outcome_017",
+        "speaker": "SYSTEM",
+        "conditions": {"skill_check_result": "success"},
+        "text": "With a surge of adrenaline, you heave the rock aside. You half-carry, half-drag Torres through the exit just as it seals shut.",
+        "effects": {"set": {"torres_loyalty": "absolute"}},
+        "next": "end_scene_fast_success"
+    },
+    { "id": "end_scene_fast_success", "speaker": "SYSTEM", "text": "A harrowing, close-shave escape, but you made it.", "choices": [] },
+    { "id": "end_scene_careful_success", "speaker": "SYSTEM", "text": "A methodical and safe escape. You avoided the worst of the danger.", "choices": [] },
+    { "id": "end_scene_combo_success", "speaker": "SYSTEM", "text": "Your expert use of your crew's talents resulted in a flawless escape.", "choices": [] },
+    { "id": "end_scene_meta_success", "speaker": "SYSTEM", "text": "Your knowledge of past timelines provided a secret path to safety.", "choices": [] },
+    { "id": "end_scene_chen_plan_success", "speaker": "SYSTEM", "text": "Running silent and dark was a huge risk, but it paid off.", "choices": [] },
+    { "id": "end_scene_failure_left_behind", "speaker": "SYSTEM", "text": "You escaped, but the cost was high. The loss of Torres will haunt you.", "choices": [] },
+    { "id": "end_scene_failure_turret", "speaker": "SYSTEM", "text": "The 'safe' route proved to be a deathtrap. You were cut down by ancient defenses.", "choices": [] }
   ]
 }
-

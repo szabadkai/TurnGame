@@ -13,45 +13,210 @@
     {
       "id": "whisper_001",
       "speaker": "ship_ai_maya",
-      "text": "Biofeedback spike on a crew member. Whisper signatures detected. Intervention recommended.",
+      "text": "Captain, I'm detecting a severe biofeedback spike in Science Officer Kim. The energy pattern is... familiar. Whisper signatures confirmed. Intervention is recommended.",
+      "emotional_state": {"kim_fear": 0},
       "choices": [
         {
-          "id": "choice_whisper_resist",
-          "text": "[Willpower] Talk them through it.",
-          "skill_check": {
-            "type": "willpower",
-            "difficulty": 14
-          },
-          "next": "whisper_resist_outcome"
+          "id": "c_recon",
+          "text": "[Reconnaissance] Maya, give me a full spectral analysis of the anomaly.",
+          "next": "whisper_recon_002"
         },
         {
-          "id": "choice_whisper_submit",
-          "text": "Let them listen—just for a moment.",
-          "next": "whisper_submit_outcome"
+          "id": "c_silent",
+          "text": "[Remain Silent] Watch and wait.",
+          "next": "whisper_silent_003"
+        },
+        {
+          "id": "c_direct",
+          "text": "Kim, report! What are you experiencing?",
+          "next": "whisper_direct_004"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"The whispers are back. Kim, focus on my voice. We've done this before.\"",
+          "conditions": { "loop_count": ">3", "remembered_event": "corruption_whisper" },
+          "next": "whisper_meta_005",
+          "effects": {"inc": {"maya_awareness": 1}, "set": {"kim_trust": 2}}
         }
       ]
     },
     {
-      "id": "whisper_resist_outcome",
-      "speaker": "science_officer_kim",
-      "text": "They steadied. The hum receded. It responds when we assert ourselves.",
-      "effects": {
-        "corruption": -1,
-        "crew_morale": 1,
-        "resisted_whisper": true
-      },
-      "next": "end_scene"
+      "id": "whisper_recon_002",
+      "speaker": "ship_ai_maya",
+      "text": "The energy field around them is resonating at a quantum frequency. It's not hostile, merely... communicative. It seems to be offering information, but the bandwidth is too high for an un-augmented human brain. Kim's neural pathways are overloading.",
+      "choices": [
+        {
+          "id": "c_recon_continue",
+          "text": "So it's knowledge, but at a price. Understood.",
+          "next": "whisper_main_choice_006"
+        }
+      ]
     },
     {
-      "id": "whisper_submit_outcome",
-      "speaker": "first_officer_torres",
-      "text": "Their eyes glazed for a heartbeat. They’re back… different. Focused, but colder.",
-      "effects": {
-        "void_corruption": 1,
-        "void_knowledge": 1
+      "id": "whisper_silent_003",
+      "speaker": "science_officer_kim",
+      "body_language": "Their eyes are unfocused, staring at a point beyond the bulkhead.",
+      "text": "\"...a city of echoes... a throne of glass... it sees... it sees...\"",
+      "effects": {"inc": {"kim_fear": 1, "void_corruption": 1}},
+      "choices": [
+        {
+          "id": "c_silent_continue",
+          "text": "The vision is corrupting them. I need to act now.",
+          "next": "whisper_main_choice_006"
+        }
+      ]
+    },
+    {
+      "id": "whisper_direct_004",
+      "speaker": "science_officer_kim",
+      "body_language": "Their head snaps toward you, voice strained.",
+      "text": "Captain... it's so loud. It's showing me... everything. The rise and fall of stars, the birth of... us.",
+      "effects": {"inc": {"kim_fear": 2}},
+      "choices": [
+        {
+          "id": "c_direct_continue",
+          "text": "Hold on, Kim. We're getting you out of this.",
+          "next": "whisper_main_choice_006"
+        }
+      ]
+    },
+    {
+      "id": "whisper_meta_005",
+      "speaker": "science_officer_kim",
+      "body_language": "Kim blinks, a flicker of recognition in their eyes. The frantic energy seems to stabilize.",
+      "text": "Captain? Your voice... it cut through the noise. I... I remember. The throne of glass... it's a trap.",
+      "effects": {"set": {"resisted_whisper": true}, "inc": {"crew_morale": 2, "void_knowledge": 1}},
+      "next": "end_scene_meta_success"
+    },
+    {
+        "id": "whisper_main_choice_006",
+        "speaker": "first_officer_torres",
+        "body_language": "Torres draws their sidearm, placing a hand on your shoulder.",
+        "text": "Captain, we're losing them. We need to make a call. Sedate them, or... do we let this play out?",
+        "choices": [
+          {
+            "id": "choice_whisper_resist",
+            "text": "[Willpower+Medicine] Try to talk them down. Guide them out of the vision.",
+            "skill_check": {
+              "type": "willpower+medicine",
+              "difficulty": 16
+            },
+            "next": "whisper_resist_outcome_007"
+          },
+          {
+            "id": "choice_whisper_submit",
+            "text": "Let them listen. Record everything. Knowledge at any cost.",
+            "next": "whisper_submit_prelude_008"
+          },
+          {
+            "id": "c_resource_dampen",
+            "text": "[Use Psionic Dampener] Activate the dampener. Shield their mind.",
+            "conditions": {"resources": {"psionic_dampener": ">0"}},
+            "effects": {"dec": {"resources.psionic_dampener": 1}},
+            "next": "whisper_dampen_outcome_012"
+          },
+          {
+            "id": "c_second_thought",
+            "text": "[Second Thoughts] Actually, just sedate them. We'll do a debrief later.",
+            "next": "whisper_sedate_outcome_013"
+          }
+        ]
       },
-      "next": "end_scene"
-    }
+      {
+        "id": "whisper_resist_outcome_007",
+        "speaker": "science_officer_kim",
+        "conditions": {"skill_check_result": "success"},
+        "text": "They take a shuddering breath, eyes refocusing. 'I'm back. Thank you, Captain. I saw... enough to know we're on the right path. It fears our unity.'",
+        "effects": {
+          "dec": {"kim_fear": 2},
+          "inc": {"crew_morale": 1, "torres_loyalty": 1},
+          "set": {"resisted_whisper": true}
+        },
+        "next": "end_scene_resist_success"
+      },
+      {
+        "id": "whisper_resist_cascade_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "Your words aren't reaching them. The feedback loop is intensifying. Captain, a neural cascade is imminent!",
+        "effects": {"inc": {"kim_fear": 3}},
+        "choices": [
+            {
+                "id": "c_cascade_push",
+                "text": "[Willpower] Push through! Override it with sheer force of will!",
+                "skill_check": { "type": "willpower", "difficulty": 20},
+                "next": "whisper_resist_outcome_007"
+            },
+            {
+                "id": "c_cascade_fail",
+                "text": "Damn it. It's too late.",
+                "next": "whisper_failure_outcome_014"
+            }
+        ]
+      },
+      {
+        "id": "whisper_submit_prelude_008",
+        "speaker": "first_officer_torres",
+        "body_language": "Torres looks at you, their expression hardening.",
+        "text": "Are you sure about this, Captain? This feels like a line we shouldn't cross.",
+        "choices": [
+            {
+                "id": "c_confirm_submit",
+                "text": "I've made my decision, Torres. Proceed.",
+                "effects": {"dec": {"torres_loyalty": 1}, "inc": {"player_stress": 1}},
+                "next": "whisper_submit_outcome_009"
+            },
+            {
+                "id": "c_back_out_submit",
+                "text": "[Second Thoughts] You're right. Change of plans. Sedate them.",
+                "next": "whisper_sedate_outcome_013"
+            }
+        ]
+      },
+      {
+        "id": "whisper_submit_outcome_009",
+        "speaker": "science_officer_kim",
+        "body_language": "Kim's body goes rigid, and they speak in a chorus of voices.",
+        "text": "'THE ANOMALY IS A KEY. THE FRACTURE IS A DOOR. THE GUARDIAN IS THE—'",
+        "next": "whisper_submit_aftermath_010"
+      },
+      {
+        "id": "whisper_submit_aftermath_010",
+        "speaker": "ship_ai_maya",
+        "text": "The connection has been severed. Kim is stable, but their neural architecture has been... rewritten. They possess significant knowledge of the Fractured Space, but their emotional affect is flattened. They are... changed.",
+        "effects": {
+          "inc": {"void_corruption": 2, "void_knowledge": 3},
+          "set": {"kim_evolution": "void_touched"},
+          "effect_delayed": {"turns": 10, "type": "kim_betrayal_chance", "probability": 0.25}
+        },
+        "next": "end_scene_submit_success"
+      },
+      {
+        "id": "whisper_dampen_outcome_012",
+        "speaker": "science_officer_kim",
+        "text": "The crackling energy around Kim dissipates as the dampener activates. They collapse into Torres's arms, exhausted but lucid. 'It was... trying to show me something. A weakness in their defenses.'",
+        "effects": {"inc": {"crew_morale": 1, "intel": 1}, "dec": {"kim_fear": 2}},
+        "next": "end_scene_dampen_success"
+    },
+    {
+        "id": "whisper_sedate_outcome_013",
+        "speaker": "first_officer_torres",
+        "text": "Kim slumps as the sedative takes effect. 'They're stable. We avoided the worst of it... but we learned nothing. Maybe that's for the best.'",
+        "effects": {"inc": {"crew_morale": -1}, "set": {"opportunity_missed": "corruption_whisper"}},
+        "next": "end_scene_sedate"
+    },
+    {
+        "id": "whisper_failure_outcome_014",
+        "speaker": "ship_ai_maya",
+        "text": "Catastrophic neural cascade detected. Science Officer Kim is... gone, Captain. The entity has burned them out from the inside, leaving only an echo.",
+        "effects": {"set": {"crew_lost": "science_officer_kim"}, "inc": {"void_corruption": 3}},
+        "next": "end_scene_failure"
+    },
+    { "id": "end_scene_resist_success", "speaker": "SYSTEM", "text": "You pulled Kim back from the brink, strengthening your crew's resolve.", "choices": [] },
+    { "id": "end_scene_submit_success", "speaker": "SYSTEM", "text": "You sacrificed a part of Kim for forbidden knowledge. The path ahead is clearer, but darker.", "choices": [] },
+    { "id": "end_scene_meta_success", "speaker": "SYSTEM", "text": "Your knowledge of the loop allowed you to navigate the crisis with ease, earning your crew's trust.", "choices": [] },
+    { "id": "end_scene_dampen_success", "speaker": "SYSTEM", "text": "Your foresight in acquiring the dampener paid off, neutralizing the threat and gaining valuable intel.", "choices": [] },
+    { "id": "end_scene_sedate", "speaker": "SYSTEM", "text": "You chose the path of caution, but the mystery of the whispers remains unsolved.", "choices": [] },
+    { "id": "end_scene_failure", "speaker": "SYSTEM", "text": "You failed to save them. The loss of Kim is a devastating blow.", "choices": [] }
   ]
 }
-
