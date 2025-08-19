@@ -6,71 +6,134 @@
   ],
   "npcs": [
     "ship_ai_maya",
-    "science_officer_kim"
+    "science_officer_kim",
+    "first_officer_torres"
   ],
   "nodes": [
     {
       "id": "sat_001",
       "speaker": "ship_ai_maya",
-      "text": "Drifting satellite ahead, partially encased in crystalline void matter. Power trace is near zero.",
+      "text": "Captain, we're approaching a derelict satellite. It's partially encased in crystalline void matter, and its power trace is near zero. It's old... pre-Federation, maybe.",
+      "emotional_state": {"kim_curiosity": 2, "torres_anxiety": 1},
       "choices": [
         {
-          "id": "choice_sat_salvage_careful",
-          "text": "[Engineering] Salvage carefully for fuel and parts.",
-          "skill_check": {
-            "type": "engineering",
-            "difficulty": 12
-          },
-          "next": "sat_careful_outcome"
+          "id": "c_scan",
+          "text": "[Reconnaissance] \"Scan it. Full spectrum. I want to know what we're dealing with.\"",
+          "next": "sat_scan_002"
         },
         {
-          "id": "choice_sat_force",
-          "text": "Force salvage. We need supplies now.",
-          "next": "sat_force_outcome",
-          "effects": {
-            "hull_stress": 1
-          }
+          "id": "c_ignore",
+          "text": "\"It's just space junk. Let's not waste time.\"",
+          "next": "end_scene_ignore"
         },
         {
-          "id": "choice_sat_scan",
-          "text": "Scan first. Look for traps or transmissions.",
-          "next": "kim_scan_outcome",
-          "effects": {
-            "intel_gained": 1
-          }
+          "id": "c_salvage_now",
+          "text": "\"We need the resources. Torres, prepare a salvage team.\"",
+          "next": "torres_prep_salvage_003"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"Ignore the fuel cells. The value is in the tertiary memory core. But be careful, it's shielded.\"",
+          "conditions": { "loop_count": ">2", "remembered_event": "satellite_data" },
+          "next": "meta_salvage_004"
         }
       ]
     },
     {
-      "id": "sat_careful_outcome",
+      "id": "sat_scan_002",
       "speaker": "science_officer_kim",
-      "text": "We bypassed the crystal veins and secured the fuel cells. Minimal contamination detected.",
-      "effects": {
-        "fuel_gained": 2,
-        "risk_reduced": true
-      },
-      "next": "end_scene"
+      "text": "The crystal growth is parasitic, feeding off the satellite's power core. There's a faint data signal repeating on a loop... and a build-up of static electricity in the casing. It could discharge if we get too close.",
+      "effects": {"inc": {"intel": 1, "kim_curiosity": 1}},
+      "next": "sat_001"
     },
     {
-      "id": "sat_force_outcome",
+      "id": "torres_prep_salvage_003",
+      "speaker": "first_officer_torres",
+      "text": "Salvage team is ready, Captain. But this is risky. We're exposed out here. My gut says this is a trap.",
+      "effects": {"inc": {"torres_anxiety": 1}},
+      "choices": [
+        {
+          "id": "c_proceed_salvage",
+          "text": "We need the supplies. Proceed with caution.",
+          "next": "salvage_operation_005"
+        },
+        {
+          "id": "c_second_thought",
+          "text": "[Second Thoughts] \"You're right, Torres. It's not worth the risk. Belay the order.\"",
+          "next": "end_scene_ignore"
+        }
+      ]
+    },
+    {
+      "id": "meta_salvage_004",
+      "speaker": "science_officer_kim",
+      "text": "The tertiary core... of course. It's a hardened backup. I can get to it, but I'll need to bypass the main power conduits. It'll be delicate.",
+      "skill_check": {"type": "engineering", "difficulty": 13},
+      "next": "meta_salvage_outcome"
+    },
+    {
+      "id": "salvage_operation_005",
       "speaker": "ship_ai_maya",
-      "text": "Pry successful, but the lattice sang. Residual hum detected in the cargo bay.",
-      "effects": {
-        "fuel_gained": 3,
-        "void_corruption": 1
-      },
-      "next": "end_scene"
+      "text": "The salvage arm is in position. We can either attempt to extract the fuel cells or download the data logs before the crystal corrupts them completely.",
+      "choices": [
+        {
+          "id": "c_get_fuel",
+          "text": "[Engineering] Prioritize the fuel cells.",
+          "skill_check": {"type": "engineering", "difficulty": 14},
+          "next": "salvage_fuel_outcome"
+        },
+        {
+          "id": "c_get_data",
+          "text": "[Computer Science] Prioritize the data.",
+          "skill_check": {"type": "computer_science", "difficulty": 15},
+          "next": "salvage_data_outcome"
+        }
+      ]
     },
     {
-      "id": "kim_scan_outcome",
+      "id": "meta_salvage_outcome",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "success"},
+      "text": "The tertiary data core has been successfully extracted. It contains... a star map. A very old one. It shows this sector before the gates were built.",
+      "effects": {"set": {"resource_gained": "ancient_star_map"}},
+      "next": "end_scene_meta"
+    },
+    {
+      "id": "salvage_fuel_outcome",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Fuel cells are aboard. We managed to extract them before the crystal growth became critical.",
+      "effects": {"inc": {"fuel": 3}},
+      "next": "end_scene_fuel"
+    },
+    {
+      "id": "salvage_fuel_fail",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The salvage arm breached the crystal casing! It's discharging energy into our hull! Disengaging now!",
+      "effects": {"inc": {"hull_damage": 10}},
+      "next": "end_scene_trap"
+    },
+    {
+      "id": "salvage_data_outcome",
       "speaker": "science_officer_kim",
-      "text": "There’s a data ping repeating an old fleet checksum. I’ve captured it—could be coordinates or a warning.",
-      "effects": {
-        "lore_unlocked": "satellite_checksum_echo",
-        "intel_gained": 1
-      },
-      "next": "end_scene"
-    }
+      "conditions": {"skill_check_result": "success"},
+      "text": "I've downloaded the logs. It's a distress call from a survey ship that disappeared twenty years ago. They were tracking... something that was tracking them.",
+      "effects": {"inc": {"intel": 2}, "set": {"lore_unlocked": "lost_survey_ship"}},
+      "next": "end_scene_data"
+    },
+    {
+      "id": "salvage_data_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The data core was too corrupted by the crystal. As I tried to access it, it sent a feedback surge through our systems. I had to shut it down.",
+      "effects": {"effect_delayed": {"turns": 2, "type": "sensor_glitch"}},
+      "next": "end_scene_trap"
+    },
+    { "id": "end_scene_ignore", "speaker": "SYSTEM", "text": "You leave the satellite to its fate, a lonely monument in the void.", "choices": [] },
+    { "id": "end_scene_fuel", "speaker": "SYSTEM", "text": "You successfully salvaged the fuel, a vital resource for the journey ahead.", "choices": [] },
+    { "id": "end_scene_data", "speaker": "SYSTEM", "text": "You recovered the satellite's data, gaining a new piece of the puzzle.", "choices": [] },
+    { "id": "end_scene_trap", "speaker": "SYSTEM", "text": "The salvage operation went wrong, damaging your ship.", "choices": [] },
+    { "id": "end_scene_meta", "speaker": "SYSTEM", "text": "Your foreknowledge allowed you to recover a priceless artifact.", "choices": [] }
   ]
 }
-

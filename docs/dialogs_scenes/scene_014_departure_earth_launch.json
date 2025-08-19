@@ -13,54 +13,108 @@
     {
       "id": "maya_depart_001",
       "speaker": "ship_ai_maya",
-      "text": "Launch stack green across the board. Frontier charts loaded. Captain, set initial course?",
+      "text": "All systems green. Launch sequence complete. The U.E.S. Meridian is away. Captain, the frontier awaits. Your orders for our initial course?",
+      "emotional_state": {"torres_eagerness": 3, "chen_anxiety": 1},
       "choices": [
         {
-          "id": "choice_depart_safe",
-          "text": "Chart the safe route. Minimize unknowns.",
-          "next": "torres_depart_safe",
-          "effects": {
-            "risk_reduced": true,
-            "fuel_spent": 1
-          }
+          "id": "c_consult_torres",
+          "text": "Torres, what's our tactical situation?",
+          "next": "torres_opinion_002"
         },
         {
-          "id": "choice_depart_risky",
-          "text": "Risk shortcuts through sparse gates.",
-          "next": "chen_depart_risky",
-          "effects": {
-            "fuel_saved": 1,
-            "hull_stress": 1
-          }
+          "id": "c_consult_chen",
+          "text": "Chen, lay out the navigational options.",
+          "next": "chen_opinion_003"
         },
         {
-          "id": "choice_depart_consult",
-          "text": "Consult the crew before we commit.",
-          "next": "torres_depart_consult",
-          "effects": {
-            "crew_morale": 1
-          }
+          "id": "c_address_crew",
+          "text": "[Leadership] \"To the crew of the Meridian: we carry the hopes of Earth. Make her proud.\"",
+          "skill_check": {"type": "leadership", "difficulty": 14},
+          "next": "crew_inspired"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"I have a bad feeling about the standard route. Chen, plot a course through the Serpent's Nebula. And divert auxiliary power to the forward shields.\"",
+          "conditions": { "loop_count": ">1" },
+          "next": "meta_departure_004"
         }
       ]
     },
     {
-      "id": "torres_depart_safe",
+      "id": "torres_opinion_002",
       "speaker": "first_officer_torres",
-      "text": "Acknowledged. Broadcasting departure clearance. We'll take the long arc around the rifts.",
-      "next": "end_scene"
+      "text": "Simple, Captain. The quickest way to the Prometheus beacon is a straight line. The pirates and anomalies can try their luck. We're the Federation's finest. Let's show them what that means.",
+      "effects": {"inc": {"torres_eagerness": 1}},
+      "next": "main_choice_005"
     },
     {
-      "id": "chen_depart_risky",
+      "id": "chen_opinion_003",
       "speaker": "navigator_chen",
-      "text": "Threading the needle between drift clusters. If the gates hiccup, we’ll feel it.",
-      "next": "end_scene"
+      "text": "Respectfully, Captain, a straight line is a good way to get killed. The established trade lanes are safer. They'll add three days to our journey, but they're patrolled and mapped. The direct route takes us through uncharted territory with known gate instability.",
+      "effects": {"inc": {"chen_anxiety": 1}},
+      "next": "main_choice_005"
     },
     {
-      "id": "torres_depart_consult",
-      "speaker": "first_officer_torres",
-      "text": "Crew briefed. Engineering prefers caution. Ops wants speed. Your call stands, Captain.",
-      "next": "end_scene"
-    }
+      "id": "meta_departure_004",
+      "speaker": "ship_ai_maya",
+      "text": "An unusual request, Captain. That route is not recommended. But your orders are clear. Adjusting course.",
+      "effects": {"inc": {"maya_awareness": 1}, "set": {"route": "serpent_nebula"}},
+      "next": "end_scene_meta"
+    },
+    {
+        "id": "crew_inspired",
+        "speaker": "first_officer_torres",
+        "conditions": {"skill_check_result": "success"},
+        "text": "Damn right, Captain. For Earth!",
+        "effects": {"inc": {"crew_morale": 1}},
+        "next": "main_choice_005"
+    },
+    {
+      "id": "main_choice_005",
+      "speaker": "ship_ai_maya",
+      "text": "Awaiting your command.",
+      "choices": [
+        {
+          "id": "c_safe_route",
+          "text": "We take the safe route. No unnecessary risks on day one.",
+          "effects": {"set": {"route": "trade_lanes"}},
+          "next": "end_scene_safe"
+        },
+        {
+          "id": "c_risky_route",
+          "text": "We take the direct route. We have a mission to complete.",
+          "effects": {"set": {"route": "direct"}},
+          "next": "end_scene_risky"
+        },
+        {
+          "id": "c_recon",
+          "text": "[Reconnaissance] \"Check the latest reports from the gate network. Any new anomalies on either route?\"",
+          "next": "recon_outcome_006"
+        }
+      ]
+    },
+    {
+      "id": "recon_outcome_006",
+      "speaker": "ship_ai_maya",
+      "text": "Analyzing... A previously unknown gravimetric anomaly has been detected on the 'safe' route. The direct route remains unchanged but is still considered high-risk.",
+      "effects": {"inc": {"intel": 1}},
+      "choices": [
+        {
+          "id": "c_safe_route_informed",
+          "text": "We'll proceed on the safe route, but with caution.",
+          "effects": {"set": {"route": "trade_lanes_anomaly"}},
+          "next": "end_scene_safe"
+        },
+        {
+          "id": "c_risky_route_informed",
+          "text": "The devil you know... We'll take our chances with the direct route.",
+          "effects": {"set": {"route": "direct"}},
+          "next": "end_scene_risky"
+        }
+      ]
+    },
+    { "id": "end_scene_safe", "speaker": "SYSTEM", "text": "You have chosen the cautious path. The journey will be longer, but hopefully safer.", "choices": [] },
+    { "id": "end_scene_risky", "speaker": "SYSTEM", "text": "You have chosen the direct path. The journey will be faster, but fraught with peril.", "choices": [] },
+    { "id": "end_scene_meta", "speaker": "SYSTEM", "text": "Your foreknowledge has set you on an unexpected path from the very beginning.", "choices": [] }
   ]
 }
-
