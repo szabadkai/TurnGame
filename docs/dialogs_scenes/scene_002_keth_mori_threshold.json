@@ -5,154 +5,180 @@
         "approach_archive"
     ],
     "npcs": [
-        "shal_thyss"
+        "shal_thyss",
+        "first_officer_torres",
+        "ship_ai_maya"
     ],
     "nodes": [
         {
             "id": "shal_001",
             "speaker": "shal_thyss",
-            "text": "[crystalline harmonics translate] Human vessel. You approach the Threshold Archive. Your kind were warned. The void-touched one among you knows the danger.",
+            "text": "[crystalline harmonics translate] Human vessel. You approach the Threshold Archive. Your kind were warned. The void-touched one among you knows the danger. State your purpose.",
+            "emotional_state": {"shal_thyss_trust": 0, "torres_aggression": 1},
             "choices": [
                 {
                     "id": "choice_001a",
-                    "text": "We mean no harm. We're searching for our lost fleet.",
+                    "text": "We are explorers, seeking knowledge. We mean no harm.",
                     "next": "shal_002a",
-                    "effects": {
-                        "keth_mori_reputation": 1,
-                        "diplomatic_path": 1
-                    }
+                    "effects": { "inc": { "keth_mori_reputation": 1, "shal_thyss_trust": 1 } }
                 },
                 {
                     "id": "choice_001b",
-                    "text": "We go where we please. Stand aside.",
-                    "next": "combat_encounter",
-                    "effects": {
-                        "keth_mori_reputation": -3,
-                        "warrior_path": 1
-                    }
+                    "text": "[Interrupt] Torres, power weapons. We're not asking for permission.",
+                    "next": "torres_interjection_001"
                 },
                 {
                     "id": "choice_001c",
-                    "text": "You know about the Prometheus? Tell us what happened.",
-                    "next": "shal_002b",
-                    "effects": {
-                        "information_seeking": 1
-                    }
+                    "text": "[Press Further] \"Warned by whom? What is this place?\"",
+                    "next": "shal_002b"
                 },
                 {
                     "id": "choice_001d",
-                    "text": "[Void Touched] The void speaks of ancient failures. Are you running out of time?",
-                    "conditions": {
-                        "crew_has": "void_touched"
-                    },
+                    "text": "[Void Touched] \"Your Archive sings a song of sorrow. I have heard it before, in the echoes between worlds.\"",
+                    "conditions": { "background": "void_touched" },
                     "next": "shal_002c",
-                    "effects": {
-                        "keth_mori_reputation": 2,
-                        "void_knowledge": 1
-                    }
+                    "effects": { "inc": { "keth_mori_reputation": 2, "void_knowledge": 1, "shal_thyss_trust": 2 } }
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"Shal-Thyss. Your people are dying. The Prometheus crew brought the Song of Unmaking. I'm here to help you break the cycle.\"",
+                    "conditions": { "loop_count": ">5", "remembered_event": "keth_mori_demise" },
+                    "next": "shal_meta_response_003"
+                }
+            ]
+        },
+        {
+            "id": "torres_interjection_001",
+            "speaker": "first_officer_torres",
+            "text": "Weapons hot, Captain. They're putting up some kind of interference screen, but we can punch through.",
+            "effects": {"inc": {"torres_aggression": 2, "shal_thyss_trust": -2}},
+            "choices": [
+                {
+                    "id": "c_commit_attack",
+                    "text": "Fire a warning shot across their bow.",
+                    "next": "combat_encounter",
+                    "effects": { "set": {"keth_mori_hostile": true}, "dec": {"keth_mori_reputation": 5}}
+                },
+                {
+                    "id": "c_second_thought",
+                    "text": "[Second Thought] Belay that order. Stand down weapons. My apologies, Shal-Thyss. My first officer is... cautious.",
+                    "effects": {"inc": {"torres_loyalty": -1}, "dec":{"torres_aggression": 2}},
+                    "next": "shal_002a"
                 }
             ]
         },
         {
             "id": "shal_002a",
             "speaker": "shal_thyss",
-            "text": "Your resonance suggests truth. But searching for the lost often leads to joining them. The Archive remembers all who pass.",
-            "next": "shal_003"
+            "text": "Your resonance suggests truth. But searching for the lost often leads to joining them. The Archive remembers all who pass. Your vessel carries the stain of many timelines.",
+            "next": "shal_004"
         },
         {
             "id": "shal_002b",
             "speaker": "shal_thyss",
-            "text": "The Prometheus crew opened doors that should remain sealed. They heard the Song of Unmaking. Half embraced it. Half fled. All are lost.",
-            "next": "shal_003"
+            "text": "This is a library of echoes, human. A record of all that has passed through this sector. The Prometheus crew came seeking a weapon. They found only an ending. They heard the Song of Unmaking.",
+            "next": "shal_004"
         },
         {
             "id": "shal_002c",
             "speaker": "shal_thyss",
-            "text": "[frequency shifts to sorrow] You perceive clearly. We are fading. The gates we built now unmake us.",
-            "next": "shal_003"
+            "text": "[frequency shifts to sorrow] You perceive the great truth. We are fading. The gates we built to connect worlds now unmake us. Each cycle, the Song grows louder.",
+            "next": "shal_004"
         },
         {
-            "id": "shal_003",
+            "id": "shal_meta_response_003",
             "speaker": "shal_thyss",
-            "text": "Will you still enter the Archive, knowing it may show you truths that cannot be unlearned?",
+            "text": "[The crystalline entity remains silent for 11 seconds, its internal light pulsing rapidly.] How? How could you know our name? The cycle... you are like them. The first crew. The ones who fractured time. You must be contained.",
+            "skill_check": {
+                "type": "contested_check",
+                "skill": "willpower",
+                "difficulty": 18,
+                "vs": "archive_containment_field",
+                "vs_difficulty": 16
+            },
+            "next": "shal_containment_outcome"
+        },
+        {
+            "id": "shal_containment_outcome",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Captain, I was able to create a counter-resonance that disrupted their containment field. They are surprised. They are... listening.",
+            "effects": {"inc": {"shal_thyss_trust": 5}},
+            "next": "shal_004"
+        },
+        {
+            "id": "shal_004",
+            "speaker": "shal_thyss",
+            "text": "Will you still enter the Archive, knowing it may show you truths that cannot be unlearned? Truths that may erase you from existence?",
             "choices": [
                 {
                     "id": "choice_003a",
-                    "text": "Help us understand. We don't want to repeat their mistakes.",
-                    "next": "shal_004a",
-                    "effects": {
-                        "keth_mori_reputation": 2,
-                        "gained_warning": true
-                    }
+                    "text": "We must. Help us understand so we don't repeat the mistakes of the Prometheus.",
+                    "next": "shal_005a",
+                    "effects": { "inc": { "keth_mori_reputation": 2, "shal_thyss_trust": 1 } }
                 },
                 {
                     "id": "choice_003b",
-                    "text": "Cryptic warnings won't stop us. Give us real answers or move.",
-                    "next": "shal_004b",
-                    "effects": {
-                        "keth_mori_reputation": -1
-                    }
+                    "text": "[Bluff] \"We are not here for truth. We are agents of the Crimson Covenant, here to harvest echo-data.\"",
+                    "skill_check": {"type": "deception", "difficulty": 17},
+                    "next": "shal_bluff_outcome"
                 },
                 {
-                    "id": "choice_003c",
-                    "text": "The Song of Unmaking? Is that what's happening to the gates?",
-                    "next": "shal_004c",
-                    "effects": {
-                        "lore_gates": 1
-                    }
-                },
-                {
-                    "id": "choice_003d",
-                    "text": "[Intelligence] You're dying, aren't you? Your whole species.",
-                    "skill_check": {
-                        "type": "intelligence",
-                        "difficulty": 15
-                    },
-                    "next": "shal_004d",
-                    "effects": {
-                        "keth_mori_reputation": 1,
-                        "keth_mori_secret": true
-                    }
+                    "id": "c_paradox",
+                    "text": "[Paradox] \"We have to enter, because in a future I remember, you told me it was the only way to save you.\"",
+                    "conditions": {"has_flag": "timeline_fracture"},
+                    "next": "shal_paradox_response"
                 }
             ]
         },
         {
-            "id": "shal_004a",
+            "id": "shal_bluff_outcome",
             "speaker": "shal_thyss",
-            "text": "Then we shall resonate together. Enter. But know that knowledge, like the void, consumes.",
-            "effects": {
-                "archive_access": true
-            },
-            "next": "end_scene"
+            "conditions": {"skill_check_result": "success"},
+            "text": "The Crimson Covenant... we have heard whispers of them. Very well. The Archive is open to you. But your resonance is... strange. We will be watching.",
+            "effects": {"set": {"disguised_as_covenant": true}},
+            "next": "end_scene_access_granted"
         },
         {
-            "id": "shal_004b",
+            "id": "shal_paradox_response",
             "speaker": "shal_thyss",
-            "text": "Impatience. So very human. The Archive will judge your worth. Enter if you dare.",
-            "effects": {
-                "archive_access": true,
-                "archive_hostile": true
-            },
-            "next": "end_scene"
+            "text": "My... future self? The logic is recursive. The cycle... it bends around you. This is a new resonance. Perhaps... perhaps you are the key. Enter. Find what you need.",
+            "effects": {"set": {"keth_mori_alliance_possible": true}},
+            "next": "end_scene_access_granted"
         },
         {
-            "id": "shal_004c",
+            "id": "shal_005a",
             "speaker": "shal_thyss",
-            "text": "The gates sing now with frequencies we never intended. Reality bends. Probability bleeds. The Song grows louder each cycle.",
-            "effects": {
-                "lore_unlocked": "song_of_unmaking"
-            },
-            "next": "end_scene"
+            "text": "Then we shall resonate together. But be warned. The Archive does not simply show you the past. It makes you live it. You will see what the Prometheus crew saw. Feel what they felt.",
+            "choices": [
+                {
+                    "id": "c_accept_vision",
+                    "text": "We are ready.",
+                    "next": "end_scene_vision_quest"
+                },
+                {
+                    "id": "c_crew_resource_gate",
+                    "text": "[Crew: Navigator Chen] \"My navigator is one of the best. Can he interface with your Archive to guide us through the memories safely?\"",
+                    "conditions": {"crew_has": ["navigator_chen", "void_touched"]},
+                    "next": "shal_chen_interface"
+                }
+            ]
         },
         {
-            "id": "shal_004d",
+            "id": "shal_chen_interface",
             "speaker": "shal_thyss",
-            "text": "We are the last generation. When we built the gates, we did not know they were doors for THEM. Now we guard what remains, waiting for the final resonance.",
-            "effects": {
-                "keth_mori_alliance_possible": true,
-                "lore_unlocked": "keth_mori_extinction"
-            },
-            "next": "end_scene"
-        }
+            "text": "A navigator touched by the void... an interesting combination. Yes. His mind can serve as an anchor. The risk will be lessened, but the truths will be no less potent.",
+            "effects": {"set": {"archive_guide": "chen"}},
+            "next": "end_scene_vision_quest"
+        },
+        {
+            "id": "combat_encounter",
+            "speaker": "SYSTEM",
+            "text": "The crystalline entity emits a piercing shriek. The space around you distorts as multiple Keth-Mori vessels de-cloak, weapons glowing with terrifying energy.",
+            "next": "end_scene_combat"
+        },
+        { "id": "end_scene_access_granted", "speaker": "SYSTEM", "text": "The great crystalline archive opens before you, a library of lost timelines.", "effects": {"set": {"archive_access": true}}, "choices": [] },
+        { "id": "end_scene_vision_quest", "speaker": "SYSTEM", "text": "You have agreed to experience the memories within the Archive. What you see will change you forever.", "effects": {"set": {"archive_access": true, "entering_vision": true}, "effect_delayed": {"turns": 1, "type": "prometheus_vision_sequence"}}, "choices": [] },
+        { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "Diplomacy has failed. You are now engaged in combat with the guardians of the Threshold Archive.", "choices": [] }
     ]
 }

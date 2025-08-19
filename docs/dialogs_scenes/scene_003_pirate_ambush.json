@@ -6,163 +6,145 @@
     ],
     "npcs": [
         "first_officer_torres",
-        "pirate_captain_raza"
+        "pirate_captain_raza",
+        "ship_ai_maya",
+        "navigator_chen"
     ],
     "nodes": [
         {
             "id": "torres_pirates_001",
             "speaker": "first_officer_torres",
-            "text": "Contacts emerging from the dust belt—pirate signatures. They’re locking targeting solutions on us.",
+            "text": "Captain, multiple contacts emerging from the dust belt—confirmed pirate signatures, the 'Crimson Cutthroats' by their engine trails. They’re locking targeting solutions on us.",
+            "emotional_state": {"torres_aggression": 3, "chen_anxiety": 1},
             "choices": [
                 {
                     "id": "choice_pirates_001a",
-                    "text": "Open fire. We don’t negotiate with raiders.",
+                    "text": "Red alert. Open fire the second they're in range.",
                     "next": "combat_encounter",
-                    "effects": {
-                        "pirate_reputation": -3,
-                        "warrior_path": 1,
-                        "crew_alert": "high"
-                    }
+                    "effects": { "inc": {"pirate_reputation": -5, "warrior_path": 1} }
                 },
                 {
                     "id": "choice_pirates_001b",
-                    "text": "Open a channel. Let’s talk first.",
-                    "next": "raza_001",
-                    "effects": {
-                        "diplomatic_path": 1
-                    }
+                    "text": "Open a channel. Let's see what they want.",
+                    "next": "raza_hail_002",
+                    "effects": { "set": {"diplomatic_path": 1} }
                 },
                 {
-                    "id": "choice_pirates_001c",
-                    "text": "Dump decoys and stall for time.",
-                    "skill_check": {
-                        "type": "deception",
-                        "difficulty": 13
-                    },
-                    "next": "torres_stall_outcome",
-                    "effects": {
-                        "intel_gained": 1
-                    }
+                    "id": "c_ask_maya",
+                    "text": "[Reconnaissance] Maya, find me a weakness in their formation.",
+                    "next": "maya_recon_003"
                 },
                 {
-                    "id": "choice_pirates_001d",
-                    "text": "[Engineering] Spike their target locks with a burst.",
-                    "skill_check": {
-                        "type": "engineering",
-                        "difficulty": 14
-                    },
-                    "next": "torres_engineering_outcome",
-                    "effects": {
-                        "systems_stress": 1
-                    }
+                    "id": "c_ask_chen",
+                    "text": "Chen, any environmental hazards we can use?",
+                    "next": "chen_recon_004"
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"Their lead ship has a faulty port thruster. Tell Chen to plot a course that exploits it.\"",
+                    "conditions": { "loop_count": ">3", "remembered_event": "raza_ambush" },
+                    "next": "meta_exploit_005",
+                    "effects": {"inc": {"maya_awareness": 1}}
                 }
             ]
         },
         {
-            "id": "raza_001",
+            "id": "raza_hail_002",
             "speaker": "pirate_captain_raza",
-            "text": "Well now, a shiny hull lost on the wrong drift. Tribute buys safety, Captain. Refuse, and we carve you into shares.",
+            "body_language": "A scarred man with a menacing grin appears on screen, sitting on a throne made of ship parts.",
+            "text": "Well now, a shiny new Federation hull, lost on the wrong drift. Tribute buys safety out here, Captain. Gold, fuel, or information. Refuse, and we carve you into shares.",
+            "emotional_state": {"raza_pride": 2},
             "choices": [
                 {
                     "id": "choice_raza_001a",
-                    "text": "We can pay. Credits for safe passage.",
-                    "next": "raza_002_paid",
-                    "effects": {
-                        "credits": -2,
-                        "pirate_reputation": 1
-                    }
+                    "text": "We can pay in fuel. How much?",
+                    "conditions": {"resources": {"fuel": ">10"}},
+                    "effects": {"dec": {"resources.fuel": 5}, "inc": {"pirate_reputation": 1}, "scaling_effect": {"type": "pirate_toll_paid", "scale_factor": 1}},
+                    "next": "raza_paid_006"
                 },
                 {
-                    "id": "choice_raza_001b",
-                    "text": "Information instead. We’re hunting the Prometheus.",
-                    "next": "raza_002_info",
-                    "effects": {
-                        "intel_spent": 1,
-                        "pirate_reputation": 1
-                    }
+                    "id": "c_bluff",
+                    "text": "[Bluff] \"You've made a mistake. This is a Federation Q-ship. Stand down or we will liquidate your fleet.\"",
+                    "skill_check": {"type": "deception+willpower", "difficulty": 18},
+                    "next": "raza_bluff_outcome"
                 },
                 {
-                    "id": "choice_raza_001c",
-                    "text": "Walk away, Raza. We’ve beaten worse fleets than yours.",
-                    "next": "combat_encounter",
-                    "effects": {
-                        "pirate_reputation": -2,
-                        "warrior_path": 1
-                    }
-                },
-                {
-                    "id": "choice_raza_001d",
-                    "text": "[Diplomacy] We can cut you in on salvage if you stand down.",
-                    "skill_check": {
-                        "type": "diplomacy",
-                        "difficulty": 15
-                    },
-                    "next": "raza_002_bargain",
-                    "effects": {
-                        "diplomatic_path": 1
-                    }
+                    "id": "c_press_further",
+                    "text": "[Press Further] \"You're a long way from the usual pirate lanes, Raza. What are you really after?\"",
+                    "next": "raza_reveal_motive"
                 }
             ]
         },
         {
-            "id": "raza_002_paid",
-            "speaker": "pirate_captain_raza",
-            "text": "Smooth sailing then. Word of advice: void sings loud past Meridian. Don’t listen long.",
-            "effects": {
-                "safe_passage": true,
-                "rumor_unlocked": "void_song_meridian"
-            },
-            "next": "end_scene"
+            "id": "maya_recon_003",
+            "speaker": "ship_ai_maya",
+            "text": "Their ships are fast, but their shielding is patchwork. A coordinated alpha strike could disable their flagship before they can properly react.",
+            "effects": {"inc": {"intel": 1}},
+            "next": "torres_pirates_001"
         },
         {
-            "id": "raza_002_info",
-            "speaker": "pirate_captain_raza",
-            "text": "Prometheus? Saw her wake near the black choir, half in and half out. If you’re smart, you’ll turn around before it starts singing back.",
-            "effects": {
-                "intel_gained": 2,
-                "route_revealed": "choir_perimeter"
-            },
-            "next": "end_scene"
+            "id": "chen_recon_004",
+            "speaker": "navigator_chen",
+            "text": "There's a dense asteroid field nearby, Captain. High risk, but if we can lure them in, their numbers would be a disadvantage.",
+            "effects": {"inc": {"intel": 1}},
+            "next": "torres_pirates_001"
         },
         {
-            "id": "raza_002_bargain",
-            "speaker": "pirate_captain_raza",
-            "text": "A cut of ghost-ship salvage? Tempting. You get a head start. We’ll be watching your trail, Captain.",
-            "effects": {
-                "temporary_truce": true,
-                "pirate_reputation": 2
-            },
-            "next": "end_scene"
-        },
-        {
-            "id": "torres_stall_outcome",
+            "id": "meta_exploit_005",
             "speaker": "first_officer_torres",
-            "text": "Decoys deployed. We’ve bought a minute, sir—enough to jump or to line up a first strike.",
+            "text": "How do you know that? Doesn't matter. Chen, you heard the Captain. Let's thread that needle and hit them where it hurts.",
+            "effects": {"set": {"first_strike": true, "advantage": "tactical"}},
+            "next": "combat_encounter"
+        },
+        {
+            "id": "raza_paid_006",
+            "speaker": "pirate_captain_raza",
+            "text": "A wise choice. Pleasure doing business with you. Word of advice: void sings loud past Meridian. Don’t listen long.",
+            "next": "end_scene_paid"
+        },
+        {
+            "id": "raza_bluff_outcome",
+            "speaker": "pirate_captain_raza",
+            "conditions": {"skill_check_result": "success"},
+            "text": "A Q-ship? [He squints, then his bravado falters.] My apologies, Commander. We mistook you for... someone else. We'll be on our way.",
+            "effects": {"inc": {"pirate_reputation": -2}},
+            "next": "end_scene_bluff_success"
+        },
+        {
+            "id": "raza_reveal_motive",
+            "speaker": "pirate_captain_raza",
+            "text": "Sharp eyes. The Prometheus. Same as you. Rumor says it's carrying something that can change everything. We want it.",
             "choices": [
                 {
-                    "id": "choice_stall_jump",
-                    "text": "Jump now.",
-                    "next": "end_scene",
-                    "effects": {
-                        "fuel": -1,
-                        "avoided_conflict": true
-                    }
+                    "id": "c_team_up",
+                    "text": "Let's work together. We'll split the prize.",
+                    "skill_check": {"type": "diplomacy", "difficulty": 16},
+                    "next": "raza_team_up_outcome"
                 },
                 {
-                    "id": "choice_stall_attack",
-                    "text": "Take the shot while they’re blind.",
-                    "next": "combat_encounter",
-                    "effects": {
-                        "first_strike": true
-                    }
+                    "id": "c_race_them",
+                    "text": "Then it's a race. May the best crew win.",
+                    "next": "combat_encounter"
                 }
             ]
         },
         {
-            "id": "torres_engineering_outcome",
-            "speaker": "first_officer_torres",
-            "text": "Their locks are scrambled. It won’t last. Your call, Captain.",
-            "next": "torres_stall_outcome"
-        }
+            "id": "raza_team_up_outcome",
+            "speaker": "pirate_captain_raza",
+            "conditions": {"skill_check_result": "success"},
+            "text": "A temporary alliance with the Feds? Now that's a story for the ages. Fine. We follow your lead... for now.",
+            "effects": {"set": {"pirate_alliance": true}, "effect_delayed": {"turns": 10, "type": "raza_betrayal_chance", "probability": 0.5}},
+            "next": "end_scene_alliance"
+        },
+        {
+            "id": "combat_encounter",
+            "speaker": "SYSTEM",
+            "text": "The time for talk is over. The void erupts with weapons fire as the pirates close in.",
+            "next": "end_scene_combat"
+        },
+        { "id": "end_scene_paid", "speaker": "SYSTEM", "text": "You paid the pirates' toll and were allowed to pass, your pride slightly bruised but your hull intact.", "choices": [] },
+        { "id": "end_scene_bluff_success", "speaker": "SYSTEM", "text": "Your bluff worked. The pirates, fearing you were more than you seemed, turned tail and fled.", "choices": [] },
+        { "id": "end_scene_alliance", "speaker": "SYSTEM", "text": "You've forged a dangerous and unstable alliance with Captain Raza. He's an ally... for now.", "choices": [] },
+        { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "You have entered combat with the Crimson Cutthroats.", "choices": [] }
     ]
 }
