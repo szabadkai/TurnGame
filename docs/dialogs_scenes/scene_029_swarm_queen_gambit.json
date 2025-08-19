@@ -1,5 +1,6 @@
 {
   "id": "scene_029_swarm_queen_gambit",
+  "act": 2,
   "location": "swarm_throne_ship_private_chamber",
   "triggers": [
     "has_flag:spared_swarm_queen_twice"

@@ -1,5 +1,6 @@
 {
   "id": "scene_016_cosmic_anomaly",
+  "act": 2,
   "location": "purple_rift_vicinity",
   "triggers": [
     "cosmic_anomaly_detected"

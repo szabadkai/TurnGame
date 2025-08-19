@@ -1,5 +1,6 @@
 {
   "id": "scene_020_beast_ambush",
+  "act": 2,
   "location": "ruins_outer_passage",
   "triggers": [
     "beasts_triggered"

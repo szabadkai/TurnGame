@@ -1,5 +1,6 @@
 {
   "id": "scene_031_nexus_recruitment",
+  "act": 2,
   "location": "trade_hub_nexus_cantina",
   "triggers": [
     "player_visits_nexus_after_prometheus"

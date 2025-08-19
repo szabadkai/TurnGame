@@ -1,5 +1,6 @@
 {
     "id": "scene_008_earth_debrief_victory",
+    "act": 3,
     "location": "earth_command_console",
     "triggers": [
         "ending_victory"

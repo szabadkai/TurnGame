@@ -1,5 +1,6 @@
 {
     "id": "scene_005_watchers_blockade",
+    "act": 2,
     "location": "choir_perimeter",
     "triggers": [
         "approach_watchers_fleet"

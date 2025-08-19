@@ -1,5 +1,6 @@
 {
     "id": "scene_012_prometheus_logs",
+    "act": 1,
     "location": "debris_field_datapods",
     "triggers": [
         "prometheus_logs_detected"

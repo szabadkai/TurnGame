@@ -1,5 +1,6 @@
 {
   "id": "scene_017_broken_probe",
+  "act": 2,
   "location": "high_orbit_probe_drift",
   "triggers": [
     "broken_probe_found"

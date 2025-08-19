@@ -1,5 +1,6 @@
 {
   "id": "scene_026_loop_awareness_progression",
+  "act": 2,
   "location": "meridian_bridge",
   "triggers": ["loop_awareness", "post_loop_event"],
   "npcs": ["ship_ai_maya"],
