@@ -25,7 +25,15 @@
     "dialogs_scenes/scene_023_collapse_escape.json",
     "dialogs_scenes/scene_024_fractured_space_entry.json",
     "dialogs_scenes/scene_025_crew_fracture.json",
-    "dialogs_scenes/scene_026_loop_awareness_progression.json"
+    "dialogs_scenes/scene_026_loop_awareness_progression.json",
+    "dialogs_scenes/scene_027_kethmori_sanctuary.json",
+    "dialogs_scenes/scene_028_prometheus_black_site.json",
+    "dialogs_scenes/scene_029_swarm_queen_gambit.json",
+    "dialogs_scenes/scene_030_information_broker.json",
+    "dialogs_scenes/scene_031_nexus_recruitment.json",
+    "dialogs_scenes/scene_032_pandora_anomaly.json",
+    "dialogs_scenes/scene_033_crucible_secret.json",
+    "dialogs_scenes/scene_034_new_horizon_mystery.json",
+    "dialogs_scenes/scene_035_retribution_echoes.json"
   ]
 }
-
