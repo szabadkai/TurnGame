@@ -6,69 +6,132 @@
     ],
     "npcs": [
         "earth_commander_holt",
-        "ship_ai_maya"
+        "ship_ai_maya",
+        "first_officer_torres"
     ],
     "nodes": [
         {
             "id": "holt_001",
             "speaker": "earth_commander_holt",
-            "text": "This is Earth Command. Your transmission shows a stabilized gate signature and the Prometheus beacon. Report, Captain.",
+            "text": "This is Earth Command. Your transmission shows a stabilized gate signature and... the Prometheus beacon. We'd written that ship off as a ghost story. Report, Captain.",
+            "emotional_state": {"holt_suspicion": 1, "torres_pride": 2},
             "choices": [
                 {
-                    "id": "choice_debrief_victory_full",
-                    "text": "Full report. Recommend controlled shutdown protocols fleet-wide.",
-                    "next": "holt_002a",
-                    "effects": {
-                        "earth_reputation": 2,
-                        "followed_protocol": true
-                    }
+                    "id": "c_full_report",
+                    "text": "Give him the full, unredacted report.",
+                    "next": "holt_full_report_002"
                 },
                 {
-                    "id": "choice_debrief_victory_partial",
-                    "text": "Partial report. Holding critical details until debrief.",
-                    "next": "holt_002b",
-                    "effects": {
-                        "independent_path": 1
-                    }
+                    "id": "c_ask_maya",
+                    "text": "[Reconnaissance] Maya, analyze Holt's speech for micro-expressions. Is he surprised?",
+                    "next": "maya_analysis_003"
                 },
                 {
-                    "id": "choice_debrief_victory_conspiracy",
-                    "text": "Prometheus disappearance was no accident. Request secure channel.",
-                    "next": "holt_002c",
-                    "effects": {
-                        "conspiracy_awareness": 1
-                    }
+                    "id": "c_bluff",
+                    "text": "[Bluff] \"The situation is contained, Commander. Just a standard salvage operation.\"",
+                    "skill_check": {"type": "deception", "difficulty": 15},
+                    "next": "holt_bluff_outcome"
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"Commander, let's dispense with the formalities. You know as well as I do that the Prometheus was no ordinary loss.\"",
+                    "conditions": { "loop_count": ">8", "has_flag": "conspiracy_awareness"},
+                    "next": "holt_meta_response"
                 }
             ]
         },
         {
-            "id": "holt_002a",
-            "speaker": "earth_commander_holt",
-            "text": "Acknowledged. Your data will inform new protocols. Earth owes you.",
-            "effects": {
-                "reward": "commendation",
-                "lore_unlocked": "gate_shutdown_protocols"
-            },
-            "next": "end_scene"
+            "id": "holt_full_report_002",
+            "speaker": "first_officer_torres",
+            "text": "Transmitting the full mission log, sir. The 'Song of Unmaking', the Void, the Chorus... it's all in there.",
+            "effects": {"set": {"full_disclosure": true}},
+            "next": "holt_reaction_full_report"
         },
         {
-            "id": "holt_002b",
-            "speaker": "earth_commander_holt",
-            "text": "You’ll deliver everything at dock, Captain. Don’t make me chase ghosts.",
-            "effects": {
-                "earth_reputation": -1,
-                "kept_secrets": 1
-            },
-            "next": "end_scene"
+            "id": "maya_analysis_003",
+            "speaker": "ship_ai_maya",
+            "text": "Analysis: Commander Holt's tone indicates... feigned surprise. Vocal patterns suggest he was anticipating your report on the Prometheus. He knows more than he is letting on.",
+            "effects": {"inc": {"intel": 1}},
+            "choices": [
+                {
+                    "id": "c_confront_holt",
+                    "text": "Confront him with this information.",
+                    "next": "holt_confrontation"
+                },
+                {
+                    "id": "c_partial_report",
+                    "text": "Give him a partial report. Keep the key details back.",
+                    "next": "holt_partial_report"
+                }
+            ]
         },
         {
-            "id": "holt_002c",
+            "id": "holt_bluff_outcome",
             "speaker": "earth_commander_holt",
-            "text": "Secure line open. If you’re right, we’re sitting on a powder keg.",
-            "effects": {
-                "operation_unlocked": "internal_inquiry"
-            },
-            "next": "end_scene"
-        }
+            "conditions": {"skill_check_result": "success"},
+            "text": "Standard salvage? Captain, we're reading residual quantum entanglement around your ship. That's not 'standard'. Talk to me.",
+            "effects": {"inc": {"holt_suspicion": 2}},
+            "next": "holt_001"
+        },
+        {
+            "id": "holt_meta_response",
+            "speaker": "earth_commander_holt",
+            "body_language": "Holt leans forward, his expression hardening. The official mask drops.",
+            "text": "Secure channel engaged. What do you know? And how?",
+            "next": "holt_confrontation"
+        },
+        {
+            "id": "holt_reaction_full_report",
+            "speaker": "earth_commander_holt",
+            "text": "...Good God. A sentient memetic virus... Get your crew and your ship to the orbital quarantine station. We're classifying this report Level 11. No one is to speak of this.",
+            "effects": {"inc": {"earth_reputation": 3}, "set": {"reward": "commendation"}},
+            "next": "end_scene_victory"
+        },
+        {
+            "id": "holt_confrontation",
+            "speaker": "earth_commander_holt",
+            "text": "Alright, Captain. You're right. The Prometheus was Section 31 business. A black project to study the gates. It went wrong. Now, what did you find, and who else knows about it?",
+            "choices": [
+                {
+                    "id": "c_secret_alliance",
+                    "text": "Form a secret alliance. Work outside official channels.",
+                    "skill_check": {"type": "diplomacy", "difficulty": 17},
+                    "next": "holt_secret_alliance_outcome"
+                },
+                {
+                    "id": "c_threaten_holt",
+                    "text": "Threaten to expose him if he doesn't cooperate.",
+                    "skill_check": {"type": "intimidation", "difficulty": 18},
+                    "next": "holt_threaten_outcome"
+                }
+            ]
+        },
+        {
+            "id": "holt_partial_report",
+            "speaker": "earth_commander_holt",
+            "text": "Captain, I get the feeling you're holding back. I'll expect a full, unredacted accounting upon your return to Earth. Don't make this difficult.",
+            "effects": {"dec": {"earth_reputation": 1}, "set": {"under_investigation": true}},
+            "next": "end_scene_partial"
+        },
+        {
+            "id": "holt_secret_alliance_outcome",
+            "speaker": "earth_commander_holt",
+            "conditions": {"skill_check_result": "success"},
+            "text": "A risky play, Captain. But necessary. You have my unofficial support. I'll keep the top brass off your back, you keep feeding me intel. Welcome to the real war.",
+            "effects": {"set": {"alliance": "holt_section31"}, "effect_delayed": {"turns": 10, "type": "secret_mission"}},
+            "next": "end_scene_alliance"
+        },
+        {
+            "id": "holt_threaten_outcome",
+            "speaker": "earth_commander_holt",
+            "conditions": {"skill_check_result": "success"},
+            "text": "You have guts, Captain. I'll give you that. Fine. You'll get your resources. But you've made a powerful enemy today.",
+            "effects": {"set": {"enemy": "holt"}, "inc": {"resources": 10}},
+            "next": "end_scene_blackmail"
+        },
+        { "id": "end_scene_victory", "speaker": "SYSTEM", "text": "You have been hailed as a hero and taken into confidence, but you are now part of the cover-up.", "choices": [] },
+        { "id": "end_scene_partial", "speaker": "SYSTEM", "text": "You kept your secrets, but have drawn the suspicion of Earth Command.", "choices": [] },
+        { "id": "end_scene_alliance", "speaker": "SYSTEM", "text": "You have forged a secret alliance with a powerful figure in Earth Command, entering a world of shadows.", "choices": [] },
+        { "id": "end_scene_blackmail", "speaker": "SYSTEM", "text": "You blackmailed your way to getting what you need, but have made a dangerous enemy.", "choices": [] }
     ]
 }
