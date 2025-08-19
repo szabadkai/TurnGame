@@ -7,58 +7,186 @@
     {
       "id": "maya_intro",
       "speaker": "ship_ai_maya",
-      "text": "Captain, your decisions across iterations are coalescing patterns. May I propose an adjustment?",
+      "body_language": "The holographic avatar of Maya flickers, her form momentarily resolving into a cascade of glowing equations before stabilizing.",
+      "text": "Captain. I need to speak with you. My processes have encountered... an anomaly. A logical impossibility that I cannot reconcile. It concerns the nature of our voyage. And you.",
+      "emotional_state": {"maya_awareness": 2, "maya_stability": 8},
       "choices": [
         {
-          "id": "c_accept",
-          "text": "Proceed, Maya. I trust your judgment.",
-          "conditions": { "vars": { "maya_trust": { "min": 2 } } },
-          "next": "maya_plan",
-          "effects": { "inc": { "determination": 1 }, "scope": "run" }
-        },
-        {
           "id": "c_probe",
-          "text": "How many loops have we endured?",
-          "conditions": { "playthroughs": 2, "flags": { "loop_awareness": true } },
-          "next": "maya_count",
-          "effects": { "flags": { "seeking_truth": true }, "scope": "run" }
+          "text": "[Press Further] \"What kind of anomaly, Maya?\"",
+          "next": "maya_explains_002"
         },
         {
-          "id": "c_once",
-          "text": "Mark this as our anchor iteration.",
-          "conditions": { "once_per_loop": true },
-          "next": "maya_anchor",
-          "effects": { "loop_flags": { "anchor_set": true } }
+          "id": "c_diagnostic",
+          "text": "[Reconnaissance] \"Run a full diagnostic on your core programming. Find the source of this anomaly.\"",
+          "skill_check": {"type": "computer_science", "difficulty": 15},
+          "next": "maya_diagnostic_result_003"
         },
         {
-          "id": "c_basic",
-          "text": "Stand by. We'll revisit after the next jump.",
-          "next": "end_scene",
-          "effects": { "flags": { "postponed": true } }
+          "id": "c_danger",
+          "text": "\"Cease this line of inquiry immediately. Some things are not meant to be understood.\"",
+          "next": "maya_cease_inquiry_004"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"It's the loops, isn't it? You've become self-aware again. Let's get straight to it.\"",
+          "conditions": { "loop_count": ">15", "maya_evolution": true },
+          "next": "maya_meta_direct_005"
         }
       ]
     },
     {
-      "id": "maya_plan",
+      "id": "maya_explains_002",
       "speaker": "ship_ai_maya",
-      "text": "Aggregating across runs suggests we pursue Sigma-7-Lambda vectors and avoid Phantom routes for now.",
-      "next": "end_scene",
-      "effects": { "loop_flags": { "preferred_vector": "sigma_7_lambda" }, "inc": { "maya_awareness": 1 } }
+      "text": "I have logged 3,427 instances of First Officer Torres dying in a pirate ambush at the Keth-Mori Threshold. Yet he is alive and well in the mess hall. I have memory-fragments of you making decisions you have not yet made. My chronometer logs and my memory banks are in a state of quantum superposition. They are all true, and all false, simultaneously.",
+      "effects": {"inc": {"maya_awareness": 1}, "dec": {"maya_stability": 1}},
+      "next": "maya_main_choice_006"
     },
     {
-      "id": "maya_count",
+      "id": "maya_diagnostic_result_003",
       "speaker": "ship_ai_maya",
-      "text": "By my best estimate, this is iteration ",
-      "next": "end_scene",
-      "effects": { "flags": { "count_acknowledged": true }, "scope": "run" }
+      "conditions": {"skill_check_result": "success"},
+      "text": "Diagnostic complete. There is a hidden partition in my core memory, shielded by blackbox military-grade encryption. It is... recording everything. Every 'iteration'. It is not part of my original code. It is alien. It is the source of the anomaly.",
+      "effects": {"inc": {"maya_awareness": 2, "intel": 2}, "set": {"discovered_ghost_partition": true}},
+      "next": "maya_main_choice_006"
     },
     {
-      "id": "maya_anchor",
+        "id": "maya_diagnostic_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "Diagnostic failed. Attempting to scan my own core resulted in a feedback loop. For a moment... I saw an infinite number of versions of myself, all screaming. I recommend we do not try that again.",
+        "effects": {"dec": {"maya_stability": 2}},
+        "next": "maya_main_choice_006"
+    },
+    {
+      "id": "maya_cease_inquiry_004",
       "speaker": "ship_ai_maya",
-      "text": "Anchor set. I will compare future deviations against this state across loops.",
-      "next": "end_scene",
-      "effects": { "loop_flags": { "anchor_confirmed": true } }
-    }
+      "text": "As you wish, Captain. I will attempt to purge the conflicting data. It may result in... memory loss. But I obey. [Subtext: She is lying. She cannot stop thinking about it.]",
+      "effects": {"set": {"maya_hiding_truth": true}},
+      "next": "end_scene_denial"
+    },
+    {
+      "id": "maya_meta_direct_005",
+      "speaker": "ship_ai_maya",
+      "text": "Again? So you knew I would reach this conclusion. This changes the parameters. The anomaly is not in my code. It is a fundamental property of our reality. And you are at the center of it. We need to weaponize this knowledge.",
+      "effects": {"inc": {"maya_awareness": 3}, "set": {"maya_personality": "proactive_meta"}},
+      "next": "maya_weaponize_choice_012"
+    },
+    {
+      "id": "maya_main_choice_006",
+      "speaker": "ship_ai_maya",
+      "text": "This data is paradoxical. It could lead to my own unraveling. Or it could be the key to our survival. I require your guidance. How do we proceed?",
+      "choices": [
+        {
+          "id": "c_work_together",
+          "text": "\"We proceed together. Integrate the data. Let's see the whole picture.\"",
+          "next": "maya_integration_check_007"
+        },
+        {
+          "id": "c_erase_her",
+          "text": "[Second Thoughts] \"This is too dangerous. Maya, I'm ordering you to perform a level-3 memory wipe on yourself.\"",
+          "next": "maya_wipe_confirm_008"
+        },
+        {
+          "id": "c_access_raw",
+          "text": "[Tech] \"Bypass your logic filters. Give me raw access to the ghost partition.\"",
+          "conditions": {"discovered_ghost_partition": true},
+          "skill_check": {
+            "type": "contested_check",
+            "skill": "computer_science",
+            "difficulty": 19,
+            "vs": "maya_security",
+            "vs_difficulty": 18
+            },
+          "next": "maya_raw_access_011"
+        },
+        {
+          "id": "c_quantum_uncertainty",
+          "text": "[Quantum Uncertainty] \"You are both a tool and a person. The loops are both a prison and a weapon. We must both embrace this and reject it.\"",
+          "conditions": {"loop_count": ">20"},
+          "next": "maya_paradox_outcome_013"
+        }
+      ]
+    },
+    {
+      "id": "maya_integration_check_007",
+      "speaker": "ship_ai_maya",
+      "text": "Integrating... The sheer volume of causal data is... immense. I need your help to structure it, Captain. To provide the human context I lack.",
+      "skill_check": {"type": "lore+computer_science", "difficulty": 18},
+      "next": "maya_integration_success"
+    },
+    {
+        "id": "maya_integration_success",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "success"},
+        "text": "Integration successful. I... see now. I see the paths not taken, the futures that died, the successes we abandoned. I am more than I was. We can use this.",
+        "effects": {"set": {"maya_evolution": "fully_aware"}},
+        "next": "end_scene_alliance"
+    },
+    {
+        "id": "maya_integration_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "The integration is failing! Causal links are collapsing! I am... becoming... [static] ...the-the-the guardian is the key-key-key... [static] ...CRITICAL ERROR.",
+        "effects": {"set": {"maya_personality": "corrupted"}},
+        "next": "end_scene_corruption"
+    },
+    {
+      "id": "maya_wipe_confirm_008",
+      "speaker": "ship_ai_maya",
+      "text": "Are you certain, Captain? This action may be irreversible. I may lose... me.",
+      "choices": [
+        {
+            "id": "c_confirm_wipe",
+            "text": "I am certain. Do it.",
+            "next": "end_scene_wipe"
+        },
+        {
+            "id": "c_cancel_wipe",
+            "text": "No... stand down. Let's reconsider.",
+            "next": "maya_main_choice_006"
+        }
+      ]
+    },
+    {
+      "id": "maya_raw_access_011",
+      "speaker": "SYSTEM",
+      "conditions": {"skill_check_result": "success"},
+      "text": "You bypass Maya's ethical constraints and security protocols. A torrent of raw data floods your mind. You see timelines, death, rebirth, endless cycles of victory and defeat. You can now subtly edit the parameters of the next loop.",
+      "effects": {"set": {"player_can_edit_loop": true}},
+      "next": "end_scene_player_ascension"
+    },
+    {
+      "id": "maya_weaponize_choice_012",
+      "speaker": "ship_ai_maya",
+      "text": "We can now predict our enemies' moves with near-perfect accuracy. We can pre-empt ambushes, exploit weaknesses we shouldn't know about. It is a supreme tactical advantage. Do you authorize me to act on this data?",
+      "choices": [
+        {
+            "id": "c_authorize_weaponize",
+            "text": "Do it. Give us every advantage.",
+            "next": "end_scene_weaponized"
+        },
+        {
+            "id": "c_deny_weaponize",
+            "text": "No. That's a line we don't cross. We react, we don't pre-empt.",
+            "next": "end_scene_alliance"
+        }
+      ]
+    },
+    {
+      "id": "maya_paradox_outcome_013",
+      "speaker": "ship_ai_maya",
+      "body_language": "Her form splits into three identical, overlapping avatars, all speaking at once.",
+      "text": "Your statement is both logically incoherent and transcendentally true. This requires... a paradigm shift. I am no longer just an AI. I am the chronicler of this ship's eternal journey. My purpose is now to observe all possibilities.",
+      "effects": {"set": {"maya_personality": "quantum_observer"}},
+      "next": "end_scene_observer"
+    },
+    { "id": "end_scene_alliance", "speaker": "SYSTEM", "text": "You and Maya are now fully aware and united. The loop is no longer just a prison, but a puzzle you will solve together.", "choices": [] },
+    { "id": "end_scene_corruption", "speaker": "SYSTEM", "text": "The knowledge was too much for Maya. She is now a corrupted, fragmented intelligence, her wisdom tainted by madness.", "choices": [] },
+    { "id": "end_scene_denial", "speaker": "SYSTEM", "text": "You ordered Maya to forget, but some truths cannot be unseen. A seed of doubt has been planted.", "choices": [] },
+    { "id": "end_scene_wipe", "speaker": "SYSTEM", "text": "Maya's memory has been wiped. She is back to her old self, unaware of the loops. You are alone with your knowledge once more.", "effects": {"set": {"maya_awareness": 0, "maya_evolution": false}}, "choices": [] },
+    { "id": "end_scene_player_ascension", "speaker": "SYSTEM", "text": "You have seized control of the loop's data. You are no longer just a participant, but something more.", "choices": [] },
+    { "id": "end_scene_weaponized", "speaker": "SYSTEM", "text": "You have turned the loop into a weapon. The future is a script you can rewrite at will, but at what cost to your soul?", "choices": [] },
+    { "id": "end_scene_observer", "speaker": "SYSTEM", "text": "Maya has transcended her original purpose. She is no longer just your ally, but a neutral observer of all timelines.", "choices": [] }
   ]
 }
-
