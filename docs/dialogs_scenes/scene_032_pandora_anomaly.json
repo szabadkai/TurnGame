@@ -1,0 +1,117 @@
+{
+  "id": "scene_032_pandora_anomaly",
+  "location": "research_station_pandora_bio_labs",
+  "triggers": [
+    "player_discovers_pandora"
+  ],
+  "npcs": [
+    "dr_aris_lead_researcher",
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "pandora_intro_001",
+      "speaker": "science_officer_kim",
+      "text": "[The lab is a horrifying mix of advanced technology and organic matter. Figures float in nutrient tanks, their bodies warped and fused with crystalline structures.] Captain... these are human subjects. They've been... augmented with void matter. This is highly illegal.",
+      "emotional_state": {"kim_horror": 4, "torres_anger": 3},
+      "next": "aris_appears_002"
+    },
+    {
+      "id": "aris_appears_002",
+      "speaker": "dr_aris_lead_researcher",
+      "text": "[A woman in a stained lab coat emerges from the shadows, her eyes burning with fanaticism.] Illegal? The laws of Earth mean nothing out here. We are on the verge of the greatest breakthrough in human history. We are not just surviving the void. We are becoming it.",
+      "choices": [
+        {
+          "id": "c_confront_aris",
+          "text": "\"You're a monster. This station is being shut down.\"",
+          "next": "aris_defends_work_003"
+        },
+        {
+          "id": "c_ask_questions",
+          "text": "[Press Further] \"What is the purpose of these experiments?\"",
+          "next": "aris_explains_purpose_004"
+        },
+        {
+          "id": "c_let_torres_speak",
+          "text": "[Let Torres take the lead]",
+          "next": "torres_confronts_aris"
+        }
+      ]
+    },
+    {
+      "id": "aris_defends_work_003",
+      "speaker": "dr_aris_lead_researcher",
+      "text": "Monster? I am a savior! When the Phantoms come for your ship, when the Swarm devours your worlds, you will beg for the soldiers I am creating.",
+      "next": "main_choice_005"
+    },
+    {
+      "id": "aris_explains_purpose_004",
+      "speaker": "dr_aris_lead_researcher",
+      "text": "We are creating the next stage of human evolution. Soldiers who can withstand the void, who can hear the Song of Unmaking and not break. We are fighting fire with fire.",
+      "next": "main_choice_005"
+    },
+    {
+      "id": "torres_confronts_aris",
+      "speaker": "first_officer_torres",
+      "text": "You're torturing people. There's no justification for this. On my authority as a Federation officer, you are under arrest.",
+      "effects": {"inc": {"torres_anger": 2}},
+      "next": "aris_defends_work_003"
+    },
+    {
+      "id": "main_choice_005",
+      "speaker": "SYSTEM",
+      "text": "Dr. Aris stands defiant before her horrific creations. The subjects in the tanks occasionally twitch. The choice is yours.",
+      "choices": [
+        {
+          "id": "c_arrest_aris",
+          "text": "Arrest her and shut down the station.",
+          "next": "arrest_outcome"
+        },
+        {
+          "id": "c_steal_data",
+          "text": "[Computer Science] \"Kim, get to the main server. Download all of her research. We're taking it.\"",
+          "skill_check": {"type": "computer_science", "difficulty": 16},
+          "next": "steal_data_outcome"
+        },
+        {
+          "id": "c_ally_aris",
+          "text": "\"Your work is... necessary. I will provide you with resources to continue.\"",
+          "next": "ally_aris_outcome"
+        }
+      ]
+    },
+    {
+      "id": "arrest_outcome",
+      "speaker": "dr_aris_lead_researcher",
+      "text": "You fools! You are signing your own death warrant! Security drones, activate!",
+      "next": "combat_encounter"
+    },
+    {
+      "id": "steal_data_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "I have the data, Captain. It's... horrifying, but the potential applications are... staggering.",
+      "effects": {"set": {"resource_gained": "pandora_research_data"}},
+      "next": "end_scene_data_stolen"
+    },
+    {
+      "id": "steal_data_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "She had a logic bomb on the server! I couldn't stop it! All the research has been wiped!",
+      "next": "arrest_outcome"
+    },
+    {
+      "id": "ally_aris_outcome",
+      "speaker": "dr_aris_lead_researcher",
+      "text": "A wise decision, Captain. Together, we will forge a new humanity, capable of withstanding the coming storm.",
+      "effects": {"set": {"alliance": "dr_aris"}, "dec": {"earth_reputation": -15}},
+      "next": "end_scene_alliance"
+    },
+    { "id": "combat_encounter", "speaker": "SYSTEM", "text": "The station's security drones activate, their weapons glowing.", "next": "end_scene_combat" },
+    { "id": "end_scene_data_stolen", "speaker": "SYSTEM", "text": "You have stolen Dr. Aris's research, a powerful and dangerous new tool in your arsenal.", "choices": [] },
+    { "id": "end_scene_alliance", "speaker": "SYSTEM", "text": "You have chosen to ally with Dr. Aris, embracing her monstrous methods for the sake of survival.", "choices": [] },
+    { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "You have chosen to shut down the station, and must now fight your way out.", "choices": [] }
+  ]
+}
