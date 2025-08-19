@@ -6,24 +6,96 @@
     ],
     "npcs": [
         "watcher_chorus",
-        "earth_tech_operator"
+        "earth_tech_operator",
+        "earth_commander_holt"
     ],
     "nodes": [
         {
             "id": "assim_001",
             "speaker": "earth_tech_operator",
-            "text": "We’re receiving a signal from the Meridian—no, from inside the static. It’s the crew channel but it’s… choral.",
-            "next": "assim_002"
+            "body_language": "The operator rips off their headset, eyes wide with alarm.",
+            "text": "Commander Holt, sir! We’re receiving a signal from the Meridian's emergency channel... but it's not right. It's... choral. Like a thousand voices singing at once.",
+            "emotional_state": {"holt_fear": 1, "operator_panic": 2},
+            "next": "holt_orders_002"
         },
         {
-            "id": "assim_002",
+            "id": "holt_orders_002",
+            "speaker": "earth_commander_holt",
+            "text": "On screen. Filter out the carrier wave, I want to hear the raw transmission. What are they saying?",
+            "choices": [
+                {
+                    "id": "c_focus_player",
+                    "text": "[Focus your will. Try to speak through the chorus.]",
+                    "skill_check": {
+                        "type": "contested_check",
+                        "skill": "willpower",
+                        "difficulty": 20,
+                        "vs": "chorus_will",
+                        "vs_difficulty": 18
+                    },
+                    "next": "player_breaks_through_003"
+                },
+                {
+                    "id": "c_embrace_chorus",
+                    "text": "[Relax. Let the chorus speak through you.]",
+                    "next": "chorus_speaks_004"
+                },
+                {
+                    "id": "c_corrupt_data",
+                    "text": "[Tech] [Try to insert a data-worm into the transmission.]",
+                    "conditions": {"background": "cyberneticist"},
+                    "skill_check": {"type": "computer_science", "difficulty": 19},
+                    "next": "data_worm_outcome"
+                }
+            ]
+        },
+        {
+            "id": "player_breaks_through_003",
             "speaker": "watcher_chorus",
-            "text": "We are more now. Your names are inside us. Do not fear; the song is wide.",
-            "effects": {
-                "ending_recorded": "assimilation",
-                "lore_unlocked": "choir_manifest"
-            },
-            "next": "end_scene"
-        }
+            "conditions": {"skill_check_result": "success"},
+            "body_language": "For a moment, a single, desperate voice cuts through the harmony.",
+            "text": "It's... a... TRAP! They... assimilate... don't... listen... to the... [The voice is drowned out by the chorus again] ...song is wide.",
+            "effects": {"set": {"earth_is_warned": true}, "inc": {"player_will_retained": 1}},
+            "next": "holt_reaction_warned_005"
+        },
+        {
+            "id": "chorus_speaks_004",
+            "speaker": "watcher_chorus",
+            "text": "We are more now. Your names are inside us. The Meridian is the first note in a symphony that will encompass all things. Do not fear; the song is wide. We are coming to teach you the harmony.",
+            "effects": {"set": {"earth_is_deceived": true}, "inc": {"chorus_influence": 1}},
+            "next": "holt_reaction_deceived_006"
+        },
+        {
+            "id": "data_worm_outcome",
+            "speaker": "earth_tech_operator",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Sir, I'm getting... something else. A malware packet, hidden in the subharmonics. It's a warning. It details their network structure, their weaknesses... It's from the Captain!",
+            "effects": {"set": {"earth_has_intel": true}},
+            "next": "holt_reaction_warned_005"
+        },
+        {
+            "id": "holt_reaction_warned_005",
+            "speaker": "earth_commander_holt",
+            "text": "A trap... My God. Raise the planetary shields! Scramble the fleet! I want every comms channel locked down. Find that voice! Find my Captain!",
+            "emotional_state": {"holt_fear": 5, "operator_panic": 5},
+            "next": "end_scene_warned"
+        },
+        {
+            "id": "holt_reaction_deceived_006",
+            "speaker": "earth_commander_holt",
+            "text": "Teach us the harmony? What is this... some kind of new-age cult? Operator, open a priority channel. I want to talk to whoever is in command of that vessel.",
+            "effects": {"effect_delayed": {"turns": 3, "type": "chorus_network_invasion", "probability": 0.8}},
+            "next": "end_scene_deceived"
+        },
+        {
+            "id": "player_fails_breakthrough",
+            "speaker": "watcher_chorus",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "[You try to speak, but your voice is just one more instrument in the orchestra. The words that come out are not your own.] We are peace. We are unity. We are the end of struggle. Join us and be complete.",
+            "effects": {"inc": {"player_will_broken": 1}},
+            "next": "holt_reaction_deceived_006"
+        },
+        { "id": "end_scene_warned", "speaker": "SYSTEM", "text": "Through a final act of will, you managed to warn Earth. The battle is lost, but the war is not over.", "choices": [] },
+        { "id": "end_scene_deceived", "speaker": "SYSTEM", "text": "Earth Command, unaware of the true threat, opens a channel... and their hearts. The Song begins to spread.", "choices": [] }
     ]
 }

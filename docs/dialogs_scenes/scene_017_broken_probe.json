@@ -6,59 +6,120 @@
   ],
   "npcs": [
     "ship_ai_maya",
-    "navigator_chen"
+    "navigator_chen",
+    "science_officer_kim"
   ],
   "nodes": [
     {
       "id": "probe_001",
       "speaker": "navigator_chen",
-      "text": "A broken probe is drifting off-axis. Solar panels cracked, data dish intact.",
+      "text": "Captain, I've got a drifting probe on sensors. Old Federation design. Solar panels are cracked, but the primary data dish seems intact.",
+      "emotional_state": {"chen_caution": 2, "kim_excitement": 1},
       "choices": [
         {
-          "id": "choice_probe_fuel",
-          "text": "Recover fuel reserves.",
-          "next": "maya_probe_fuel",
-          "effects": {
-            "fuel_gained": 1
-          }
+          "id": "c_recon",
+          "text": "[Reconnaissance] \"Kim, give it a full-spectrum scan before we get any closer.\"",
+          "next": "probe_scan_002"
         },
         {
-          "id": "choice_probe_decrypt",
-          "text": "Decrypt the signal and pull logs.",
-          "next": "maya_probe_decrypt",
-          "effects": {
-            "intel_gained": 1
-          }
+          "id": "c_direct_approach",
+          "text": "\"No time to waste. Chen, take us in close for salvage.\"",
+          "next": "probe_main_choice_003"
         },
         {
-          "id": "choice_probe_ignore",
-          "text": "Ignore it. Time is worth more.",
-          "next": "end_scene",
-          "effects": {
-            "risk_avoided": true
-          }
+          "id": "c_ignore",
+          "text": "Ignore it. We have bigger problems.",
+          "next": "end_scene_ignore"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"That's not a probe, it's a black box. The data core is what matters, but it's rigged to wipe.\"",
+          "conditions": { "loop_count": ">4", "remembered_event": "probe_trap"},
+          "next": "probe_meta_disarm_004"
         }
       ]
     },
     {
-      "id": "maya_probe_fuel",
-      "speaker": "ship_ai_maya",
-      "text": "Fuel bladder secured. Minimal risk.",
-      "effects": {
-        "fuel_gained": 1
-      },
-      "next": "end_scene"
+      "id": "probe_scan_002",
+      "speaker": "science_officer_kim",
+      "text": "Scan complete. The power signature is strange... there's a secondary power source I can't identify, and the data core is shielded with military-grade encryption. This is more than a simple weather probe.",
+      "effects": {"inc": {"intel": 1, "chen_caution": 1}},
+      "next": "probe_main_choice_003"
     },
     {
-      "id": "maya_probe_decrypt",
+      "id": "probe_main_choice_003",
       "speaker": "ship_ai_maya",
-      "text": "Telemetry suggests increased pirate presence along the trade lane—and a weak SOS near jungle coordinates.",
-      "effects": {
-        "route_revealed": "jungle_ruins_site",
-        "pirate_activity_warning": true
-      },
-      "next": "end_scene"
-    }
+      "text": "We are in position. What are your orders for the salvage operation?",
+      "choices": [
+        {
+          "id": "c_salvage_fuel",
+          "text": "[Engineering] \"Carefully extract the fuel cells. Avoid the data core.\"",
+          "skill_check": {
+            "type": "contested_check",
+            "skill": "engineering",
+            "difficulty": 15,
+            "vs": "probe_trap_sensitivity",
+            "vs_difficulty": 13
+          },
+          "next": "probe_fuel_outcome"
+        },
+        {
+          "id": "c_salvage_data",
+          "text": "[Computer Science] \"Hack the data core. I want to know what it's hiding.\"",
+          "skill_check": {"type": "computer_science", "difficulty": 16},
+          "next": "probe_data_outcome"
+        },
+        {
+          "id": "c_second_thought",
+          "text": "[Second Thoughts] \"This feels wrong. Pull back. We're leaving it.\"",
+          "next": "end_scene_ignore"
+        }
+      ]
+    },
+    {
+      "id": "probe_meta_disarm_004",
+      "speaker": "science_officer_kim",
+      "text": "Rigged to wipe? Let me see... yes, I see it. A logic bomb tied to any unauthorized access attempt. But if I create a recursive loop in the access query... I can bypass it!",
+      "effects": {"inc": {"kim_loyalty": 1}},
+      "skill_check": {"type": "computer_science", "difficulty": 12},
+      "next": "probe_data_outcome"
+    },
+    {
+      "id": "probe_fuel_outcome",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Fuel cells have been safely extracted and loaded. No anomalies detected.",
+      "effects": {"inc": {"fuel": 2}},
+      "next": "end_scene_fuel"
+    },
+    {
+      "id": "probe_fuel_fail",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "Warning! Removing the fuel cell triggered a dead man's switch! The probe's data core just self-destructed, sending out a massive energy pulse!",
+      "effects": {"inc": {"hull_damage": 3}, "effect_chance": {"probability": 0.2, "effect": "attract_attention"}},
+      "next": "end_scene_trap"
+    },
+    {
+      "id": "probe_data_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "I'm in! It's... a fragment of an AI consciousness. From a science vessel, the 'Cassini'. It was studying the gate network when... it saw something. Something that looked back.",
+      "effects": {"inc": {"intel": 2}, "effect_delayed": {"turns": 5, "type": "ai_fragment_awakens"}},
+      "next": "end_scene_data"
+    },
+    {
+      "id": "probe_data_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The encryption is too strong. I managed to pull a few corrupted fragments, but the rest is gone. It mentions... 'a city of echoes'... 'a throne of glass'... nonsense.",
+      "effects": {"inc": {"intel": 1, "void_corruption": 1}},
+      "next": "end_scene_corrupted_data"
+    },
+    { "id": "end_scene_ignore", "speaker": "SYSTEM", "text": "You decide to leave the derelict probe alone, its secrets still locked inside.", "choices": [] },
+    { "id": "end_scene_fuel", "speaker": "SYSTEM", "text": "You successfully salvaged fuel from the probe.", "choices": [] },
+    { "id": "end_scene_trap", "speaker": "SYSTEM", "text": "The probe was a trap, and you sprang it.", "choices": [] },
+    { "id": "end_scene_data", "speaker": "SYSTEM", "text": "You recovered the probe's data, uncovering a new piece of the puzzle.", "choices": [] },
+    { "id": "end_scene_corrupted_data", "speaker": "SYSTEM", "text": "You recovered only corrupted data, and a faint touch of madness.", "choices": [] }
   ]
 }
-
