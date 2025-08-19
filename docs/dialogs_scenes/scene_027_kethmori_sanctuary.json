@@ -1,0 +1,102 @@
+{
+  "id": "scene_027_kethmori_sanctuary",
+  "location": "kethmori_hidden_sanctuary",
+  "triggers": [
+    "has_flag:saved_kethmori_elder"
+  ],
+  "npcs": [
+    "kethmori_elder_zhal",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "zhal_intro_001",
+      "speaker": "kethmori_elder_zhal",
+      "text": "[The ancient crystalline being resonates with a sound that is both ancient and familiar.] The Anomaly. The Constant. We knew you would find this place. You always do.",
+      "emotional_state": {"zhal_serenity": 10, "maya_awareness": 5},
+      "choices": [
+        {
+          "id": "c_who_are_you",
+          "text": "\"You know who I am?\"",
+          "next": "zhal_explains_002"
+        },
+        {
+          "id": "c_shared_memory",
+          "text": "[Shared Memory] \"Zhal. The last time we spoke, you gave me the Resonance Key. But it was too late.\"",
+          "conditions": {"loop_count": ">10"},
+          "next": "zhal_shared_memory_003"
+        },
+        {
+          "id": "c_ask_maya",
+          "text": "[Reconnaissance] Maya, what is this place?",
+          "next": "maya_explains_sanctuary"
+        }
+      ]
+    },
+    {
+      "id": "zhal_explains_002",
+      "speaker": "kethmori_elder_zhal",
+      "text": "We do not know 'who' you are. We know 'what' you are. You are the eye of the storm. The point around which all possibilities churn. We have seen you lead humanity to salvation, and to ruin. We have seen you die a thousand times.",
+      "effects": {"inc": {"void_knowledge": 2}},
+      "next": "zhal_main_choice_004"
+    },
+    {
+      "id": "zhal_shared_memory_003",
+      "speaker": "kethmori_elder_zhal",
+      "text": "Yes. The Resonance Key. In that timeline, you were too late. In others, you did not come at all. In a few, you came as a conqueror. But in this one... you are early. The cycle is not yet set. There is still time.",
+      "effects": {"inc": {"player_hope": 1}},
+      "next": "zhal_main_choice_004"
+    },
+    {
+      "id": "maya_explains_sanctuary",
+      "speaker": "ship_ai_maya",
+      "text": "This sanctuary is... out of time. It is shielded from the gate network's temporal feedback. That is why they can remember. That is why they are still alive.",
+      "effects": {"inc": {"intel": 2}},
+      "next": "zhal_main_choice_004"
+    },
+    {
+      "id": "zhal_main_choice_004",
+      "speaker": "kethmori_elder_zhal",
+      "text": "The gates are a disease. A beautiful, wondrous disease that is killing the universe. We built them, and we have spent millennia watching them kill us. But we have found a way. A final resonance. A sequence that can unmake the gates, just as they unmake us. We can teach it to you. But be warned: this knowledge, once learned, cannot be forgotten. It will echo in all your future lives.",
+      "choices": [
+        {
+          "id": "c_accept_knowledge",
+          "text": "Teach me. I will bear this burden.",
+          "next": "zhal_teaches_sequence"
+        },
+        {
+          "id": "c_reject_knowledge",
+          "text": "No. The gates are our only hope for travel. There must be another way.",
+          "next": "zhal_reject_outcome"
+        },
+        {
+          "id": "c_paradox",
+          "text": "[Paradox] \"But if I learn how to destroy the gates, won't that prevent me from ever coming back here to learn it in the first place?\"",
+          "next": "zhal_paradox_answer"
+        }
+      ]
+    },
+    {
+      "id": "zhal_teaches_sequence",
+      "speaker": "kethmori_elder_zhal",
+      "text": "Then listen. The Song of Unmaking is not a weapon, but a key. It does not destroy, it... resolves. You must find the Terminus Gate, the first and last, and sing the counter-harmony. The notes are...",
+      "effects": {"set": {"lore_unlocked": "gate_shutdown_sequence"}, "set": {"path_to_true_ending": true}},
+      "next": "end_scene_knowledge_gained"
+    },
+    {
+      "id": "zhal_reject_outcome",
+      "speaker": "kethmori_elder_zhal",
+      "text": "A noble sentiment. One we have heard from you before. In 73% of those timelines, you were wrong. We will not force this knowledge upon you. Go. Live this life as you see fit. We will be here, if you change your mind. Or if you do not.",
+      "next": "end_scene_rejected"
+    },
+    {
+      "id": "zhal_paradox_answer",
+      "speaker": "kethmori_elder_zhal",
+      "text": "A clever question. One you have asked before. The answer is the nature of the loop itself. You are not just traveling in time. You are traveling between possibilities. If you succeed, this timeline will be the last. The other yous, in the other loops, will simply cease to be. A small price to pay for reality, is it not?",
+      "effects": {"inc": {"void_knowledge": 5}},
+      "next": "zhal_main_choice_004"
+    },
+    { "id": "end_scene_knowledge_gained", "speaker": "SYSTEM", "text": "You now possess the knowledge to end the cycle, but the burden of that choice is now yours to carry across all timelines.", "choices": [] },
+    { "id": "end_scene_rejected", "speaker": "SYSTEM", "text": "You have refused the ultimate weapon, choosing to believe in another way. The Keth'mori wait, as they always have.", "choices": [] }
+  ]
+}

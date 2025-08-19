@@ -1,0 +1,135 @@
+{
+  "id": "scene_028_prometheus_black_site",
+  "location": "prometheus_moon_base_sigma",
+  "triggers": [
+    "has_flag:project_prometheus_unlocked"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "base_approach_001",
+      "speaker": "first_officer_torres",
+      "text": "This is it, Captain. The coordinates from the fragmented logs. A ghost facility, not on any official star chart. Looks abandoned.",
+      "emotional_state": {"torres_suspicion": 3, "kim_excitement": 2},
+      "choices": [
+        {
+          "id": "c_scan_base",
+          "text": "[Reconnaissance] \"Maya, do a full sweep. Power signatures, life signs, structural integrity.\"",
+          "next": "base_scan_results_002"
+        },
+        {
+          "id": "c_enter_base",
+          "text": "Let's not waste time. We go in now.",
+          "next": "base_interior_003"
+        }
+      ]
+    },
+    {
+      "id": "base_scan_results_002",
+      "speaker": "ship_ai_maya",
+      "text": "No life signs. Minimal power readings, consistent with emergency backup. However, I detect a single, heavily shielded data vault deep within the facility. It's still drawing power.",
+      "effects": {"inc": {"intel": 1}},
+      "next": "base_interior_003"
+    },
+    {
+      "id": "base_interior_003",
+      "speaker": "science_officer_kim",
+      "text": "The dust suggests it was abandoned in a hurry. Most of the terminals have been wiped, but the central command console seems intact, just powered down.",
+      "choices": [
+        {
+          "id": "c_restore_power",
+          "text": "[Engineering] \"Let's try to restore power to this section. Cautiously.\"",
+          "skill_check": {"type": "engineering", "difficulty": 15},
+          "next": "base_power_restored"
+        },
+        {
+          "id": "c_check_vault",
+          "text": "Let's head for that shielded data vault Maya found.",
+          "next": "base_vault_door"
+        }
+      ]
+    },
+    {
+      "id": "base_power_restored",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Power restored to the command console. It's... running a data purge protocol. We have seconds before everything is lost!",
+      "choices": [
+        {
+          "id": "c_stop_purge",
+          "text": "[Computer Science] \"Kim, stop that purge now!\"",
+          "skill_check": {"type": "contested_check", "skill": "computer_science", "difficulty": 18, "vs": "purge_protocol", "vs_difficulty": 16},
+          "next": "base_data_recovered"
+        },
+        {
+            "id": "c_let_it_burn",
+            "text": "It's a trap. Let it wipe.",
+            "next": "base_purge_complete"
+        }
+      ]
+    },
+    {
+      "id": "base_vault_door",
+      "speaker": "first_officer_torres",
+      "text": "Here's the vault. Heavy blast door. No conventional lock. It seems to require a biometric signature from a high-ranking officer.",
+      "choices": [
+        {
+          "id": "c_force_door",
+          "text": "[Engineering] \"We're not high-ranking enough. Let's make our own door.\"",
+          "skill_check": {"type": "engineering", "difficulty": 19},
+          "next": "base_data_recovered"
+        },
+        {
+          "id": "c_void_touch_lock",
+          "text": "[Void Touched] \"The lock remembers the last person who touched it. Let me try something.\"",
+          "conditions": {"background": "void_touched"},
+          "skill_check": {"type": "void_touched", "difficulty": 17},
+          "next": "base_data_recovered"
+        }
+      ]
+    },
+    {
+      "id": "base_data_recovered",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "I've got it! The logs... Captain, this is... this is everything. 'Project Prometheus' was a weapons development program. They weren't exploring the gates, they were trying to turn them into weapons. They succeeded, and it created the Song of Unmaking. Our mission... our salvage mission... the directive is to recover the 'weapon' and erase all evidence. Including us.",
+      "effects": {"set": {"lore_unlocked": "project_prometheus_truth"}},
+      "next": "base_final_choice"
+    },
+    {
+        "id": "base_purge_complete",
+        "speaker": "ship_ai_maya",
+        "text": "The data has been wiped. However, the energy signature from the purge has overloaded the local power grid. The data vault has just unlocked itself as a failsafe.",
+        "next": "base_data_recovered"
+    },
+    {
+      "id": "base_final_choice",
+      "speaker": "first_officer_torres",
+      "text": "They sent us here to die. To clean up their mess. So what do we do now, Captain? We're holding the biggest secret in human history.",
+      "choices": [
+        {
+          "id": "c_leak_data",
+          "text": "We leak this to the Free Colonies. Let the truth burn Earth Command to the ground.",
+          "next": "end_scene_leak"
+        },
+        {
+          "id": "c_confront_earth",
+          "text": "We confront Holt. We use this as leverage.",
+          "next": "end_scene_confront"
+        },
+        {
+          "id": "c_erase_data",
+          "text": "We erase it. This secret is too dangerous for anyone to know.",
+          "next": "end_scene_erase"
+        }
+      ]
+    },
+    { "id": "end_scene_leak", "speaker": "SYSTEM", "text": "You have sent the data to the Free Colonies. The foundations of the United Earth Coalition will be shaken to their core.", "effects": {"set": {"earth_reputation": -50, "colonies_reputation": 20}}, "choices": [] },
+    { "id": "end_scene_confront", "speaker": "SYSTEM", "text": "You now hold the ultimate bargaining chip. Earth Command will have to listen to you now.", "effects": {"set": {"has_leverage_earth": true}}, "choices": [] },
+    { "id": "end_scene_erase", "speaker": "SYSTEM", "text": "You have erased the data, taking the burden of this terrible secret upon yourself.", "effects": {"set": {"kept_secrets": 10}}, "choices": [] }
+  ]
+}
