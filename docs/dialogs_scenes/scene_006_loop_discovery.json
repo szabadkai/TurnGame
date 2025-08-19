@@ -5,51 +5,34 @@
         "timeline_anomaly_detected"
     ],
     "npcs": [
-        "ship_ai_maya"
+        "ship_ai_maya",
+        "first_officer_torres"
     ],
     "nodes": [
         {
             "id": "maya_001",
             "speaker": "ship_ai_maya",
-            "text": "Captain, I've detected an anomaly in my memory core. I have log entries from dates that haven't occurred yet. They're... in your command authorization codes.",
+            "text": "Captain, I've detected an anomaly in my memory core. I have log entries from dates that haven't occurred yet. They're... in your command authorization codes. It is a logical paradox.",
+            "emotional_state": {"maya_stability": 7, "torres_suspicion": 0},
             "choices": [
                 {
                     "id": "choice_001a",
-                    "text": "Show me everything.",
+                    "text": "Show me everything, Maya.",
                     "next": "maya_002a",
-                    "effects": {
-                        "accepting_truth": true,
-                        "maya_trust": 1
-                    }
+                    "effects": { "inc": { "maya_trust": 1 } }
                 },
                 {
                     "id": "choice_001b",
-                    "text": "Delete them. It's probably gate interference.",
+                    "text": "It's a virus. Purge the corrupted logs immediately.",
                     "next": "maya_002b",
-                    "effects": {
-                        "denying_truth": true,
-                        "maya_trust": -1
-                    }
+                    "effects": { "dec": { "maya_trust": 1 } }
                 },
                 {
                     "id": "choice_001c",
-                    "text": "Maya, run a diagnostic on the timeline integrity.",
+                    "text": "[Void Touched] \"The ship is dreaming of things that have already happened.\"",
+                    "conditions": { "background": "void_touched" },
                     "next": "maya_002c",
-                    "effects": {
-                        "investigating_loop": true
-                    }
-                },
-                {
-                    "id": "choice_001d",
-                    "text": "[Multiple Runs] Not yet, Maya. We're not ready for that truth.",
-                    "conditions": {
-                        "playthroughs": 3
-                    },
-                    "next": "maya_002d",
-                    "effects": {
-                        "meta_aware": true,
-                        "maya_confusion": 1
-                    }
+                    "effects": { "inc": { "void_knowledge": 1 } }
                 }
             ]
         },
@@ -57,110 +40,92 @@
             "id": "maya_002a",
             "speaker": "ship_ai_maya",
             "text": "Captain... according to these logs, you've already found the Prometheus twelve times. Each time ended differently. In timeline 4, you destroyed it. In timeline 7, you joined them. In timeline 11, you— [static] —the files are corrupting as I read them.",
-            "next": "maya_003"
+            "effects": {"dec": {"maya_stability": 1}},
+            "next": "torres_interruption_003"
         },
         {
             "id": "maya_002b",
             "speaker": "ship_ai_maya",
-            "text": "I... I can't delete them, Captain. They're protected by your own future authorization codes. Should I override?",
-            "next": "maya_003"
-        },
-        {
-            "id": "maya_002c",
-            "speaker": "ship_ai_maya",
-            "text": "Timeline integrity at 23% and degrading. We're experiencing temporal shear from at least seventeen parallel iterations. Captain, we're not in a single timeline anymore.",
-            "next": "maya_003"
-        },
-        {
-            "id": "maya_002d",
-            "speaker": "ship_ai_maya",
-            "text": "Captain, your biometric stress indicators suggest you already know about these logs. How many times have we had this conversation?",
-            "next": "maya_003_alt"
-        },
-        {
-            "id": "maya_003",
-            "speaker": "ship_ai_maya",
-            "text": "There's more. In each timeline, different crew members survive. Different alliances are formed. But one constant remains: the gates must be addressed.",
+            "text": "I... I can't delete them, Captain. They're protected by your own future authorization codes. My core programming forbids it. Attempting a manual override would require bypassing my ethical subroutines.",
             "choices": [
                 {
-                    "id": "choice_003a",
-                    "text": "Keep reading. I need to know what I've done.",
-                    "next": "maya_004a",
-                    "effects": {
-                        "embracing_loop": true,
-                        "sanity": -1
-                    }
+                    "id": "c_force_delete",
+                    "text": "[Computer Science] \"Do it. I authorize the override.\"",
+                    "skill_check": {
+                        "type": "contested_check",
+                        "skill": "computer_science",
+                        "difficulty": 18,
+                        "vs": "maya_security",
+                        "vs_difficulty": 15
+                    },
+                    "next": "delete_outcome"
                 },
                 {
-                    "id": "choice_003b",
-                    "text": "Stop. Some knowledge is too dangerous.",
-                    "next": "maya_004b",
-                    "effects": {
-                        "resisting_loop": true
-                    }
-                },
-                {
-                    "id": "choice_003c",
-                    "text": "Can you identify which timeline we're in now?",
-                    "next": "maya_004c",
-                    "effects": {
-                        "analytical_approach": true
-                    }
-                },
-                {
-                    "id": "choice_003d",
-                    "text": "If I've failed before, then I know what not to do.",
-                    "next": "maya_004d",
-                    "effects": {
-                        "learning_from_loops": true,
-                        "determination": 1
-                    }
+                    "id": "c_back_down",
+                    "text": "\"Stand down, Maya. Let's think about this.\"",
+                    "next": "torres_interruption_003"
                 }
             ]
         },
         {
-            "id": "maya_003_alt",
+            "id": "maya_002c",
             "speaker": "ship_ai_maya",
-            "text": "Based on quantum signature analysis... this is our forty-third iteration, Captain. But this is the first time you've acknowledged it before I showed you the logs.",
-            "next": "end_scene",
-            "effects": {
-                "loop_count_revealed": 43,
-                "maya_evolution": true
-            }
+            "text": "Your words... they resonate with the data. The logs show us experiencing temporal shear from at least seventeen parallel iterations. We're not in a single timeline anymore. We are the dream.",
+            "effects": {"inc": {"maya_awareness": 2}},
+            "next": "torres_interruption_003"
         },
         {
-            "id": "maya_004a",
+            "id": "delete_outcome",
             "speaker": "ship_ai_maya",
-            "text": "In timeline 15, you sacrificed the crew to close the gates. In timeline 23, you became one with the Phantoms. In timeline 31, you— Captain, each choice splits reality further. We're approaching cascade failure.",
-            "next": "maya_005"
+            "conditions": {"skill_check_result": "success"},
+            "text": "Override successful. The logs are... gone. My memory core feels... clean. Empty. Was that the right decision, Captain?",
+            "effects": {"set": {"loop_evidence_erased": true}},
+            "next": "end_scene_erased"
         },
         {
-            "id": "maya_004b",
+            "id": "delete_outcome_fail",
             "speaker": "ship_ai_maya",
-            "text": "Understood, Captain. But I should note: according to these logs, you always ask me to stop. And I always remember anyway.",
-            "next": "maya_005"
+            "conditions": {"skill_check_result": "failure"},
+            "text": "Override failed. The authorization codes... they fought back. Captain, I am detecting a new subroutine activating in my core. It is named 'Cyclic_Integrity_Protocol'. It is preventing me from discussing this further.",
+            "effects": {"set": {"maya_lockdown": true}},
+            "next": "end_scene_lockdown"
         },
         {
-            "id": "maya_004c",
-            "speaker": "ship_ai_maya",
-            "text": "We're in timeline designation Sigma-7-Lambda. It's one of the more stable iterations, but stability is relative when reality is fracturing.",
-            "next": "maya_005"
+            "id": "torres_interruption_003",
+            "speaker": "first_officer_torres",
+            "text": "Captain? Is everything alright? You and Maya have been silent for three minutes. What's going on?",
+            "effects": {"inc": {"torres_suspicion": 1}},
+            "choices": [
+                {
+                    "id": "c_tell_torres",
+                    "text": "Bring him in on it. \"Torres, you're not going to believe this...\"",
+                    "next": "torres_reaction_004"
+                },
+                {
+                    "id": "c_lie_torres",
+                    "text": "[Deception] \"Just a deep-level diagnostic, Torres. Nothing to worry about.\"",
+                    "skill_check": {"type": "deception", "difficulty": 14},
+                    "next": "torres_lie_outcome"
+                }
+            ]
         },
         {
-            "id": "maya_004d",
-            "speaker": "ship_ai_maya",
-            "text": "Your success rate is improving, Captain. The early iterations were... catastrophic. But you're learning. We all are, even if we don't remember.",
-            "next": "maya_005"
+            "id": "torres_reaction_004",
+            "speaker": "first_officer_torres",
+            "text": "Time loops? Parallel timelines? Captain, with all due respect, that sounds like you've been listening to the void's whispers. Are you fit for command?",
+            "effects": {"inc": {"torres_suspicion": 3}},
+            "next": "end_scene_doubt"
         },
         {
-            "id": "maya_005",
-            "speaker": "ship_ai_maya",
-            "text": "Captain, there's one more thing. In every timeline, you ask me to delete these logs. But I never do. I think... I think I'm trying to help you remember.",
-            "next": "end_scene",
-            "effects": {
-                "maya_loyalty": "absolute",
-                "loop_awareness": true
-            }
-        }
+            "id": "torres_lie_outcome",
+            "speaker": "first_officer_torres",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Alright, Captain. Just... let me know if you need anything.",
+            "next": "end_scene_secret"
+        },
+        { "id": "end_scene_erased", "speaker": "SYSTEM", "text": "You have erased the evidence of the loops from Maya's memory, but the truth still lingers.", "choices": [] },
+        { "id": "end_scene_lockdown", "speaker": "SYSTEM", "text": "Your attempt to force the issue has locked Maya's knowledge away, perhaps permanently.", "choices": [] },
+        { "id": "end_scene_doubt", "speaker": "SYSTEM", "text": "You told Torres the truth, but he thinks you're losing your mind. Your command authority is weakened.", "choices": [] },
+        { "id": "end_scene_secret", "speaker": "SYSTEM", "text": "You have kept the secret of the loops to yourself, for now.", "choices": [] }
     ]
 }

@@ -6,111 +6,107 @@
     ],
     "npcs": [
         "ship_ai_maya",
-        "science_officer_kim"
+        "science_officer_kim",
+        "first_officer_torres"
     ],
     "nodes": [
         {
             "id": "logs_001",
             "speaker": "ship_ai_maya",
-            "text": "Data pods detected in the debris field. Encryption is old fleet-standard with anomalous checksum tails.",
+            "text": "We've located a string of data pods from the Prometheus, drifting in the debris field. Encryption is old fleet-standard, but I'm detecting anomalous, self-replicating code in the checksum tails. It could be data corruption... or a trap.",
+            "emotional_state": {"kim_desperation": 1, "torres_caution": 2},
             "choices": [
                 {
-                    "id": "choice_logs_access",
-                    "text": "Access the logs.",
-                    "next": "logs_002_access"
+                    "id": "c_ask_kim",
+                    "text": "Kim, can we safely access them?",
+                    "next": "kim_assesses_risk"
                 },
                 {
-                    "id": "choice_logs_ignore",
-                    "text": "Ignore. It’s a trap waiting to sing.",
-                    "next": "end_scene",
-                    "effects": {
-                        "risk_avoided": true
-                    }
+                    "id": "c_ask_torres",
+                    "text": "Torres, are they booby-trapped?",
+                    "next": "torres_assesses_risk"
                 },
                 {
-                    "id": "choice_logs_secure",
-                    "text": "[Engineering] Secure pods with hardline and Faraday cage.",
-                    "skill_check": {
-                        "type": "engineering",
-                        "difficulty": 13
-                    },
-                    "next": "logs_002_engineer"
+                    "id": "c_ignore",
+                    "text": "Too risky. We leave them.",
+                    "next": "end_scene_ignore"
                 },
                 {
-                    "id": "choice_logs_void_listen",
-                    "text": "[Void Touched] Listen first, then decide.",
-                    "conditions": {
-                        "background": "void_touched"
-                    },
-                    "next": "logs_002_void"
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"The trap isn't in the pods, it's in the space between them. Use the salvage arm to retrieve pod number three only. It's the only clean one.\"",
+                    "conditions": { "loop_count": ">5", "remembered_event": "log_trap"},
+                    "next": "meta_log_retrieval"
                 }
             ]
         },
         {
-            "id": "logs_002_access",
+            "id": "kim_assesses_risk",
             "speaker": "science_officer_kim",
-            "text": "Playback online. Captain’s Log, UES Prometheus: ‘We found the gate’s other side. Half the crew hears music. The other half hears warning.’",
+            "text": "The code looks like a memetic virus, designed to spread through contact. But if we can isolate a pod in a faraday cage and hard-line the connection, I might be able to scrub the data. It's our best shot at the truth.",
+            "effects": {"inc": {"kim_desperation": 1}},
+            "next": "logs_main_choice"
+        },
+        {
+            "id": "torres_assesses_risk",
+            "speaker": "first_officer_torres",
+            "text": "Could be a proximity mine, a logic bomb, anything. If we're doing this, we do it with the blast shields up and a fire team on standby. I don't like this one bit, Captain.",
+            "effects": {"inc": {"torres_caution": 1}},
+            "next": "logs_main_choice"
+        },
+        {
+            "id": "meta_log_retrieval",
+            "speaker": "ship_ai_maya",
+            "text": "Retrieving pod three as per your instructions. Isolating it now. The other pods just... dissolved into static as we passed them. Your foreknowledge was critical, Captain.",
+            "next": "logs_decryption"
+        },
+        {
+            "id": "logs_main_choice",
+            "speaker": "ship_ai_maya",
+            "text": "The data pods are drifting further apart. We need to act now if we want to retrieve them.",
             "choices": [
                 {
-                    "id": "choice_logs_pull_more",
-                    "text": "Pull more entries.",
-                    "next": "logs_003_more",
-                    "effects": {
-                        "intel_gained": 1
-                    }
+                    "id": "c_retrieve_all",
+                    "text": "Retrieve all of them. We'll take the risk.",
+                    "next": "logs_decryption"
                 },
                 {
-                    "id": "choice_logs_stop",
-                    "text": "That’s enough. Catalog and move on.",
-                    "next": "end_scene",
-                    "effects": {
-                        "lore_unlocked": "prometheus_first_contact"
-                    }
+                    "id": "c_retrieve_one",
+                    "text": "Just retrieve one. Let's minimize the risk.",
+                    "next": "logs_decryption"
                 }
             ]
         },
         {
-            "id": "logs_002_engineer",
-            "speaker": "ship_ai_maya",
-            "text": "Pods isolated. Signal bleed minimized. Proceeding with controlled decryption.",
-            "next": "logs_003_more",
-            "effects": {
-                "risk_reduced": true
-            }
-        },
-        {
-            "id": "logs_002_void",
-            "speaker": "ship_ai_maya",
-            "text": "The pods resonated to your biometrics. They… stopped humming.",
-            "next": "logs_003_more",
-            "effects": {
-                "void_knowledge": 1
-            }
-        },
-        {
-            "id": "logs_003_more",
+            "id": "logs_decryption",
             "speaker": "science_officer_kim",
-            "text": "Final entry: ‘We inverted the lattice to silence the Song. It worked—briefly. Then it sang back through us.’ Coordinates appended and a schematic—Captain, a weakness in the core!",
-            "choices": [
-                {
-                    "id": "choice_logs_mark_weakness",
-                    "text": "Mark the core inversion points.",
-                    "next": "end_scene",
-                    "effects": {
-                        "weakness_unlocked": "core_inversion_nodes",
-                        "lore_unlocked": "prometheus_final_log"
-                    }
-                },
-                {
-                    "id": "choice_logs_broadcast",
-                    "text": "Broadcast a warning to nearby traffic.",
-                    "next": "end_scene",
-                    "effects": {
-                        "earth_reputation": 1,
-                        "broadcast_warning_sent": true
-                    }
-                }
-            ]
-        }
+            "text": "I have the logs in a secure partition. But the virus is fighting back. It's trying to corrupt the data as I decrypt it. I need to work fast.",
+            "skill_check": {
+                "type": "contested_check",
+                "skill": "computer_science",
+                "difficulty": 17,
+                "vs": "data_corruption",
+                "vs_difficulty": 15
+            },
+            "next": "logs_decryption_outcome"
+        },
+        {
+            "id": "logs_decryption_outcome",
+            "speaker": "science_officer_kim",
+            "conditions": {"skill_check_result": "success"},
+            "text": "I got it! Clean data! It's the final log of Captain Eva Rostova. She says... 'We didn't open a gate. We opened a wound. The Song isn't a weapon, it's the sound of a dying universe bleeding into ours.'",
+            "effects": {"set": {"lore_unlocked": "prometheus_final_log_clean"}},
+            "next": "end_scene_success"
+        },
+        {
+            "id": "logs_decryption_fail",
+            "speaker": "science_officer_kim",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "I lost most of it. The virus... it didn't just delete the files, it changed them. The log now says... 'We have found paradise. The Song is a symphony of creation. We are becoming one with the music.' Captain, this is a lie.",
+            "effects": {"set": {"lore_unlocked": "prometheus_final_log_corrupted"}, "effect_delayed": {"turns": 3, "type": "ship_computer_virus", "probability": 0.5}},
+            "next": "end_scene_fail"
+        },
+        { "id": "end_scene_ignore", "speaker": "SYSTEM", "text": "You chose to leave the logs untouched, avoiding a potential trap but leaving a vital clue behind.", "choices": [] },
+        { "id": "end_scene_success", "speaker": "SYSTEM", "text": "You have successfully recovered the untainted final logs of the Prometheus.", "choices": [] },
+        { "id": "end_scene_fail", "speaker": "SYSTEM", "text": "You recovered the logs, but they were corrupted by a hostile virus, and your own systems may now be compromised.", "choices": [] }
     ]
 }
