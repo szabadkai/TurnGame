@@ -1,0 +1,115 @@
+# Ready-to-Use Image Generation Prompts for "The Exodus Protocol" Dialog Scenes
+
+Base Style Modifier (add to each prompt):
+"Pixel art science-fiction game scene, landscape orientation. Retro space opera aesthetic similar to Heroes of Might and Magic 3 tactical RPG style, adapted for sci-fi. Glowing neon accents, detailed environments, atmospheric lighting. UI overlay with dialogue boxes, branching choice buttons, resource counters (Fuel/Crew/Intel). Cinematic framing, immersive atmosphere."
+
+---
+
+SCENE_001_PROMETHEUS_DISCOVERY:
+"Spaceship bridge interior. Navigator Chen at glowing control console with trembling hands, showing fear and excitement. Large viewport showing massive derelict UES Prometheus against swirling purple void energies. Amber bridge lighting, blue scanner displays. Dialogue box: 'Captain, we're picking up a massive energy signature. It's the UES Prometheus!' Five choice buttons visible below. [Base Style Modifier]"
+
+SCENE_002_KETH_MORI_THRESHOLD:
+"Ancient alien crystalline gateway with glowing geometric patterns, Keth'mori architecture. Crew in space suits approaching cautiously. Swirling energy portal center, ambient blue-purple lighting. Archaeological scanning equipment. Mysterious alien glyphs glowing on walls. Tactical grid overlay. [Base Style Modifier]"
+
+SCENE_003_PIRATE_AMBUSH:
+"Space battle scene. Multiple pirate ships emerging from dust belt with red engine trails. Player ship in center, targeting displays active. First Officer Torres at tactical station, aggressive stance. Combat grid overlay showing ship positions. Weapon charge indicators, shield status displays. [Base Style Modifier]"
+
+SCENE_004_ALIEN_GLYPHS:
+"Archaeological site with ancient alien ruins. Mysterious glowing glyphs covering walls. Science Officer Kim with analysis equipment, excited discovery pose. Holographic translation displays floating above. Glyphs pulsing with otherworldly energy. Detailed pixel art alien architecture. [Base Style Modifier]"
+
+SCENE_005_WATCHERS_BLOCKADE:
+"Space blockade with massive Watcher Chorus vessels in formation. Bio-organic ship designs with musical energy waves visible between ships. Harmonic barriers glowing. Player ship approaching. Navigation displays showing blocked routes. Spectral analysis showing harmonic frequencies. [Base Style Modifier]"
+
+SCENE_006_LOOP_DISCOVERY:
+"Starship bridge with AI Maya displaying holographic temporal anomaly data, timeline fragmentation graphs. Captain at command chair, Torres suspicious in background. Multiple timeline visualization showing loop iterations. Quantum uncertainty indicators, temporal distortion effects. [Base Style Modifier]"
+
+SCENE_007_CRYSTAL_GUARDIAN:
+"Ancient ruins interior with massive Crystal Guardian assembling from chamber walls. Towering crystalline figure with faceted surfaces glowing with resonant energy. Crew in defensive positions. Ancient Keth'mori geometric architecture patterns. Tactical grid showing combat positioning. [Base Style Modifier]"
+
+SCENE_008_EARTH_DEBRIEF_VICTORY:
+"Military command center with Earth Commander Holt at communication console, official bearing. Multiple displays showing Prometheus beacon recovery success. Torres reporting with visible pride. Clean, organized Earth military aesthetics. Resource counters showing reputation gained. [Base Style Modifier]"
+
+SCENE_009_EARTH_DEBRIEF_ASSIMILATION:
+"Corrupted military command center with static-filled displays. Watcher Chorus transmission visible on screens. Tech Operator removing headset in alarm. Harmonic interference patterns, choral energy waves from communication arrays. Warning indicators flashing red. [Base Style Modifier]"
+
+SCENE_010_EARTH_DEBRIEF_PACT:
+"Tense military briefing room with Commander Holt showing paranoid expression, harsh interrogation lighting. Maya AI displays showing erratic biosigns. Quantum radiation indicators visible. Kim showing subtle corruption influence signs. Quarantine protocol warnings. [Base Style Modifier]"
+
+SCENE_011_PROMETHEUS_WRECK_APPROACH:
+"Space navigation scene with Prometheus wreck half-buried in swirling void wake, hull stress patterns visible. Navigator Chen at controls showing terror, Torres resolute at tactical. Dangerous void energy surrounding wreck. Navigation grid overlay showing approach vectors. [Base Style Modifier]"
+
+SCENE_012_PROMETHEUS_LOGS:
+"Debris field with multiple data pods floating in space debris, some glowing with corrupted code signatures. Maya AI processing encrypted data streams. Kim at analysis station with isolation protocols. Faraday cage containment. Virus detection displays, data corruption indicators. [Base Style Modifier]"
+
+SCENE_013_WRECK_CONFRONTATION:
+"Inside transformed Prometheus showing bio-mechanical fusion. Organic growths integrated with ship systems. Crew facing unknown entity with weapons drawn. Tension-filled standoff scene. Hybrid technology visible throughout. [Base Style Modifier]"
+
+SCENE_014_DEPARTURE_EARTH_LAUNCH:
+"Earth orbital station with ship departing. Mission parameters displayed on screens. Crew at launch stations with focused expressions. Earth visible in background with defense platforms. Launch sequence indicators active. [Base Style Modifier]"
+
+SCENE_015_DERELICT_SATELLITE:
+"Abandoned monitoring station in deep space. Crew in EVA suits investigating dark structure. Warning beacons still blinking. Dark solar arrays and damaged hull sections. Salvage equipment visible. [Base Style Modifier]"
+
+SCENE_016_COSMIC_ANOMALY:
+"Reality-warping space anomaly with impossible geometry. Purple and blue energy distortions bending space visibly. Crew observing from safe distance with awe and fear. Sensor arrays showing impossible readings, reality fracture indicators. [Base Style Modifier]"
+
+SCENE_017_BROKEN_PROBE:
+"Damaged exploration probe being recovered by crew. Scarred hull showing void energy damage. Data extraction equipment attached. Crew in EVA suits working carefully. Probe's damaged sensors and communication arrays visible. [Base Style Modifier]"
+
+SCENE_018_PLANETFALL_DESCENT:
+"Ship descending through hostile alien atmosphere. Storm systems visible below with lightning. Dangerous rocky terrain and hostile environment indicators. Atmospheric entry effects, heat shields glowing. Navigation showing landing zone. [Base Style Modifier]"
+
+SCENE_019_LANDING_ZONE:
+"Alien planet surface with ship landed in hostile environment. Crew in environmental suits exploring rocky terrain. Alien landscape with strange atmospheric effects. Environmental hazard indicators, oxygen level displays. [Base Style Modifier]"
+
+SCENE_020_BEAST_AMBUSH:
+"Crew fighting alien beasts on planet surface. Tactical combat grid overlay showing positions. Weapons fire effects, defensive positions taken. Alien creatures with threatening poses. Combat status indicators, health bars. [Base Style Modifier]"
+
+SCENE_021_RESCUE_OR_RAID:
+"Moral choice scene with crew facing decision between rescue and raid. Split crew loyalties visible through body language. Survivors visible in background. Supply caches and rescue equipment. Ethical choice indicators. [Base Style Modifier]"
+
+SCENE_022_CORRUPTION_WHISPER:
+"Psychological horror scene with crew member showing void corruption signs. Purple whisper effects around affected character. Reality distortion aura, other crew showing concern and fear. Corruption level indicators. [Base Style Modifier]"
+
+SCENE_023_COLLAPSE_ESCAPE:
+"Emergency evacuation with structure collapsing around crew. Debris falling, emergency lighting active. Crew running toward evacuation routes. Damage indicators flashing, structural integrity warnings. [Base Style Modifier]"
+
+SCENE_024_FRACTURED_SPACE_ENTRY:
+"Ship entering fractured space region with reality distortion effects. Space itself showing cracks and temporal anomalies. Navigation displaying impossible readings. Crew bracing for dimensional transition. [Base Style Modifier]"
+
+SCENE_025_CREW_FRACTURE:
+"Mutiny scene with Torres confronting Captain on bridge. Crew taking sides, tension visible. Torres hand on sidearm, grim resolve. Other crew members choosing loyalties. Leadership crisis indicators. [Base Style Modifier]"
+
+SCENE_026_LOOP_AWARENESS_PROGRESSION:
+"Crew becoming aware of time loops with multiple reality overlays visible. Maya showing complex timeline data. Temporal awareness indicators. Past and future timeline ghosts overlapping current scene. [Base Style Modifier]"
+
+SCENE_027_KETHMORI_SANCTUARY:
+"Ancient Keth'mori temple interior with crystalline architecture. Guardian entities visible, sacred alien symbols glowing. Geometric patterns throughout structure. Crew showing reverence and awe. Archaeological significance indicators. [Base Style Modifier]"
+
+SCENE_028_PROMETHEUS_BLACK_SITE:
+"Hidden government research station with classified experiments visible. Security measures active, cover-up evidence scattered. Secret facility architecture, restricted access areas marked. Classification level indicators. [Base Style Modifier]"
+
+SCENE_029_SWARM_QUEEN_GAMBIT:
+"Massive Swarm Queen entity with bio-mechanical hive architecture. Crew preparing for negotiation or combat. Organic tunnel structures, alien hive technology. Queen's imposing presence, negotiation or threat indicators. [Base Style Modifier]"
+
+SCENE_030_INFORMATION_BROKER:
+"Shadowy information broker encounter in hidden trading post. Clandestine meeting atmosphere, dim lighting. Data exchange equipment visible. Broker figure partially in shadows, classified information displays. [Base Style Modifier]"
+
+SCENE_031_NEXUS_RECRUITMENT:
+"Nexus organization meeting with faction representatives visible. Crew making alliance decisions. Multiple faction symbols and representatives. Alliance negotiation indicators, political relationship displays. [Base Style Modifier]"
+
+SCENE_032_PANDORA_ANOMALY:
+"Pandora Station with reality-altering experiments active. Containment breach warnings flashing. Dangerous scientific apparatus, reality distortion fields. Emergency protocols activated, hazard level indicators. [Base Style Modifier]"
+
+SCENE_033_CRUCIBLE_SECRET:
+"Discovery of major conspiracy with secret documents and evidence scattered. Truth revelation scene with classified files displayed. Evidence compilation, conspiracy web indicators. Crew realizing implications. [Base Style Modifier]"
+
+SCENE_034_NEW_HORIZON_MYSTERY:
+"New frontier location with unknown phenomena. Crew making historic first discovery. Unexplored space region, mysterious structures or phenomena. Discovery significance indicators, exploration milestone markers. [Base Style Modifier]"
+
+SCENE_035_RETRIBUTION_ECHOES:
+"Epic final confrontation with cosmic consequences. Multiple faction representatives present. Final choice presentation with universe-affecting decisions. Climactic atmosphere, resolution indicators. [Base Style Modifier]"
+
+---
+
+Usage: Copy the base style modifier and specific scene description, combine them for your image generation tool of choice.

@@ -1,0 +1,307 @@
+{
+  "illustration_index": {
+    "project": "The Exodus Protocol - Dialog Scene Illustrations",
+    "style": "Pixel art, Heroes of Might and Magic 3 tactical RPG aesthetic, sci-fi adaptation",
+    "total_scenes": 35,
+    "format": "Landscape orientation with UI overlays",
+    
+    "scene_mapping": [
+      {
+        "file": "scene_001_prometheus_discovery.json",
+        "title": "Prometheus Discovery",
+        "act": 1,
+        "location": "spaceship_bridge",
+        "key_visual": "Navigator Chen discovering lost flagship",
+        "illustration_file": "scene_001_prometheus_discovery.png"
+      },
+      {
+        "file": "scene_002_keth_mori_threshold.json", 
+        "title": "Keth'mori Threshold",
+        "act": 1,
+        "location": "alien_gateway",
+        "key_visual": "Crew approaching crystalline portal",
+        "illustration_file": "scene_002_keth_mori_threshold.png"
+      },
+      {
+        "file": "scene_003_pirate_ambush.json",
+        "title": "Pirate Ambush", 
+        "act": 2,
+        "location": "space_battle",
+        "key_visual": "Combat with Crimson Cutthroats",
+        "illustration_file": "scene_003_pirate_ambush.png"
+      },
+      {
+        "file": "scene_004_alien_glyphs.json",
+        "title": "Alien Glyphs",
+        "act": 1,
+        "location": "archaeological_site", 
+        "key_visual": "Kim studying mysterious symbols",
+        "illustration_file": "scene_004_alien_glyphs.png"
+      },
+      {
+        "file": "scene_005_watchers_blockade.json",
+        "title": "Watchers Blockade",
+        "act": 1, 
+        "location": "space_blockade",
+        "key_visual": "Massive alien vessels in formation",
+        "illustration_file": "scene_005_watchers_blockade.png"
+      },
+      {
+        "file": "scene_006_loop_discovery.json",
+        "title": "Loop Discovery",
+        "act": 2,
+        "location": "bridge_temporal_anomaly",
+        "key_visual": "Maya revealing temporal loops",
+        "illustration_file": "scene_006_loop_discovery.png"
+      },
+      {
+        "file": "scene_007_crystal_guardian.json",
+        "title": "Crystal Guardian", 
+        "act": 2,
+        "location": "ancient_ruins",
+        "key_visual": "Towering crystalline entity",
+        "illustration_file": "scene_007_crystal_guardian.png"
+      },
+      {
+        "file": "scene_008_earth_debrief_victory.json",
+        "title": "Earth Debrief Victory",
+        "act": 3,
+        "location": "earth_command",
+        "key_visual": "Successful mission report",
+        "illustration_file": "scene_008_earth_debrief_victory.png"
+      },
+      {
+        "file": "scene_009_earth_debrief_assimilation.json",
+        "title": "Earth Debrief Assimilation",
+        "act": 3,
+        "location": "earth_command_corrupted", 
+        "key_visual": "Corrupted Watcher transmission",
+        "illustration_file": "scene_009_earth_debrief_assimilation.png"
+      },
+      {
+        "file": "scene_010_earth_debrief_pact.json",
+        "title": "Earth Debrief Pact",
+        "act": 3,
+        "location": "earth_command_interrogation",
+        "key_visual": "Tense military debriefing",
+        "illustration_file": "scene_010_earth_debrief_pact.png"
+      },
+      {
+        "file": "scene_011_prometheus_wreck_approach.json",
+        "title": "Prometheus Wreck Approach",
+        "act": 1,
+        "location": "wreck_exterior",
+        "key_visual": "Dangerous approach to derelict",
+        "illustration_file": "scene_011_prometheus_wreck_approach.png"
+      },
+      {
+        "file": "scene_012_prometheus_logs.json",
+        "title": "Prometheus Logs",
+        "act": 1,
+        "location": "debris_field",
+        "key_visual": "Data pod recovery",
+        "illustration_file": "scene_012_prometheus_logs.png"
+      },
+      {
+        "file": "scene_013_wreck_confrontation.json",
+        "title": "Wreck Confrontation",
+        "act": 2,
+        "location": "prometheus_interior",
+        "key_visual": "Bio-mechanical fusion encounter",
+        "illustration_file": "scene_013_wreck_confrontation.png"
+      },
+      {
+        "file": "scene_014_departure_earth_launch.json",
+        "title": "Departure Earth Launch", 
+        "act": 1,
+        "location": "orbital_station",
+        "key_visual": "Mission launch sequence",
+        "illustration_file": "scene_014_departure_earth_launch.png"
+      },
+      {
+        "file": "scene_015_derelict_satellite.json",
+        "title": "Derelict Satellite",
+        "act": 2,
+        "location": "abandoned_station",
+        "key_visual": "EVA investigation",
+        "illustration_file": "scene_015_derelict_satellite.png"
+      },
+      {
+        "file": "scene_016_cosmic_anomaly.json",
+        "title": "Cosmic Anomaly",
+        "act": 2,
+        "location": "space_distortion",
+        "key_visual": "Reality-warping phenomenon", 
+        "illustration_file": "scene_016_cosmic_anomaly.png"
+      },
+      {
+        "file": "scene_017_broken_probe.json",
+        "title": "Broken Probe",
+        "act": 2,
+        "location": "probe_recovery",
+        "key_visual": "Damaged probe salvage",
+        "illustration_file": "scene_017_broken_probe.png"
+      },
+      {
+        "file": "scene_018_planetfall_descent.json",
+        "title": "Planetfall Descent",
+        "act": 2,
+        "location": "atmospheric_entry",
+        "key_visual": "Hostile planet approach",
+        "illustration_file": "scene_018_planetfall_descent.png"
+      },
+      {
+        "file": "scene_019_landing_zone.json",
+        "title": "Landing Zone",
+        "act": 2,
+        "location": "alien_surface", 
+        "key_visual": "Planet surface exploration",
+        "illustration_file": "scene_019_landing_zone.png"
+      },
+      {
+        "file": "scene_020_beast_ambush.json",
+        "title": "Beast Ambush",
+        "act": 2,
+        "location": "combat_zone",
+        "key_visual": "Alien creature combat",
+        "illustration_file": "scene_020_beast_ambush.png"
+      },
+      {
+        "file": "scene_021_rescue_or_raid.json",
+        "title": "Rescue or Raid",
+        "act": 2,
+        "location": "moral_choice_scene",
+        "key_visual": "Ethical dilemma presentation",
+        "illustration_file": "scene_021_rescue_or_raid.png"
+      },
+      {
+        "file": "scene_022_corruption_whisper.json",
+        "title": "Corruption Whisper",
+        "act": 2,
+        "location": "psychological_horror",
+        "key_visual": "Void corruption effects",
+        "illustration_file": "scene_022_corruption_whisper.png"
+      },
+      {
+        "file": "scene_023_collapse_escape.json",
+        "title": "Collapse Escape",
+        "act": 2,
+        "location": "emergency_evacuation",
+        "key_visual": "Structure collapse escape",
+        "illustration_file": "scene_023_collapse_escape.png"
+      },
+      {
+        "file": "scene_024_fractured_space_entry.json",
+        "title": "Fractured Space Entry",
+        "act": 2,
+        "location": "dimensional_breach",
+        "key_visual": "Reality fracture navigation",
+        "illustration_file": "scene_024_fractured_space_entry.png"
+      },
+      {
+        "file": "scene_025_crew_fracture.json",
+        "title": "Crew Fracture",
+        "act": 2,
+        "location": "bridge_mutiny",
+        "key_visual": "Torres mutiny attempt",
+        "illustration_file": "scene_025_crew_fracture.png"
+      },
+      {
+        "file": "scene_026_loop_awareness_progression.json",
+        "title": "Loop Awareness Progression",
+        "act": 2,
+        "location": "temporal_realization",
+        "key_visual": "Timeline awareness revelation",
+        "illustration_file": "scene_026_loop_awareness_progression.png"
+      },
+      {
+        "file": "scene_027_kethmori_sanctuary.json",
+        "title": "Keth'mori Sanctuary",
+        "act": 3,
+        "location": "alien_temple",
+        "key_visual": "Ancient alien sanctuary",
+        "illustration_file": "scene_027_kethmori_sanctuary.png"
+      },
+      {
+        "file": "scene_028_prometheus_black_site.json",
+        "title": "Prometheus Black Site",
+        "act": 3,
+        "location": "secret_facility",
+        "key_visual": "Government cover-up discovery", 
+        "illustration_file": "scene_028_prometheus_black_site.png"
+      },
+      {
+        "file": "scene_029_swarm_queen_gambit.json",
+        "title": "Swarm Queen Gambit",
+        "act": 3,
+        "location": "alien_hive",
+        "key_visual": "Swarm Queen negotiation",
+        "illustration_file": "scene_029_swarm_queen_gambit.png"
+      },
+      {
+        "file": "scene_030_information_broker.json",
+        "title": "Information Broker",
+        "act": 3,
+        "location": "clandestine_meeting",
+        "key_visual": "Shadow data exchange",
+        "illustration_file": "scene_030_information_broker.png"
+      },
+      {
+        "file": "scene_031_nexus_recruitment.json",
+        "title": "Nexus Recruitment",
+        "act": 3,
+        "location": "faction_meeting",
+        "key_visual": "Alliance negotiations",
+        "illustration_file": "scene_031_nexus_recruitment.png"
+      },
+      {
+        "file": "scene_032_pandora_anomaly.json",
+        "title": "Pandora Anomaly",
+        "act": 3,
+        "location": "research_station",
+        "key_visual": "Dangerous experiments",
+        "illustration_file": "scene_032_pandora_anomaly.png"
+      },
+      {
+        "file": "scene_033_crucible_secret.json",
+        "title": "Crucible Secret",
+        "act": 3,
+        "location": "revelation_scene",
+        "key_visual": "Conspiracy truth discovery",
+        "illustration_file": "scene_033_crucible_secret.png"
+      },
+      {
+        "file": "scene_034_new_horizon_mystery.json",
+        "title": "New Horizon Mystery",
+        "act": 3,
+        "location": "frontier_discovery",
+        "key_visual": "Historic first discovery",
+        "illustration_file": "scene_034_new_horizon_mystery.png"
+      },
+      {
+        "file": "scene_035_retribution_echoes.json", 
+        "title": "Retribution Echoes",
+        "act": 3,
+        "location": "final_confrontation",
+        "key_visual": "Epic cosmic conclusion",
+        "illustration_file": "scene_035_retribution_echoes.png"
+      }
+    ],
+    
+    "generation_notes": {
+      "base_style": "Pixel art science-fiction, landscape orientation, Heroes of Might and Magic 3 tactical RPG aesthetic adapted for sci-fi",
+      "ui_elements": "Dialogue boxes, branching choice buttons, resource counters (Fuel/Crew/Intel), tactical grids where applicable",
+      "lighting": "Atmospheric tension with glowing consoles, neon accents, void energy effects",
+      "characters": "Expressive pixel art crew in space uniforms, alien entities, corrupted beings",
+      "consistency": "Maintain retro tactical RPG aesthetic throughout all scenes"
+    },
+    
+    "usage_instructions": [
+      "Use scene_generation_prompts.txt for ready-to-use image generation prompts", 
+      "Use scene_illustration_prompts.md for detailed artistic specifications",
+      "Generate images at high resolution for game integration",
+      "Maintain consistent UI layout and visual style across all scenes",
+      "Test generated images for readability of text and choice buttons"
+    ]
+  }
+}
