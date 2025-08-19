@@ -1,5 +1,6 @@
 {
     "id": "scene_011_prometheus_wreck_approach",
+    "act": 1,
     "location": "prometheus_wreck_perimeter",
     "triggers": [
         "approach_prometheus_wreck"

@@ -1,5 +1,6 @@
 {
   "id": "scene_015_derelict_satellite",
+  "act": 2,
   "location": "void_tangled_satellite_orbit",
   "triggers": [
     "derelict_satellite_found"

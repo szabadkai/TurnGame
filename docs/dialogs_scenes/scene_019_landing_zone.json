@@ -1,5 +1,6 @@
 {
   "id": "scene_019_landing_zone",
+  "act": 2,
   "location": "jungle_lz_perimeter",
   "triggers": [
     "landed_near_ruins"

@@ -1,5 +1,6 @@
 {
   "id": "scene_025_crew_fracture",
+  "act": 2,
   "location": "meridian_bridge_afterglow",
   "triggers": [
     "crew_conflict_event"

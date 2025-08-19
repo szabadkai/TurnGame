@@ -1,5 +1,6 @@
 {
     "id": "scene_013_wreck_confrontation",
+    "act": 1,
     "location": "prometheus_wreck_core",
     "triggers": [
         "boarded_prometheus_core"

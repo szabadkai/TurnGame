@@ -1,5 +1,6 @@
 {
     "id": "scene_010_earth_debrief_pact",
+    "act": 3,
     "location": "earth_command_console",
     "triggers": [
         "ending_pact"

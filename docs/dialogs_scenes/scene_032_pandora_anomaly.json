@@ -1,5 +1,6 @@
 {
   "id": "scene_032_pandora_anomaly",
+  "act": 2,
   "location": "research_station_pandora_bio_labs",
   "triggers": [
     "player_discovers_pandora"

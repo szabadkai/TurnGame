@@ -1,5 +1,6 @@
 {
     "id": "scene_009_earth_debrief_assimilation",
+    "act": 3,
     "location": "earth_command_console",
     "triggers": [
         "ending_assimilation"

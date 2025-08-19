@@ -1,5 +1,6 @@
 {
     "id": "scene_004_alien_glyphs",
+    "act": 2,
     "location": "jungle_ruins_chamber",
     "triggers": [
         "found_glyphs"

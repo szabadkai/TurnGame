@@ -1,5 +1,6 @@
 {
     "id": "scene_002_keth_mori_threshold",
+    "act": 2,
     "location": "threshold_archive",
     "triggers": [
         "approach_archive"

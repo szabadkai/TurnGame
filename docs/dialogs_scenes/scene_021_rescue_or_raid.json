@@ -1,5 +1,6 @@
 {
   "id": "scene_021_rescue_or_raid",
+  "act": 2,
   "location": "ruins_fork_chamber",
   "triggers": [
     "ruins_fork_encounter"

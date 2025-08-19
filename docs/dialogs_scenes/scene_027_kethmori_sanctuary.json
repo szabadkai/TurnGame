@@ -1,5 +1,6 @@
 {
   "id": "scene_027_kethmori_sanctuary",
+  "act": 2,
   "location": "kethmori_hidden_sanctuary",
   "triggers": [
     "has_flag:saved_kethmori_elder"

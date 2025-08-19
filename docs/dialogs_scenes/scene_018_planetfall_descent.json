@@ -1,5 +1,6 @@
 {
   "id": "scene_018_planetfall_descent",
+  "act": 2,
   "location": "stormy_atmosphere_entry",
   "triggers": [
     "approach_ruins_planet"

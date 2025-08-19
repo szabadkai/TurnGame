@@ -1,5 +1,6 @@
 {
     "id": "scene_001_prometheus_discovery",
+    "act": 1,
     "location": "space_sector_7",
     "triggers": [
         "prometheus_scan"

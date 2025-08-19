@@ -1,5 +1,6 @@
 {
   "id": "scene_023_collapse_escape",
+  "act": 2,
   "location": "ruins_escape_corridor",
   "triggers": [
     "ruins_collapse_triggered"

@@ -1,5 +1,6 @@
 {
     "id": "scene_006_loop_discovery",
+    "act": 2,
     "location": "meridian_bridge",
     "triggers": [
         "timeline_anomaly_detected"

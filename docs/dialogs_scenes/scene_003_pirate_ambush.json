@@ -1,5 +1,6 @@
 {
     "id": "scene_003_pirate_ambush",
+    "act": 2,
     "location": "outer_rim_trade_lane",
     "triggers": [
         "pirate_ambush"

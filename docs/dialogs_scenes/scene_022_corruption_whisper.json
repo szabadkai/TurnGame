@@ -1,5 +1,6 @@
 {
   "id": "scene_022_corruption_whisper",
+  "act": 2,
   "location": "ruins_shadow_hall",
   "triggers": [
     "void_whisper_event"

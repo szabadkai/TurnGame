@@ -1,5 +1,6 @@
 {
   "id": "scene_014_departure_earth_launch",
+  "act": 1,
   "location": "earth_launch_bay",
   "triggers": [
     "campaign_start"

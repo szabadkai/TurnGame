@@ -1,5 +1,6 @@
 {
   "id": "scene_028_prometheus_black_site",
+  "act": 2,
   "location": "prometheus_moon_base_sigma",
   "triggers": [
     "has_flag:project_prometheus_unlocked"

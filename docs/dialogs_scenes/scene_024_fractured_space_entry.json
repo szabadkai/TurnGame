@@ -1,5 +1,6 @@
 {
   "id": "scene_024_fractured_space_entry",
+  "act": 2,
   "location": "void_sphere_periphery",
   "triggers": [
     "enter_fractured_space"
