@@ -15,6 +15,7 @@ function get_character_sprite(character_index, direction, animation_state, weapo
     var STATE_IDLE = 0;
     var STATE_RUN = 1;
     var STATE_ATTACK = 2;
+    var STATE_DIE = 3;
     
     // Create sprite lookup table based on character index
     var sprite_prefix = "chr" + string(character_index) + "_";
@@ -56,6 +57,11 @@ function get_character_sprite(character_index, direction, animation_state, weapo
             } else {
                 state_suffix = "attack_sword";
             }
+            break;
+            
+        case STATE_DIE:
+            // Death animation - ignore weapon type for death
+            state_suffix = "die";
             break;
             
         default: 
@@ -109,6 +115,12 @@ function get_character_sprite(character_index, direction, animation_state, weapo
         }
     }
     
+    // If death sprite still not found for any character, default to chr2's death sprite name
+    if (sprite_id == -1 && animation_state == STATE_DIE) {
+        var chr2_die_name = "chr2_die_" + dir_suffix;
+        sprite_id = asset_get_index(chr2_die_name);
+    }
+
     // Fallback to character 1 if sprite still doesn't exist
     if (sprite_id == -1) {
         sprite_name = "chr1_" + state_suffix + "_" + dir_suffix;
@@ -119,12 +131,21 @@ function get_character_sprite(character_index, direction, animation_state, weapo
         }
     }
     
-    // Final fallback to dummy sprite if still not found
+    // Final fallback: generic death sprite (Sprite103) for death, otherwise dummy
     if (sprite_id == -1) {
-        if (character_index == 2) {
-            show_debug_message("CHR2 DEBUG: Using dummy sprite as final fallback");
+        if (animation_state == STATE_DIE) {
+            var generic_die = asset_get_index("Sprite103");
+            if (generic_die != -1) {
+                sprite_id = generic_die;
+            } else {
+                sprite_id = dummy;
+            }
+        } else {
+            if (character_index == 2) {
+                show_debug_message("CHR2 DEBUG: Using dummy sprite as final fallback");
+            }
+            sprite_id = dummy;
         }
-        sprite_id = dummy;
     }
     
     return sprite_id;
@@ -138,10 +159,10 @@ function init_character_sprite_matrix(character_index, weapon_special_type = "no
     
     // Initialize each direction
     for (var dir = 0; dir < 4; dir++) {
-        sprite_matrix[dir] = array_create(3);
+        sprite_matrix[dir] = array_create(4);
         
         // Initialize each animation state for this direction
-        for (var state = 0; state < 3; state++) {
+        for (var state = 0; state < 4; state++) {
             sprite_matrix[dir][state] = get_character_sprite(character_index, dir, state, weapon_special_type);
         }
     }

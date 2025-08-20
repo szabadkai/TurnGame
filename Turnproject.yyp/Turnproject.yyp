@@ -227,6 +227,8 @@
     {"id":{"name":"chr7_run_sword_up","path":"sprites/chr7_run_sword_up/chr7_run_sword_up.yy",},},
     {"id":{"name":"dummy","path":"sprites/dummy/dummy.yy",},},
     {"id":{"name":"spr_active","path":"sprites/spr_active/spr_active.yy",},},
+    {"id":{"name":"Sprite102","path":"sprites/Sprite102/Sprite102.yy",},},
+    {"id":{"name":"Sprite103","path":"sprites/Sprite103/Sprite103.yy",},},
     {"id":{"name":"Sprite15","path":"sprites/Sprite15/Sprite15.yy",},},
     {"id":{"name":"Sprite16","path":"sprites/Sprite16/Sprite16.yy",},},
     {"id":{"name":"Sprite17","path":"sprites/Sprite17/Sprite17.yy",},},

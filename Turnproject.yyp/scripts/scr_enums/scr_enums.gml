@@ -16,7 +16,8 @@ enum Dir {
 enum State {
 	IDLE,
 	RUN,
-	ATTACK
+	ATTACK,
+	DIE
 }
 
 enum DialogState {

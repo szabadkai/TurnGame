@@ -81,23 +81,18 @@ function check_loop_count(condition) {
     var current_loop = global.loop_count ?? 0;
     
     if (is_string(condition)) {
-        // Handle conditions like ">10", ">=5", etc.
-        if (string_char_at(condition, 1) == ">") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_loop >= compare_value;
-            } else {
-                return current_loop > compare_value;
-            }
-        } else if (string_char_at(condition, 1) == "<") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_loop <= compare_value;
-            } else {
-                return current_loop < compare_value;
-            }
+        var op1 = string_char_at(condition, 1);
+        var op2 = (string_length(condition) >= 2) ? string_char_at(condition, 2) : "";
+        var skip = (op2 == "=") ? 2 : 1;
+        
+        if (op1 == ">" || op1 == "<" || op1 == "=") {
+            var rhs = string_delete(condition, 1, skip);
+            var compare_value = real(rhs);
+            if (op1 == ">" && op2 == "=") return current_loop >= compare_value;
+            if (op1 == ">") return current_loop > compare_value;
+            if (op1 == "<" && op2 == "=") return current_loop <= compare_value;
+            if (op1 == "<") return current_loop < compare_value;
+            if (op1 == "=") return current_loop == compare_value;
         }
     }
     
@@ -109,27 +104,18 @@ function check_stat_condition(stat_name, condition) {
     var current_value = get_dialog_stat(stat_name);
     
     if (is_string(condition)) {
-        // Handle conditions like ">2", ">=3", etc.
-        if (string_char_at(condition, 1) == ">") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_value >= compare_value;
-            } else {
-                return current_value > compare_value;
-            }
-        } else if (string_char_at(condition, 1) == "<") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_value <= compare_value;
-            } else {
-                return current_value < compare_value;
-            }
-        } else if (string_char_at(condition, 1) == "=") {
-            // Handle "=2" condition
-            var compare_value = real(string_delete(condition, 1, 1));
-            return current_value == compare_value;
+        var op1 = string_char_at(condition, 1);
+        var op2 = (string_length(condition) >= 2) ? string_char_at(condition, 2) : "";
+        var skip = (op2 == "=") ? 2 : 1;
+        
+        if (op1 == ">" || op1 == "<" || op1 == "=") {
+            var rhs = string_delete(condition, 1, skip);
+            var compare_value = real(rhs);
+            if (op1 == ">" && op2 == "=") return current_value >= compare_value;
+            if (op1 == ">") return current_value > compare_value;
+            if (op1 == "<" && op2 == "=") return current_value <= compare_value;
+            if (op1 == "<") return current_value < compare_value;
+            if (op1 == "=") return current_value == compare_value;
         }
     }
     
@@ -194,22 +180,18 @@ function check_general_condition(condition_name, condition_value) {
 // Check numeric condition helper
 function check_numeric_condition(current_value, condition) {
     if (is_string(condition)) {
-        if (string_char_at(condition, 1) == ">") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_length(condition) > 1 && string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_value >= compare_value;
-            } else {
-                return current_value > compare_value;
-            }
-        } else if (string_char_at(condition, 1) == "<") {
-            var compare_value = real(string_delete(condition, 1, 1));
-            if (string_length(condition) > 1 && string_char_at(condition, 2) == "=") {
-                compare_value = real(string_delete(condition, 1, 2));
-                return current_value <= compare_value;
-            } else {
-                return current_value < compare_value;
-            }
+        var op1 = string_char_at(condition, 1);
+        var op2 = (string_length(condition) >= 2) ? string_char_at(condition, 2) : "";
+        var skip = (op2 == "=") ? 2 : 1;
+        
+        if (op1 == ">" || op1 == "<" || op1 == "=") {
+            var rhs = string_delete(condition, 1, skip);
+            var compare_value = real(rhs);
+            if (op1 == ">" && op2 == "=") return current_value >= compare_value;
+            if (op1 == ">") return current_value > compare_value;
+            if (op1 == "<" && op2 == "=") return current_value <= compare_value;
+            if (op1 == "<") return current_value < compare_value;
+            if (op1 == "=") return current_value == compare_value;
         }
     }
     

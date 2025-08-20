@@ -19,30 +19,53 @@ if (burn_turns > 0 && state == TURNSTATE.active) {
 
 // === DEATH HANDLING (CHECK FIRST) ===
 if (hp <= 0) {
-    // Log enemy death
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("*** " + character_name + " HAS DIED! ***");
-    }
-    
-    // If this enemy was taking its turn, we need to pass the turn
-    var was_active = (state == TURNSTATE.active);
-    
-    // Remove from turn list BEFORE destroying instance
-    var turn_index = ds_list_find_index(obj_TurnManager.turn_list, id);
-    if (turn_index >= 0) {
-        ds_list_delete(obj_TurnManager.turn_list, turn_index);
-    }
-    
-    // If enemy was active, trigger turn rotation to next character
-    if (was_active) {
-        state = TURNSTATE.inactive;  // Clean up state
-        with(obj_TurnManager) {
-            event_user(0);  // Rotate to next turn
+    if (!dying) {
+        // Log enemy death
+        if (variable_global_exists("combat_log")) {
+            global.combat_log("*** " + character_name + " HAS DIED! ***");
+        }
+
+        // If this enemy was taking its turn, we need to pass the turn
+        var was_active = (state == TURNSTATE.active);
+
+        // Remove from turn list BEFORE starting death animation
+        if (instance_exists(obj_TurnManager) && ds_exists(obj_TurnManager.turn_list, ds_type_list)) {
+            var turn_index = ds_list_find_index(obj_TurnManager.turn_list, id);
+            if (turn_index >= 0) {
+                ds_list_delete(obj_TurnManager.turn_list, turn_index);
+            }
+        }
+
+        // If enemy was active, trigger turn rotation to next character
+        if (was_active) {
+            state = TURNSTATE.inactive;  // Clean up state
+            with (obj_TurnManager) {
+                event_user(0);  // Rotate to next turn
+            }
+        }
+
+        // Start death animation
+        dying = true;
+        anim_state = State.DIE;
+        // Ensure sprite matrix contains death state
+        if (spr_matrix == undefined) spr_matrix = init_character_sprite_matrix(character_index);
+        var die_sprite = spr_matrix[dir][State.DIE];
+        if (die_sprite == undefined || !sprite_exists(die_sprite)) {
+            // Fallback to generic death sprite
+            die_sprite = asset_get_index("Sprite103");
+        }
+        if (die_sprite != -1) {
+            sprite_index = die_sprite;
+        }
+        image_index = 0;
+        image_speed = 0.8;
+        is_anim = true;
+    } else {
+        // Already in death animation: destroy when it finishes
+        if (image_index >= sprite_get_number(sprite_index) - 1) {
+            instance_destroy();
         }
     }
-    
-    // Destroy the instance
-    instance_destroy();
     exit; // Stop processing this step event
 }
 

@@ -110,6 +110,8 @@
     {"name":"chr7_run_sword_up","order":114,"path":"sprites/chr7_run_sword_up/chr7_run_sword_up.yy",},
     {"name":"dummy","order":21,"path":"sprites/dummy/dummy.yy",},
     {"name":"spr_active","order":22,"path":"sprites/spr_active/spr_active.yy",},
+    {"name":"Sprite102","order":127,"path":"sprites/Sprite102/Sprite102.yy",},
+    {"name":"Sprite103","order":128,"path":"sprites/Sprite103/Sprite103.yy",},
     {"name":"Sprite15","order":28,"path":"sprites/Sprite15/Sprite15.yy",},
     {"name":"Sprite16","order":29,"path":"sprites/Sprite16/Sprite16.yy",},
     {"name":"Sprite17","order":30,"path":"sprites/Sprite17/Sprite17.yy",},

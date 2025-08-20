@@ -155,7 +155,6 @@ function load_dialog_scene(scene_id) {
         show_debug_message("Failed to parse JSON for scene " + scene_id + ": " + string(e));
     }
     
-    
     show_debug_message("Dialog scene not found: " + scene_id);
     return false;
 }
@@ -699,7 +698,7 @@ function end_dialog_scene() {
             return;
         }
     }
-
+}
 
 // Get scene metadata
 function get_dialog_scene_info() {

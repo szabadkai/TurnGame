@@ -102,3 +102,4 @@ spr_matrix = init_character_sprite_matrix(character_index);
 dir = Dir.DOWN;
 anim_state = State.IDLE;
 image_speed = 1.0;
+dying = false;

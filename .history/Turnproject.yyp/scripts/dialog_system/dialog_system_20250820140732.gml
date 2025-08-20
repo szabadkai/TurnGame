@@ -699,7 +699,7 @@ function end_dialog_scene() {
             return;
         }
     }
-
+}
 
 // Get scene metadata
 function get_dialog_scene_info() {

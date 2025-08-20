@@ -102,10 +102,7 @@ process_delayed_effects();
 
 // Debug input
 if (dialog_debug) {
-    // Press D to start demo dialog
-    if (keyboard_check_pressed(ord("D"))) {
-        start_demo_dialog();
-    }
+    // Press D to start demo dialog }
     
     // Press ESC to end dialog
     if (keyboard_check_pressed(vk_escape)) {
