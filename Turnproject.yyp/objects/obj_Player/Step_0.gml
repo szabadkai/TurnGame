@@ -209,6 +209,21 @@ if (anim_state == State.ATTACK && is_anim) {
         
         var attack_roll = roll_d20();
         var attack_total = attack_roll + attack_bonus;
+
+        // Validate target before using it (may have been destroyed/moved)
+        if (!variable_instance_exists(id, "target_enemy") || is_undefined(target_enemy) || target_enemy == noone || !instance_exists(target_enemy)) {
+            if (variable_global_exists("combat_log")) global.combat_log("Attack cancelled: target unavailable.");
+            // Cleanly end the attack animation/state
+            anim_state = State.IDLE;
+            sprite_index = spr_matrix[dir][anim_state];
+            image_index = 0;
+            image_speed = 1.0;
+            is_anim = false;
+            moves = max(0, moves - 1);
+            depth = 0;
+            exit;
+        }
+
         var hit = (attack_total >= target_enemy.defense_score);
         
         if (variable_global_exists("combat_log")) global.combat_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
@@ -276,5 +291,4 @@ if (hp <= 0) {
 if (state == TURNSTATE.active && moves == 0) {
 	alarm[0] = 1;
 }
-
 

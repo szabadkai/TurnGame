@@ -27,7 +27,7 @@ function find_best_target_by_priority(seeker, target_object_type) {
     
     with (target_object_type) {
         if (hp > 0) {  // Only target living characters
-            var score = 0;
+            score = 0;
             var distance = point_distance(seeker.x, seeker.y, x, y) / 16;
             
             // Distance factor (closer is better)
@@ -59,8 +59,22 @@ function find_best_target_by_priority(seeker, target_object_type) {
 
 // === PATHFINDING ===
 
-function get_direction_to_target(from_x, from_y, to_x, to_y) {
-    // Get the primary direction from one position to another
+function get_direction_to_target(a0, a1, a2 = undefined, a3 = undefined) {
+    // Get the primary direction between either two objects or two points
+    var from_x, from_y, to_x, to_y;
+    
+    if (is_undefined(a2) && is_undefined(a3)) {
+        // Called with two objects
+        var from_obj = a0;
+        var to_obj = a1;
+        from_x = from_obj.x; from_y = from_obj.y;
+        to_x = to_obj.x;     to_y = to_obj.y;
+    } else {
+        // Called with four coordinates
+        from_x = a0; from_y = a1;
+        to_x   = a2; to_y   = a3;
+    }
+    
     var dx = to_x - from_x;
     var dy = to_y - from_y;
     

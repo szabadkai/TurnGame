@@ -1,5 +1,5 @@
 {
-  "$GMScript":"",
+  "$GMScript":"v1",
   "%Name":"ai_shared",
   "isCompatibility":false,
   "isDnD":false,
