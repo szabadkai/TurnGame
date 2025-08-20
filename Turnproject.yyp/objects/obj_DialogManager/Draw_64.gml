@@ -75,44 +75,45 @@ if (global.dialog_scene_selection) {
     var count_text = string(global.selected_scene_index + 1) + " / " + string(array_length(scene_list));
     draw_text(box_x + box_width - 80, instruction_y, count_text);
     
-    // Draw preview of current scene image
+    // Draw preview of current scene image with caching
     if (global.selected_scene_index >= 0 && global.selected_scene_index < array_length(scene_list)) {
         var selected_scene_id = scene_list[global.selected_scene_index];
         
-        // Prefer new scene-id filenames, fallback to numbered
-        var parts = string_split(selected_scene_id, "_");
-        var scene_num = (array_length(parts) >= 2) ? parts[1] : "001";
-        
-        var preview_paths = [
-            selected_scene_id + ".png",
-            "dialogs/images/" + selected_scene_id + ".png",
-            "datafiles/dialogs/images/" + selected_scene_id + ".png",
-            scene_num + ".png",
-            "dialogs/images/" + scene_num + ".png",
-            "datafiles/dialogs/images/" + scene_num + ".png"
-        ];
-        
-        for (var p = 0; p < array_length(preview_paths); p++) {
-            var preview_path = preview_paths[p];
-            if (file_exists(preview_path)) {
+        // Check if we need to load a new preview (scene changed)
+        if (preview_scene_id != selected_scene_id) {
+            // Clean up old preview sprite
+            if (preview_sprite != noone && sprite_exists(preview_sprite)) {
+                sprite_delete(preview_sprite);
+                preview_sprite = noone;
+            }
+            
+            // Load new preview
+            var preview_image_path = get_scene_image_path(selected_scene_id);
+            if (preview_image_path != "") {
                 try {
-                    var preview_sprite = sprite_add(preview_path, 1, false, false, 0, 0);
+                    preview_sprite = sprite_add(preview_image_path, 1, false, false, 0, 0);
                     if (preview_sprite != -1 && sprite_exists(preview_sprite)) {
-                        // Draw small preview
-                        var preview_size = 80;
-                        var preview_x = box_x + box_width - preview_size - 20;
-                        var preview_y = box_y + 60;
-                        
-                        draw_sprite_stretched(preview_sprite, 0, preview_x, preview_y, preview_size, preview_size);
-                        
-                        // Clean up preview sprite
-                        sprite_delete(preview_sprite);
-                        break;
+                        preview_scene_id = selected_scene_id;
+                        show_debug_message("Loaded preview for: " + selected_scene_id);
+                    } else {
+                        preview_sprite = noone;
                     }
                 } catch (e) {
-                    // Ignore preview loading errors
+                    show_debug_message("Preview loading failed for: " + preview_image_path);
+                    preview_sprite = noone;
                 }
             }
+        }
+        
+        // Draw cached preview if available
+        if (preview_sprite != noone && sprite_exists(preview_sprite)) {
+            // Use 24:9 aspect ratio for preview (ultrawide)
+            var preview_width = 240;
+            var preview_height = 90; // 240 / 24 * 9 = 90
+            var preview_x = box_x + box_width - preview_width - 20;
+            var preview_y = box_y + 60;
+            
+            draw_sprite_stretched(preview_sprite, 0, preview_x, preview_y, preview_width, preview_height);
         }
     }
     

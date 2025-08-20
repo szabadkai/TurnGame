@@ -26,4 +26,8 @@ choice_count = 0;
 // Debug mode
 dialog_debug = true;
 
+// Preview caching
+preview_scene_id = "";
+preview_sprite = noone;
+
 show_debug_message("DialogManager initialized");

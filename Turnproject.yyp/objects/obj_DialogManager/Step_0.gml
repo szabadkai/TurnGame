@@ -14,7 +14,8 @@ if (dialog_debug && keyboard_check_pressed(vk_f1)) {
 }
 
 // Handle transition effects
-// Handle scene selection input here too (fallback to ensure navigation works)
+// Handle ALL input in Step event for better organization
+// Scene selection input
 if (global.dialog_scene_selection) {
     if (keyboard_check_pressed(vk_up)) {
         navigate_scene_selection(-1);
@@ -22,8 +23,10 @@ if (global.dialog_scene_selection) {
     if (keyboard_check_pressed(vk_down)) {
         navigate_scene_selection(1);
     }
-    // Select with Enter only to avoid instantly selecting when opening with 'I'
     if (keyboard_check_pressed(vk_enter)) {
+        select_current_scene();
+    }
+    if (keyboard_check_pressed(ord("I"))) {
         select_current_scene();
     }
     if (keyboard_check_pressed(vk_escape)) {
@@ -31,6 +34,12 @@ if (global.dialog_scene_selection) {
         global.dialog_scene_selection = false;
         global.dialog_state = 0; // DialogState.INACTIVE
         transition_alpha = 0;
+        // No other UI is present; immediately transition to Room1 from the dialog room
+        if (room == Room_Dialog) {
+            show_debug_message("ESC closed selector; transitioning to Room1");
+            room_goto(Room1);
+            return;
+        }
     }
     // Avoid processing dialog logic while in scene selection
     return;
@@ -54,14 +63,16 @@ if (global.dialog_state == 2) { // DialogState.CHOICE_SELECTION
         // Navigate choices with arrow keys
         if (keyboard_check_pressed(vk_up)) {
             selected_choice_index = (selected_choice_index - 1 + choice_count) % choice_count;
+            show_debug_message("Selected choice: " + string(selected_choice_index));
         }
         if (keyboard_check_pressed(vk_down)) {
             selected_choice_index = (selected_choice_index + 1) % choice_count;
+            show_debug_message("Selected choice: " + string(selected_choice_index));
         }
         
         // Select choice with Enter or Space
         if (keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space)) {
-            select_choice(selected_choice_index);
+            select_dialog_choice(choices[selected_choice_index]);
         }
     }
 }
@@ -76,6 +87,7 @@ if (global.dialog_state == 1) { // DialogState.ACTIVE
             if (array_length(choices) > 0) {
                 global.dialog_state = 2; // DialogState.CHOICE_SELECTION
                 selected_choice_index = 0;
+                choice_count = array_length(choices);
             } else {
                 // No valid choices available - check for auto-advance
                 if (variable_struct_exists(current_node, "next")) {
@@ -97,6 +109,31 @@ if (global.dialog_state == 1) { // DialogState.ACTIVE
     }
 }
 
+// Handle general input (when dialog is inactive)
+if (global.dialog_state == 0) { // DialogState.INACTIVE
+    // Start scene selection with I key
+    if (keyboard_check_pressed(ord("I"))) {
+        show_debug_message("Starting scene selection from main game...");
+        start_scene_selection();
+    }
+}
+
+// Handle ESC for all states (except scene selection which is handled above)
+if (!global.dialog_scene_selection && global.dialog_state != 0) {
+    if (keyboard_check_pressed(vk_escape)) {
+        show_debug_message("Exiting dialog...");
+        end_dialog_scene();
+        transition_alpha = 0;
+    }
+} else if (!global.dialog_scene_selection && global.dialog_state == 0) {
+    // No UI visible (no selection, dialog inactive). If we are in the dialog room,
+    // pressing ESC should always transition to Room1.
+    if (keyboard_check_pressed(vk_escape) && room == Room_Dialog) {
+        show_debug_message("ESC pressed with no UI; transitioning to Room1");
+        room_goto(Room1);
+    }
+}
+
 // Process delayed effects
 process_delayed_effects();
 
@@ -110,12 +147,3 @@ if (dialog_debug) {
     }
 }
 
-// Function to select a choice
-function select_choice(choice_index) {
-    var choices = get_available_choices();
-    if (choice_index >= 0 && choice_index < array_length(choices)) {
-        select_dialog_choice(choices[choice_index]);
-        global.dialog_state = 3; // DialogState.TRANSITIONING
-        transition_alpha = 0;
-    }
-}

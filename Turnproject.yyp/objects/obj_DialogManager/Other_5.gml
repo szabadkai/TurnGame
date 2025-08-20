@@ -18,4 +18,11 @@ if (global.current_scene_image != noone && sprite_exists(global.current_scene_im
     global.current_scene_image = noone;
 }
 
+// Clean up preview sprite
+if (preview_sprite != noone && sprite_exists(preview_sprite)) {
+    sprite_delete(preview_sprite);
+    preview_sprite = noone;
+}
+preview_scene_id = "";
+
 show_debug_message("DialogManager cleaned up on room end");
