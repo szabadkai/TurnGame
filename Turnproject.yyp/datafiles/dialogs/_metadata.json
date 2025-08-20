@@ -1,0 +1,15 @@
+{
+    "version": "1.4",
+    "total_scenes": 26,
+    "branching_type": "multi_path",
+    "save_compatibility": [
+        "timeline_aware",
+        "persistent_choices"
+    ],
+    "effect_types": {
+        "reputation": "integer -10 to 10",
+        "flags": "boolean",
+        "counters": "integer",
+        "paths": "integer tracking path commitment"
+    }
+}

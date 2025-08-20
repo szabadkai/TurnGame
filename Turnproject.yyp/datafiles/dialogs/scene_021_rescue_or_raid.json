@@ -1,0 +1,155 @@
+{
+  "id": "scene_021_rescue_or_raid",
+  "act": 2,
+  "location": "ruins_fork_chamber",
+  "triggers": [
+    "ruins_fork_encounter"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "fork_001",
+      "speaker": "science_officer_kim",
+      "text": "Captain, the path forks here. My scanner is picking up faint life signs from under a rockfall to the left. To the right, there's a sealed vault emitting a low power signature, likely containing supplies.",
+      "emotional_state": {"torres_pragmatism": 3, "kim_empathy": 3},
+      "choices": [
+        {
+          "id": "c_ask_torres",
+          "text": "Torres, your recommendation?",
+          "next": "fork_torres_opinion"
+        },
+        {
+          "id": "c_ask_kim",
+          "text": "Kim, what are the chances of a successful rescue?",
+          "next": "fork_kim_opinion"
+        },
+        {
+          "id": "c_wait",
+          "text": "[Remain Silent] (Consider the options.)",
+          "effects": {"timed_response": {"duration": 15, "next_node": "fork_timed_event"}},
+          "next": "fork_wait"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"The 'colonists' are a lure. The real prize is the data cache hidden behind the vault's power supply.\"",
+          "conditions": { "loop_count": ">5", "remembered_event": "ruins_fork_trap"},
+          "next": "fork_meta_choice"
+        }
+      ]
+    },
+    {
+      "id": "fork_torres_opinion",
+      "speaker": "first_officer_torres",
+      "text": "Sir, we're low on medical supplies and ammo. That vault could be the difference between life and death for us. The colonists... it's a hard choice, but our crew has to come first.",
+      "effects": {"inc": {"torres_pragmatism": 1}},
+      "next": "fork_001"
+    },
+    {
+      "id": "fork_kim_opinion",
+      "speaker": "science_officer_kim",
+      "text": "Their life signs are weak, but stable. We have a good chance of getting them out if we act quickly. We can't just leave them here to die, Captain.",
+      "effects": {"inc": {"kim_empathy": 1}},
+      "next": "fork_001"
+    },
+    {
+      "id": "fork_wait",
+      "speaker": "SYSTEM",
+      "text": "You take a moment to weigh the options. The ground trembles slightly.",
+      "next": "fork_001"
+    },
+    {
+      "id": "fork_timed_event",
+      "speaker": "science_officer_kim",
+      "text": "Another tremor, stronger this time! Captain, the rubble is shifting! The life signs are fading! We have to decide now!",
+      "effects": {"inc": {"rescue_difficulty": 2}},
+      "next": "fork_001"
+    },
+    {
+      "id": "fork_meta_choice",
+      "speaker": "first_officer_torres",
+      "text": "A hidden cache? Behind the vault? That's... oddly specific, Captain. But I trust you. Kim, forget the life signs. We're going for that vault.",
+      "next": "fork_raid_check"
+    },
+    {
+      "id": "fork_main_choice",
+      "speaker": "SYSTEM",
+      "text": "The choice is yours. The lives of strangers, or the well-being of your crew.",
+       "choices": [
+        {
+          "id": "choice_fork_rescue",
+          "text": "We're attempting the rescue. Get to work.",
+          "next": "fork_rescue_check"
+        },
+        {
+          "id": "choice_fork_raid",
+          "text": "We need the supplies. Open the vault.",
+          "next": "fork_raid_check"
+        }
+      ]
+    },
+    {
+      "id": "fork_rescue_check",
+      "speaker": "first_officer_torres",
+      "text": "It's a lot of rock. We can try to lift it with brute force, or Kim can use the sonic emitters to try and break it up more precisely.",
+      "choices": [
+        {
+          "id": "c_rescue_brute",
+          "text": "[Athletics] Brute force it.",
+          "skill_check": {"type": "group_athletics", "difficulty": 15},
+          "next": "fork_rescue_outcome"
+        },
+        {
+          "id": "c_rescue_finesse",
+          "text": "[Engineering] Use the sonic emitters.",
+          "skill_check": {"type": "engineering", "difficulty": 13},
+          "next": "fork_rescue_outcome"
+        }
+      ]
+    },
+    {
+      "id": "fork_raid_check",
+      "speaker": "science_officer_kim",
+      "text": "The vault lock is electronic, but ancient. I can try to bypass it, but if I fail, it will likely trigger defenses.",
+      "skill_check": {"type": "tech", "difficulty": 16},
+      "next": "fork_raid_outcome"
+    },
+    {
+      "id": "fork_rescue_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "We've got them! They're weak, but alive. They were... colonists, from a generation ship that crashed decades ago.",
+      "effects": {"inc": {"earth_reputation": 2}, "set": {"colonists_rescued": true}},
+      "next": "end_scene_rescue"
+    },
+    {
+      "id": "fork_rescue_fail",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "It's no good, the whole passage came down! The life signs are gone. We... we were too late.",
+      "effects": {"dec": {"crew_morale": 2}},
+      "next": "end_scene_fail"
+    },
+    {
+      "id": "fork_raid_outcome",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "success"},
+      "text": "We're in! Medical supplies, ammo, ration packs... it's a treasure trove! We're back in fighting shape.",
+      "effects": {"inc": {"supplies": 5}},
+      "next": "end_scene_raid"
+    },
+    {
+      "id": "fork_raid_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The lockdown failed! It's an energy trap! The vault is flooding with radiation!",
+      "effects": {"inc": {"crew_injury": 2, "void_corruption": 1}},
+      "next": "end_scene_fail"
+    },
+    { "id": "end_scene_rescue", "speaker": "SYSTEM", "text": "You chose to save the colonists, upholding your duty to protect human life.", "choices": [] },
+    { "id": "end_scene_raid", "speaker": "SYSTEM", "text": "You chose to prioritize your crew, securing vital supplies for the journey ahead.", "choices": [] },
+    { "id": "end_scene_fail", "speaker": "SYSTEM", "text": "Your attempt failed, leaving you with nothing but injuries and regret.", "choices": [] }
+  ]
+}

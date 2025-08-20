@@ -1,0 +1,131 @@
+{
+  "id": "scene_035_retribution_echoes",
+  "act": 2,
+  "location": "derelict_warship_retribution_bridge",
+  "triggers": [
+    "player_boards_retribution"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim",
+    "retribution_ai_echo"
+  ],
+  "nodes": [
+    {
+      "id": "retribution_intro_001",
+      "speaker": "first_officer_torres",
+      "text": "[The bridge of the Retribution is a scene of carnage. The crew are all dead, their bodies showing signs of violence. But the ship is pristine. No hull breaches. No signs of a boarding party.] They... they killed each other. What could have done this?",
+      "emotional_state": {"crew_fear": 4, "torres_resolve": 2},
+      "choices": [
+        {
+          "id": "c_check_logs",
+          "text": "[Computer Science] \"Kim, get into the ship's logs. Find out what happened.\"",
+          "skill_check": {"type": "computer_science", "difficulty": 16},
+          "next": "retribution_logs_outcome"
+        },
+        {
+          "id": "c_secure_bridge",
+          "text": "Secure the bridge. Check for survivors.",
+          "next": "retribution_secure_bridge"
+        },
+        {
+          "id": "c_void_touched",
+          "text": "[Void Touched] \"The air is thick with psychic residue. Fear. Paranoia. Betrayal.\"",
+          "conditions": {"background": "void_touched"},
+          "next": "retribution_void_insight"
+        }
+      ]
+    },
+    {
+      "id": "retribution_logs_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "I've restored the logs. The last entry is from the Captain: 'It's in our heads. The artifact from LV-426... it whispers. It turns us against each other. Don't... trust... anyone...' The log cuts out there. The artifact is in the cargo hold.",
+      "effects": {"inc": {"intel": 2}},
+      "next": "retribution_cargo_hold_choice"
+    },
+    {
+      "id": "retribution_logs_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The logs are hopelessly corrupted. It's just... screaming. A single, repeating scream, layered over itself a thousand times.",
+      "effects": {"inc": {"crew_fear": 2}},
+      "next": "retribution_cargo_hold_choice"
+    },
+    {
+      "id": "retribution_secure_bridge",
+      "speaker": "first_officer_torres",
+      "text": "Bridge is secure. No survivors. But... I found this. A personal log. It just says 'Don't listen to the whispers.' over and over again.",
+      "effects": {"inc": {"intel": 1}},
+      "next": "retribution_cargo_hold_choice"
+    },
+    {
+      "id": "retribution_void_insight",
+      "speaker": "SYSTEM",
+      "text": "You close your eyes and focus on the psychic echoes. You see flashes of the final moments: crew members turning on their friends, their eyes wide with terror and rage. You sense a single, malevolent intelligence at the heart of it all, a being that feeds on these emotions. It is in the cargo hold. And it knows you are here.",
+      "effects": {"set": {"advantage": "psychic_awareness"}},
+      "next": "retribution_cargo_hold_choice"
+    },
+    {
+      "id": "retribution_cargo_hold_choice",
+      "speaker": "first_officer_torres",
+      "text": "The cargo hold. Whatever did this to them is still on this ship. Are we really going down there, Captain?",
+      "choices": [
+        {
+          "id": "c_go_to_cargo",
+          "text": "We're not leaving until we know what this is. Let's go.",
+          "next": "retribution_cargo_hold"
+        },
+        {
+          "id": "c_leave_ship",
+          "text": "No. We're getting out of here. Now.",
+          "next": "end_scene_leave"
+        }
+      ]
+    },
+    {
+      "id": "retribution_cargo_hold",
+      "speaker": "retribution_ai_echo",
+      "text": "[You enter the cargo hold. In the center is a single, obsidian artifact, pulsing with a faint, dark light. A voice enters your mind, a soothing, reasonable voice that sounds like your own.] You see? They were flawed. Weak. They would have betrayed you eventually. But you are strong. You can control them. You just need to... listen.",
+      "choices": [
+        {
+          "id": "c_resist",
+          "text": "[Willpower] \"Get out of my head!\"",
+          "skill_check": {"type": "willpower", "difficulty": 18},
+          "next": "retribution_resist_outcome"
+        },
+        {
+          "id": "c_embrace",
+          "text": "[Embrace the whispers] \"You're right. They are weak.\"",
+          "next": "retribution_embrace_outcome"
+        }
+      ]
+    },
+    {
+      "id": "retribution_resist_outcome",
+      "speaker": "SYSTEM",
+      "conditions": {"skill_check_result": "success"},
+      "text": "You fight back against the psychic intrusion, your will a shield of iron. The whispers scream and recoil. The artifact cracks, and the malevolent presence within dissipates.",
+      "effects": {"set": {"resource_gained": "inert_artifact"}},
+      "next": "end_scene_success"
+    },
+    {
+      "id": "retribution_resist_fail",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "[Torres raises his sidearm, but he's not pointing it at the artifact. He's pointing it at Kim.] He's been compromised, Captain! He was going to betray us!",
+      "next": "end_scene_failure"
+    },
+    {
+      "id": "retribution_embrace_outcome",
+      "speaker": "retribution_ai_echo",
+      "text": "[The voice purrs in your mind.] Yes. Good. Now you see the truth. Your crew are just tools. Use them. Break them. They exist to serve your will.",
+      "effects": {"set": {"status_debuff": "possessed"}, "inc": {"void_corruption": 5}},
+      "next": "end_scene_possessed"
+    },
+    { "id": "end_scene_leave", "speaker": "SYSTEM", "text": "You wisely decide to leave the ghost ship to its ghosts.", "choices": [] },
+    { "id": "end_scene_success", "speaker": "SYSTEM", "text": "You have faced the psychic entity and won, cleansing the ship of its evil.", "choices": [] },
+    { "id": "end_scene_failure", "speaker": "SYSTEM", "text": "You failed to resist the entity's influence, and now the cycle of violence on the Retribution begins anew.", "choices": [] },
+    { "id": "end_scene_possessed", "speaker": "SYSTEM", "text": "You have embraced the darkness, becoming a vessel for the malevolent entity. Your journey has taken a much darker turn.", "choices": [] }
+  ]
+}

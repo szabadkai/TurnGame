@@ -1,0 +1,88 @@
+{
+  "id": "scene_020_beast_ambush",
+  "act": 2,
+  "location": "ruins_outer_passage",
+  "triggers": [
+    "beasts_triggered"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "beast_001",
+      "speaker": "first_officer_torres",
+      "text": "Contact! Movement on the walls, ceiling! They're all around us! It's an ambush!",
+      "emotional_state": {"crew_fear": 2, "torres_adrenaline": 3},
+      "choices": [
+        {
+          "id": "c_fight",
+          "text": "Open fire! Create a perimeter!",
+          "next": "combat_encounter_start"
+        },
+        {
+          "id": "c_fallback",
+          "text": "[Athletics] Fall back to that narrow passage we passed!",
+          "skill_check": {"type": "group_athletics", "difficulty": 14},
+          "next": "beast_fallback_outcome"
+        },
+        {
+          "id": "c_use_repellent",
+          "text": "[Use Beast Repellent] Kim, use the repellent now!",
+          "conditions": {"has_resource": "beast_repellent"},
+          "next": "beast_repellent_outcome"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"There are six of them. Two from the ceiling, four from the sides. Focus fire on the ceiling first.\"",
+          "conditions": { "loop_count": ">3", "remembered_death": "beast_ambush"},
+          "effects": {"set": {"advantage": "tactical_foreknowledge"}},
+          "next": "combat_encounter_start"
+        }
+      ]
+    },
+    {
+        "id": "combat_encounter_start",
+        "speaker": "SYSTEM",
+        "text": "The jungle erupts in a flurry of claws and teeth. The fight begins.",
+        "next": "end_scene_combat"
+    },
+    {
+        "id": "beast_fallback_outcome",
+        "speaker": "first_officer_torres",
+        "conditions": {"skill_check_result": "success"},
+        "text": "We made it! The passage is narrow enough that they can only come at us one at a time. We have the advantage now!",
+        "effects": {"set": {"advantage": "choke_point"}},
+        "next": "combat_encounter_start"
+    },
+    {
+        "id": "beast_fallback_fail",
+        "speaker": "first_officer_torres",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "Kim stumbled! They're surrounded! We have to go back for them!",
+        "effects": {"set": {"disadvantage": "surrounded"}},
+        "next": "combat_encounter_start"
+    },
+    {
+        "id": "beast_repellent_outcome",
+        "speaker": "science_officer_kim",
+        "text": "The repellent is working! The creatures are recoiling, confused! They're keeping their distance.",
+        "choices": [
+            {
+                "id": "c_repel_attack",
+                "text": "Press the attack while they're disoriented.",
+                "effects": {"set": {"advantage": "disoriented_enemy"}},
+                "next": "combat_encounter_start"
+            },
+            {
+                "id": "c_repel_escape",
+                "text": "This is our chance. Let's get to the ruins, now!",
+                "next": "end_scene_escape"
+            }
+        ]
+    },
+    { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "You have engaged the beasts of the jungle.", "choices": [] },
+    { "id": "end_scene_escape", "speaker": "SYSTEM", "text": "You successfully used your wits to avoid a fight and escape to the ruins.", "choices": [] }
+  ]
+}

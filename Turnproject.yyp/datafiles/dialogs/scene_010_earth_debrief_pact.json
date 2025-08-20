@@ -1,0 +1,124 @@
+{
+    "id": "scene_010_earth_debrief_pact",
+    "act": 3,
+    "location": "earth_command_console",
+    "triggers": [
+        "ending_pact"
+    ],
+    "npcs": [
+        "earth_commander_holt",
+        "ship_ai_maya",
+        "science_officer_kim"
+    ],
+    "nodes": [
+        {
+            "id": "pact_001",
+            "speaker": "earth_commander_holt",
+            "text": "Captain, my board is lit up like a festival. Your ship is emitting low-level quantum radiation, your crew's biosigns are erratic, and the gate signature persists. What in God's name did you do out there?",
+            "emotional_state": {"holt_paranoia": 3, "player_stress": 1},
+            "choices": [
+                {
+                    "id": "c_admit_pact",
+                    "text": "We made a pact with the entity in the wreck. It was the only way to stabilize the gate.",
+                    "next": "holt_reacts_pact_002"
+                },
+                {
+                    "id": "c_downplay",
+                    "text": "[Deception] \"We initiated a temporary truce with a local intelligence. It's a standard first contact protocol.\"",
+                    "skill_check": {"type": "deception", "difficulty": 16},
+                    "next": "holt_downplay_outcome"
+                },
+                {
+                    "id": "c_ask_maya",
+                    "text": "[Reconnaissance] Maya, is this channel secure? Any signs of eavesdropping?",
+                    "next": "maya_scan_channel_003"
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"Commander, I made a pact because in every timeline where I don't, Earth falls. This is the only way.\"",
+                    "conditions": { "loop_count": ">10", "remembered_event": "earth_falls"},
+                    "next": "holt_meta_response"
+                }
+            ]
+        },
+        {
+            "id": "holt_reacts_pact_002",
+            "speaker": "earth_commander_holt",
+            "text": "A pact? You unilaterally entered into an agreement with an unknown, non-terrestrial power? Do you have any idea what you've done? This is a potential existential threat!",
+            "effects": {"inc": {"holt_paranoia": 2, "earth_reputation": -3}},
+            "choices": [
+                {
+                    "id": "c_defend_pact",
+                    "text": "It was a calculated risk. And it worked.",
+                    "next": "holt_interrogation_004"
+                },
+                {
+                    "id": "c_show_corruption",
+                    "text": "[Show signs of corruption] \"It was necessary. The song is wide... and we must all learn to sing it.\"",
+                    "conditions": {"has_flag": "whisper_marked"},
+                    "next": "kim_interjects_corrupt"
+                }
+            ]
+        },
+        {
+            "id": "maya_scan_channel_003",
+            "speaker": "ship_ai_maya",
+            "text": "The channel is secure, Captain. However, I am detecting a high level of background radiation consistent with void energies... originating from Commander Holt's location.",
+            "effects": {"inc": {"intel": 2}},
+            "next": "pact_001"
+        },
+        {
+            "id": "holt_downplay_outcome",
+            "speaker": "earth_commander_holt",
+            "conditions": {"skill_check_result": "success"},
+            "text": "A 'local intelligence'... Fine. Transmit the full treaty for review. We'll see if your 'standard protocol' holds up under scrutiny.",
+            "effects": {"dec": {"holt_paranoia": 1}},
+            "next": "end_scene_scrutiny"
+        },
+        {
+            "id": "holt_meta_response",
+            "speaker": "earth_commander_holt",
+            "text": "...What did you just say? Repeat that, Captain. On whose authority are you making such claims?",
+            "skill_check": {
+                "type": "contested_check",
+                "skill": "willpower",
+                "difficulty": 19,
+                "vs": "holt_interrogation",
+                "vs_difficulty": 17
+            },
+            "next": "holt_meta_outcome"
+        },
+        {
+            "id": "holt_interrogation_004",
+            "speaker": "earth_commander_holt",
+            "text": "I want every detail. What were the terms? What did you give them? What did they give you? And I want your entire crew submitted for psychological evaluation upon your return.",
+            "next": "end_scene_inquiry"
+        },
+        {
+            "id": "kim_interjects_corrupt",
+            "speaker": "science_officer_kim",
+            "body_language": "Kim's eyes glaze over for a second.",
+            "text": "The Commander is afraid of the harmony. He does not wish to be part of the whole.",
+            "next": "holt_reacts_corruption"
+        },
+        {
+            "id": "holt_reacts_corruption",
+            "speaker": "earth_commander_holt",
+            "text": "What was that? Officer Kim, are you alright? Captain, what have you done to your crew? This is not a debriefing anymore. This is a quarantine order. You are not to approach Earth.",
+            "effects": {"set": {"ship_status": "quarantined", "earth_reputation": -10}},
+            "next": "end_scene_quarantine"
+        },
+        {
+            "id": "holt_meta_outcome",
+            "speaker": "earth_commander_holt",
+            "conditions": {"skill_check_result": "success"},
+            "text": "You hold his gaze, your certainty unwavering. He sees something in your eyes... something ancient. He breaks contact first. '...I see. Proceed with caution, Captain. And keep this channel open.'",
+            "effects": {"set": {"alliance": "holt_secret"}, "inc": {"earth_reputation": 1}},
+            "next": "end_scene_secret_pact"
+        },
+        { "id": "end_scene_scrutiny", "speaker": "SYSTEM", "text": "You've managed to downplay the pact, but your actions will be under intense scrutiny.", "choices": [] },
+        { "id": "end_scene_inquiry", "speaker": "SYSTEM", "text": "You have been placed under official inquiry. Your career, and your freedom, are on the line.", "choices": [] },
+        { "id": "end_scene_quarantine", "speaker": "SYSTEM", "text": "Your crew's strange behavior has resulted in a quarantine order. You are now an exile.", "choices": [] },
+        { "id": "end_scene_secret_pact", "speaker": "SYSTEM", "text": "Your impossible knowledge has convinced Holt to trust you, for now. You have a secret ally at the heart of Earth Command.", "choices": [] }
+    ]
+}

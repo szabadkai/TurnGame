@@ -1,0 +1,106 @@
+{
+  "id": "scene_029_swarm_queen_gambit",
+  "act": 2,
+  "location": "swarm_throne_ship_private_chamber",
+  "triggers": [
+    "has_flag:spared_swarm_queen_twice"
+  ],
+  "npcs": [
+    "swarm_queen_9",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "queen_intro_001",
+      "speaker": "swarm_queen_9",
+      "text": "[The chamber is strangely silent. The Swarm Queen, a towering bio-mechanical entity, regards you not with hunger, but with an unnerving intelligence.] You have spared us. Twice. A statistical anomaly. We chose not to erase the memory of your mercy this time. We chose to ask: why?",
+      "emotional_state": {"queen_curiosity": 10, "maya_awareness": 6},
+      "choices": [
+        {
+          "id": "c_ask_how",
+          "text": "\"You remember? How is that possible?\"",
+          "next": "queen_explains_memory_002"
+        },
+        {
+          "id": "c_shared_memory",
+          "text": "[Shared Memory] \"The first time, it was a tactical decision. The second time, it was because I remembered you spared my ship at the Kepler nebula.\"",
+          "conditions": {"loop_count": ">12"},
+          "next": "queen_confirms_memory_003"
+        },
+        {
+          "id": "c_bluff",
+          "text": "[Bluff] \"Because you are more valuable to me alive than dead. I am weaving a new future, and you have a part to play in it.\"",
+          "skill_check": {"type": "deception+willpower", "difficulty": 19},
+          "next": "queen_bluff_outcome"
+        }
+      ]
+    },
+    {
+      "id": "queen_explains_memory_002",
+      "speaker": "swarm_queen_9",
+      "text": "The hive is a network. When a Queen dies, her memories are... archived. Most are discarded as redundant. But your actions were unique. They created a resonance we could not ignore. A pattern. Just like you.",
+      "effects": {"inc": {"intel": 2}},
+      "next": "queen_offer_004"
+    },
+    {
+      "id": "queen_confirms_memory_003",
+      "speaker": "swarm_queen_9",
+      "text": "Yes. The Kepler nebula. A timeline of fire and ruin. You see? We are both haunted. We both remember the worlds that have burned.",
+      "effects": {"set": {"swarm_alliance_possible": true}},
+      "next": "queen_offer_004"
+    },
+    {
+      "id": "queen_bluff_outcome",
+      "speaker": "swarm_queen_9",
+      "conditions": {"skill_check_result": "success"},
+      "text": "[She tilts her head, a thousand tiny limbs clicking.] A weaver. A manipulator of fate. You are more dangerous than we thought. And more interesting. We approve.",
+      "effects": {"inc": {"queen_respect": 2}},
+      "next": "queen_offer_004"
+    },
+    {
+      "id": "queen_offer_004",
+      "speaker": "swarm_queen_9",
+      "text": "You believe you are saving your people. But you are only choosing which fire consumes them. The Phantoms. The collapsing gates. There is another. A greater hunger. One that the Swarm has been fleeing for a thousand generations. We cannot outrun it. But you... you can rewind the clock. You can give us another chance. A new home in a timeline that survives.",
+      "choices": [
+        {
+          "id": "c_accept_offer",
+          "text": "An alliance. You help me save humanity, I help you escape this 'greater hunger'.",
+          "next": "queen_accepts_alliance"
+        },
+        {
+          "id": "c_reject_offer",
+          "text": "I can't trust you. The Swarm has killed billions.",
+          "next": "queen_rejects_alliance"
+        },
+        {
+          "id": "c_paradox",
+          "text": "[Paradox] \"But if I find you a safe timeline, you will have no reason to have ever developed this memory, and this conversation will never have happened.\"",
+          "next": "queen_paradox_answer"
+        }
+      ]
+    },
+    {
+      "id": "queen_accepts_alliance",
+      "speaker": "swarm_queen_9",
+      "text": "A pact. Between the Constant and the Swarm. The universe will tremble. We will grant you access to our bio-toxins and our knowledge of the deep void. In return, you will find us a new genesis.",
+      "effects": {"set": {"alliance": "swarm"}, "effect_delayed": {"turns": 15, "type": "swarm_betrayal_chance", "probability": 0.1}},
+      "next": "end_scene_alliance"
+    },
+    {
+      "id": "queen_rejects_alliance",
+      "speaker": "swarm_queen_9",
+      "text": "Then you are a fool. You will die, and we will die, and the great hunger will consume all. We will not make this offer again, in this timeline or the next. We will remember this. We will remember you.",
+      "effects": {"set": {"enemy": "swarm_queen_9_meta"}},
+      "next": "end_scene_rejection"
+    },
+    {
+      "id": "queen_paradox_answer",
+      "speaker": "swarm_queen_9",
+      "text": "You think in straight lines. Time is a fabric, Constant. If you save us, you do not erase our past. You simply create a new thread where our future is not extinction. We will still remember the threat. We will still be grateful. And we will still be in your debt.",
+      "effects": {"inc": {"void_knowledge": 3}},
+      "next": "queen_offer_004"
+    },
+    { "id": "end_scene_alliance", "speaker": "SYSTEM", "text": "You have forged an unthinkable alliance with the Swarm. You may have just saved both your species, or doomed them.", "choices": [] },
+    { "id": "end_scene_rejection", "speaker": "SYSTEM", "text": "You have refused the Swarm's offer, and in doing so, made an enemy that can think and remember across time itself.", "choices": [] }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "id": "scene_019_landing_zone",
+  "act": 2,
+  "location": "jungle_lz_perimeter",
+  "triggers": [
+    "landed_near_ruins"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim"
+  ],
+  "nodes": [
+    {
+      "id": "lz_001",
+      "speaker": "first_officer_torres",
+      "text": "LZ is hot. Air's thick, can't see more than 50 meters. The ruin entrance is 300 meters east, but this jungle feels... watchful.",
+      "emotional_state": {"torres_vigilance": 3, "kim_curiosity": 2},
+      "choices": [
+        {
+          "id": "c_scout",
+          "text": "[Reconnaissance] \"Let's scout the area. I don't like surprises.\"",
+          "next": "lz_scout_choice_002"
+        },
+        {
+          "id": "c_direct_path",
+          "text": "\"We stick to the mission. Straight to the ruins, single file.\"",
+          "effects": {"inc": {"ambush_chance": 2}},
+          "next": "end_scene_direct"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"The direct path is a nesting ground. We take the ridge to the north. It's longer, but safer.\"",
+          "conditions": { "loop_count": ">2", "remembered_death": "beast_ambush"},
+          "next": "end_scene_ridge_path",
+          "effects": {"set": {"ambush_avoided": true}}
+        }
+      ]
+    },
+    {
+      "id": "lz_scout_choice_002",
+      "speaker": "science_officer_kim",
+      "text": "Scouting protocols active. I'm picking up anomalous flora and some very large bio-signatures. What's our focus?",
+      "choices": [
+        {
+          "id": "c_scout_tracks",
+          "text": "Examine those tracks by the creek.",
+          "skill_check": {"type": "survival", "difficulty": 14},
+          "next": "lz_scout_tracks_outcome"
+        },
+        {
+          "id": "c_scout_flora",
+          "text": "Scan that pulsating plant.",
+          "skill_check": {"type": "science", "difficulty": 15},
+          "next": "lz_scout_flora_outcome"
+        },
+        {
+          "id": "c_scout_sound",
+          "text": "Triangulate that clicking sound from the canopy.",
+          "next": "lz_scout_sound_outcome"
+        }
+      ]
+    },
+    {
+      "id": "lz_scout_tracks_outcome",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Three-toed, heavy, clawed. These aren't herbivores. And they're fresh. They're stalking the path to the ruins.",
+      "effects": {"set": {"intel_beast_stalking": true}, "dec": {"ambush_chance": 1}},
+      "next": "lz_scout_complete"
+    },
+    {
+      "id": "lz_scout_tracks_fail",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "Can't get a clear print, the ground is too soft. Could be anything.",
+      "next": "lz_scout_complete"
+    },
+    {
+      "id": "lz_scout_flora_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Fascinating! The plant's pulsation is a defense mechanism. It emits a neurotoxin. I can synthesize a counter-agent that might work as a repellent.",
+      "effects": {"set": {"resource_gained": "beast_repellent"}},
+      "next": "lz_scout_complete"
+    },
+    {
+      "id": "lz_scout_flora_fail",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "The plant just released a cloud of spores! Everyone, masks on! I... I think I got a mild dose. My hands are numb.",
+      "effects": {"set": {"kim_status": "numb_hands"}, "inc": {"crew_injury": 1}},
+      "next": "lz_scout_complete"
+    },
+    {
+      "id": "lz_scout_sound_outcome",
+      "speaker": "SYSTEM",
+      "text": "As you focus on the sound, it suddenly stops. An unnerving silence descends on the jungle. You feel a dozen unseen eyes turn towards you.",
+      "effects": {"inc": {"ambush_chance": 1, "crew_fear": 1}},
+      "next": "lz_scout_complete"
+    },
+    {
+      "id": "lz_scout_complete",
+      "speaker": "first_officer_torres",
+      "text": "Scouting complete, Captain. We have our path.",
+      "choices": [
+        {
+          "id": "c_path_ridge",
+          "text": "Take the ridge path.",
+          "next": "end_scene_ridge_path"
+        },
+        {
+          "id": "c_path_direct",
+          "text": "Stick to the direct route. We're prepared now.",
+          "next": "end_scene_direct"
+        }
+      ]
+    },
+    { "id": "end_scene_direct", "speaker": "SYSTEM", "text": "You proceed directly towards the ruins.", "choices": [] },
+    { "id": "end_scene_ridge_path", "speaker": "SYSTEM", "text": "You take the safer, longer path along the ridge.", "choices": [] }
+  ]
+}

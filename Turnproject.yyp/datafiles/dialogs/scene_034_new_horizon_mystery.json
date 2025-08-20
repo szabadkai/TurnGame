@@ -1,0 +1,133 @@
+{
+  "id": "scene_034_new_horizon_mystery",
+  "act": 2,
+  "location": "derelict_ship_new_horizon_cryo_bay",
+  "triggers": [
+    "player_finds_new_horizon"
+  ],
+  "npcs": [
+    "first_officer_torres",
+    "science_officer_kim",
+    "ship_ai_maya"
+  ],
+  "nodes": [
+    {
+      "id": "horizon_intro_001",
+      "speaker": "first_officer_torres",
+      "text": "[The beam of your flashlight cuts through the icy mist of the cryo-bay. Thousands upon thousands of cryo-pods stretch into the darkness, each with a human face frozen inside.] My God... there must be ten thousand people here. Why would anyone just... leave them?",
+      "emotional_state": {"torres_shock": 4, "kim_curiosity": 3},
+      "choices": [
+        {
+          "id": "c_check_logs",
+          "text": "[Computer Science] \"Maya, try to access the ship's logs. Find out what happened.\"",
+          "skill_check": {"type": "computer_science", "difficulty": 15},
+          "next": "horizon_logs_outcome"
+        },
+        {
+          "id": "c_check_systems",
+          "text": "[Engineering] \"Kim, check the life support systems. Why are they still in cryo?\"",
+          "skill_check": {"type": "engineering", "difficulty": 14},
+          "next": "horizon_systems_outcome"
+        },
+        {
+          "id": "c_scan_pod",
+          "text": "[Science] \"Scan one of the pods. Let's see what condition the occupants are in.\"",
+          "skill_check": {"type": "science", "difficulty": 16},
+          "next": "horizon_scan_outcome"
+        }
+      ]
+    },
+    {
+      "id": "horizon_logs_outcome",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "success"},
+      "text": "I've bypassed the security lockout. The final log is from the ship's science officer. They were ordered to bring the ship to these coordinates and... leave it here. The mission was designated 'Project Prometheus - Long-Term Exposure Study'.",
+      "effects": {"inc": {"intel": 2}},
+      "next": "horizon_truth_revealed"
+    },
+    {
+      "id": "horizon_systems_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "The cryo-systems are working perfectly. Too perfectly. They were never meant to be revived. The system is designed for indefinite suspension. And... the navigation system was remotely wiped. They were stranded here deliberately.",
+      "effects": {"inc": {"intel": 2}},
+      "next": "horizon_truth_revealed"
+    },
+    {
+      "id": "horizon_scan_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "The occupant's cellular structure is... saturated with void energy. But it's stable. The cryo-sleep seems to have arrested the usual degradation. They are... something new. Not quite human anymore, but not corrupted either.",
+      "effects": {"inc": {"intel": 2, "void_knowledge": 2}},
+      "next": "horizon_truth_revealed"
+    },
+    {
+      "id": "horizon_truth_revealed",
+      "speaker": "first_officer_torres",
+      "text": "A long-term exposure study... they used ten thousand innocent colonists as lab rats. This is... monstrous. What are your orders, Captain?",
+      "choices": [
+        {
+          "id": "c_wake_them",
+          "text": "We wake them up. All of them.",
+          "next": "horizon_wake_consequences"
+        },
+        {
+          "id": "c_leave_them",
+          "text": "We leave them. We report this to... someone. The Free Colonies, maybe.",
+          "next": "end_scene_leave"
+        },
+        {
+          "id": "c_euthanize",
+          "text": "[Mercy] \"We can't save them, and we can't leave them like this. Maya, prepare to overload the life support systems. Make it painless.\"",
+          "next": "horizon_euthanize_confirm"
+        },
+        {
+            "id": "c_take_for_aris",
+            "text": "[Dr. Aris Alliance] \"Dr. Aris would find these subjects... fascinating. Let's take a few samples for her.\"",
+            "conditions": {"has_ally": "dr_aris"},
+            "next": "end_scene_aris"
+        }
+      ]
+    },
+    {
+      "id": "horizon_wake_consequences",
+      "speaker": "ship_ai_maya",
+      "text": "Warning: waking ten thousand individuals will deplete our food and medical reserves in under a week. It is not a sustainable course of action.",
+      "choices": [
+        {
+          "id": "c_wake_anyway",
+          "text": "I don't care. Do it.",
+          "effects": {"set": {"colonists_woken": true}, "dec": {"supplies": 20, "fuel": 10}},
+          "next": "end_scene_wake"
+        },
+        {
+          "id": "c_change_mind",
+          "text": "[Second Thoughts] You're right. That's not feasible. We have to find another way.",
+          "next": "horizon_truth_revealed"
+        }
+      ]
+    },
+    {
+      "id": "horizon_euthanize_confirm",
+      "speaker": "first_officer_torres",
+      "text": "Captain... are you sure about this? This is mass murder.",
+      "choices": [
+        {
+          "id": "c_confirm_euthanize",
+          "text": "It's mercy. I've made my decision.",
+          "effects": {"inc": {"player_stress": 5}},
+          "next": "end_scene_euthanize"
+        },
+        {
+          "id": "c_cancel_euthanize",
+          "text": "No. You're right. I can't do it.",
+          "next": "horizon_truth_revealed"
+        }
+      ]
+    },
+    { "id": "end_scene_wake", "speaker": "SYSTEM", "text": "You have awoken ten thousand souls, taking on the immense burden of their survival.", "choices": [] },
+    { "id": "end_scene_leave", "speaker": "SYSTEM", "text": "You have left the colonists in their frozen sleep, carrying the heavy secret of their existence.", "choices": [] },
+    { "id": "end_scene_euthanize", "speaker": "SYSTEM", "text": "You have made a terrible choice, ending ten thousand lives in what you can only hope was an act of mercy.", "choices": [] },
+    { "id": "end_scene_aris", "speaker": "SYSTEM", "text": "You have taken some of the cryo-pods for Dr. Aris. The results of her subsequent experiments will surely be... interesting.", "choices": [] }
+  ]
+}

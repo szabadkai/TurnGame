@@ -1,0 +1,156 @@
+{
+    "id": "scene_011_prometheus_wreck_approach",
+    "act": 1,
+    "location": "prometheus_wreck_perimeter",
+    "triggers": [
+        "approach_prometheus_wreck"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "first_officer_torres",
+        "navigator_chen"
+    ],
+    "nodes": [
+        {
+            "id": "maya_prom_001",
+            "speaker": "ship_ai_maya",
+            "text": "Visual contact. The Prometheus is half-interred in the void’s wake. Hull stress harmonics are peaking. One wrong vector and we shear apart. The ship is... crying out in pain.",
+            "emotional_state": {"chen_terror": 3, "torres_resolve": 3},
+            "choices": [
+                {
+                    "id": "choice_prom_use_lane",
+                    "text": "Use the passage corridor we earned from the Watchers.",
+                    "conditions": { "flags": { "safe_passage": true } },
+                    "next": "maya_prom_lane_result"
+                },
+                {
+                    "id": "choice_prom_sync_beacon",
+                    "text": "[Beacon Access] Sync with the beacon and ride its wake.",
+                    "conditions": { "flags": { "beacon_access": true } },
+                    "next": "maya_prom_beacon_sync"
+                },
+                {
+                    "id": "choice_prom_direct",
+                    "text": "There's no safe way. Direct approach. Full power.",
+                    "next": "chen_direct_protest"
+                },
+                {
+                    "id": "choice_prom_listen_void",
+                    "text": "[Void Touched] The wake isn't just energy. It's a memory. Let me listen to it.",
+                    "conditions": { "background": "void_touched" },
+                    "next": "void_echo_001"
+                }
+            ]
+        },
+        {
+            "id": "chen_direct_protest",
+            "speaker": "navigator_chen",
+            "text": "Captain, that's suicide! The shear stress will tear us to pieces before we get within a thousand kilometers!",
+            "effects": {"inc": {"chen_terror": 2}},
+            "choices": [
+                {
+                    "id": "c_override_chen",
+                    "text": "[Leadership] \"I know the risks, Chen. Do it.\"",
+                    "skill_check": {"type": "leadership", "difficulty": 16},
+                    "next": "maya_prom_direct_check"
+                },
+                {
+                    "id": "c_reassure_chen",
+                    "text": "\"We can do this. Torres, divert all power to the structural integrity field.\"",
+                    "next": "maya_prom_direct_check"
+                },
+                {
+                    "id": "c_meta_direct",
+                    "text": "[Previous Loop] \"The readings are a lie. There's a stable corridor that opens for exactly 3.7 seconds. Time it perfectly.\"",
+                    "conditions": {"loop_count": ">6", "remembered_event": "prometheus_approach"},
+                    "next": "meta_direct_approach"
+                }
+            ]
+        },
+        {
+            "id": "maya_prom_lane_result",
+            "speaker": "ship_ai_maya",
+            "text": "Following the Watchers' corridor. Minimal turbulence. The wreck’s docking spines are reachable.",
+            "next": "end_scene_safe"
+        },
+        {
+            "id": "maya_prom_beacon_sync",
+            "speaker": "ship_ai_maya",
+            "text": "Beacon handshake achieved. The wake is parting locally—like it remembers our purpose.",
+            "next": "end_scene_safe"
+        },
+        {
+            "id": "meta_direct_approach",
+            "speaker": "navigator_chen",
+            "text": "A 3.7 second window? That's insane... but the Captain hasn't been wrong yet. Timing burn... now!",
+            "effects": {"set": {"advantage": "perfect_approach"}},
+            "next": "end_scene_safe"
+        },
+        {
+            "id": "maya_prom_direct_check",
+            "speaker": "ship_ai_maya",
+            "text": "Warning: entering the high-stress zone. Hull integrity beginning to drop. We need to navigate a field of shifting temporal pockets.",
+            "skill_check": {
+                "type": "piloting",
+                "difficulty": 18
+            },
+            "next": "maya_prom_direct_outcome"
+        },
+        {
+            "id": "maya_prom_direct_outcome",
+            "speaker": "navigator_chen",
+            "conditions": {"skill_check_result": "success"},
+            "text": "I... I did it. We're through the worst of it. Hull integrity at 68%.",
+            "effects": {"dec": {"hull_integrity": 32}},
+            "next": "end_scene_rough"
+        },
+        {
+            "id": "maya_prom_direct_fail",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "We've struck a temporal distortion! Multiple hull breaches! Engineering, report!",
+            "skill_check": {
+                "type": "engineering",
+                "difficulty": 17
+            },
+            "next": "maya_prom_engineering_outcome"
+        },
+        {
+            "id": "maya_prom_engineering_outcome",
+            "speaker": "first_officer_torres",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Breaches sealed! But we're dead in the water, Captain. Main power is offline.",
+            "effects": {"set": {"ship_status": "crippled"}},
+            "next": "end_scene_crippled"
+        },
+        {
+            "id": "maya_prom_engineering_fail",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "Containment field is failing! The core is going critical! Goodbye, Captain.",
+            "next": "end_scene_destroyed"
+        },
+        {
+            "id": "void_echo_001",
+            "speaker": "ship_ai_maya",
+            "text": "Captain? Your vitals just spiked. The wake is… answering you. It shows us a path. A path of silence.",
+            "choices": [
+                {
+                    "id": "c_accept_path",
+                    "text": "Take the silent path.",
+                    "effects": {"inc": {"void_corruption": 1}},
+                    "next": "end_scene_safe"
+                },
+                {
+                    "id": "c_reject_path",
+                    "text": "No. We make our own path.",
+                    "next": "chen_direct_protest"
+                }
+            ]
+        },
+        { "id": "end_scene_safe", "speaker": "SYSTEM", "text": "You have safely reached the Prometheus wreck.", "choices": [] },
+        { "id": "end_scene_rough", "speaker": "SYSTEM", "text": "You have reached the wreck, but your ship has taken a beating.", "choices": [] },
+        { "id": "end_scene_crippled", "speaker": "SYSTEM", "text": "You survived the approach, but your ship is crippled and adrift before the silent giant.", "choices": [] },
+        { "id": "end_scene_destroyed", "speaker": "SYSTEM", "text": "Your gamble failed. The Meridian is consumed by the chaotic energies surrounding the Prometheus.", "choices": [] }
+    ]
+}

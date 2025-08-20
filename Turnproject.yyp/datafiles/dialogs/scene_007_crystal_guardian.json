@@ -1,0 +1,113 @@
+{
+    "id": "scene_007_crystal_guardian",
+    "act": 2,
+    "location": "ruins_inner_sanctum",
+    "triggers": [
+        "approach_guardian_core"
+    ],
+    "npcs": [
+        "crystal_guardian",
+        "science_officer_kim",
+        "first_officer_torres"
+    ],
+    "nodes": [
+        {
+            "id": "guardian_001",
+            "speaker": "crystal_guardian",
+            "text": "[The air hums as a towering crystalline figure assembles itself from the chamber walls.] Resonance unauthorized. Intruders at the heart. Purpose your intent or be unmade.",
+            "emotional_state": {"guardian_agitation": 2},
+            "choices": [
+                {
+                    "id": "choice_guardian_fight",
+                    "text": "Torres, we're taking it down.",
+                    "next": "combat_encounter",
+                    "effects": { "set": {"guardian_hostile": true} }
+                },
+                {
+                    "id": "choice_guardian_diplomacy",
+                    "text": "[Diplomacy] \"We are not invaders. We seek knowledge to prevent a collapse that threatens us all.\"",
+                    "skill_check": { "type": "diplomacy", "difficulty": 16 },
+                    "next": "guardian_002_diplo"
+                },
+                {
+                    "id": "c_lore_check",
+                    "text": "[Lore] \"Your structure is that of a Keth'mori Echo-Sleeper. You are not a soldier, you are a librarian.\"",
+                    "skill_check": {"type": "lore", "difficulty": 17},
+                    "next": "guardian_lore_success"
+                },
+                {
+                    "id": "c_meta_paradox",
+                    "text": "[Paradox] \"In the timeline where you destroy me, the gate collapses and takes this whole moon with it. Is that your purpose?\"",
+                    "conditions": {"has_flag": "timeline_fracture"},
+                    "next": "guardian_paradox_response"
+                }
+            ]
+        },
+        {
+            "id": "guardian_002_diplo",
+            "speaker": "crystal_guardian",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Intent measured. Prevention aligns with Prime Directive. Passage conditional: return what you take as knowledge, not as weapon.",
+            "next": "guardian_diplo_choice"
+        },
+        {
+            "id": "guardian_lore_success",
+            "speaker": "crystal_guardian",
+            "conditions": {"skill_check_result": "success"},
+            "text": "[The Guardian's humming softens.] You know our old names. You see past the weapon to the purpose. Few have. Very well, Librarian. What knowledge do you seek?",
+            "effects": {"inc": {"kethmori_reputation": 2}},
+            "next": "guardian_diplo_choice"
+        },
+        {
+            "id": "guardian_paradox_response",
+            "speaker": "crystal_guardian",
+            "text": "[A wave of dissonant chords emanates from the Guardian.] That memory... is not ours. Yet it resonates with truth. If our purpose creates its own failure... then our purpose must be re-evaluated. We must... observe. Pass.",
+            "effects": {"set": {"guardian_passive": true}},
+            "next": "end_scene_passage"
+        },
+        {
+            "id": "guardian_diplo_choice",
+            "speaker": "science_officer_kim",
+            "text": "It's willing to talk, Captain. This is incredible.",
+            "choices": [
+                {
+                    "id": "c_diplo_accept",
+                    "text": "We agree to your terms.",
+                    "next": "end_scene_passage"
+                },
+                {
+                    "id": "c_press_further",
+                    "text": "[Press Further] \"Tell us about the Prime Directive. What are you protecting?\"",
+                    "next": "guardian_explains"
+                }
+            ]
+        },
+        {
+            "id": "guardian_explains",
+            "speaker": "crystal_guardian",
+            "text": "We protect the memory of what was from the echo of what could be. The Song of Unmaking is a paradox that consumes. We are the final firewall. To know more is to become part of the firewall. Is that your wish?",
+            "choices": [
+                {
+                    "id": "c_become_firewall",
+                    "text": "[Void Touched] \"I will share the burden.\"",
+                    "conditions": {"background": "void_touched"},
+                    "next": "end_scene_firewall"
+                },
+                {
+                    "id": "c_decline_firewall",
+                    "text": "Our path lies forward, not in standing guard.",
+                    "next": "end_scene_passage"
+                }
+            ]
+        },
+        {
+            "id": "combat_encounter",
+            "speaker": "SYSTEM",
+            "text": "The Guardian's facets glow with intense energy. The fight for the heart of the ruins has begun.",
+            "next": "end_scene_combat"
+        },
+        { "id": "end_scene_passage", "speaker": "SYSTEM", "text": "The Crystal Guardian has granted you passage, recognizing you as fellow seekers of knowledge.", "effects": {"set": {"beacon_access": true}}, "choices": [] },
+        { "id": "end_scene_firewall", "speaker": "SYSTEM", "text": "You have taken on a piece of the Guardian's burden. Your mind is now a bastion against the void, but the responsibility is immense.", "effects": {"set": {"status_buff": "firewall_resonance"}}, "choices": [] },
+        { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "You have chosen violence. The ancient guardian of this place rises to meet you.", "choices": [] }
+    ]
+}

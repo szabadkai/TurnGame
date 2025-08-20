@@ -1,0 +1,134 @@
+{
+    "id": "scene_013_wreck_confrontation",
+    "act": 1,
+    "location": "prometheus_wreck_core",
+    "triggers": [
+        "boarded_prometheus_core"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "void_manifest",
+        "first_officer_torres",
+        "science_officer_kim"
+    ],
+    "nodes": [
+        {
+            "id": "wreck_001",
+            "speaker": "void_manifest",
+            "text": "[The air itself crackles. The space in the center of the core coalesces into a being of pure, screaming static. It speaks in a chorus of all the voices of the Prometheus crew.] Your steps are chords upon a broken instrument. Will you tune, will you quiet, or will you join?",
+            "emotional_state": {"crew_terror": 5, "manifestation_stability": 10},
+            "choices": [
+                {
+                    "id": "c_fight",
+                    "text": "Torres, Kim, on me! We're ending this now!",
+                    "next": "wreck_fight_options"
+                },
+                {
+                    "id": "c_submit",
+                    "text": "[Submit to the Choir] \"I am tired of fighting. I will join the song.\"",
+                    "next": "wreck_submit"
+                },
+                {
+                    "id": "c_negotiate",
+                    "text": "[Diplomacy] \"You are a wound. Let us heal you.\"",
+                    "skill_check": {"type": "diplomacy", "difficulty": 19},
+                    "next": "wreck_negotiate_outcome"
+                },
+                {
+                    "id": "c_meta_memory",
+                    "text": "[Shared Memory] \"I remember you. From the timeline where we merged. You told me you were lonely.\"",
+                    "conditions": {"has_flag": "shared_memory_unlocked"},
+                    "next": "wreck_meta_response"
+                }
+            ]
+        },
+        {
+            "id": "wreck_fight_options",
+            "speaker": "first_officer_torres",
+            "text": "What's the target, Captain? The core itself, or the... things... pouring out of it?",
+            "choices": [
+                {
+                    "id": "c_fight_core",
+                    "text": "Target the core. Cut off the source.",
+                    "skill_check": {"type": "group_check", "skills": ["engineering", "combat"], "difficulty": 18},
+                    "next": "wreck_fight_outcome"
+                },
+                {
+                    "id": "c_fight_manifestations",
+                    "text": "Fight the manifestations. Thin their numbers.",
+                    "next": "combat_encounter"
+                },
+                {
+                    "id": "c_invert_core",
+                    "text": "[Core Inversion] \"Kim, now! Use the inversion sequence!\"",
+                    "conditions": {"has_flag": "weakness_unlocked:core_inversion_nodes"},
+                    "skill_check": {"type": "intelligence", "difficulty": 14},
+                    "next": "wreck_invert_outcome"
+                }
+            ]
+        },
+        {
+            "id": "wreck_submit",
+            "speaker": "void_manifest",
+            "text": "You loosen the hand upon your own name. Welcome to the wideness. You are home.",
+            "effects": {"set": {"ending": "assimilation"}},
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_negotiate_outcome",
+            "speaker": "void_manifest",
+            "conditions": {"skill_check_result": "success"},
+            "text": "[The screaming static softens to a low hum.] Heal... us? A new thought. A new song. We will... consider this. You may pass. We will watch.",
+            "effects": {"set": {"ending": "pact"}},
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_meta_response",
+            "speaker": "void_manifest",
+            "text": "[The chorus of voices falters, replaced by a single, mournful voice - that of Captain Rostova of the Prometheus.] You... you remember. Then you know what must be done. The core cannot be destroyed. It must be contained. Will you help me?",
+            "choices": [
+                {
+                    "id": "c_contain_core",
+                    "text": "\"I'll help you. Tell me what to do.\"",
+                    "next": "wreck_containment_plan"
+                }
+            ]
+        },
+        {
+            "id": "wreck_containment_plan",
+            "speaker": "void_manifest",
+            "text": "We must create a resonance cage. It will trap me here, but it will stop the Song from spreading. It will require a great sacrifice. A life for a life.",
+            "choices": [
+                {
+                    "id": "c_sacrifice_self",
+                    "text": "[Sacrifice Yourself] \"Take me. My life for the galaxy's.\"",
+                    "next": "end_scene_sacrifice"
+                },
+                {
+                    "id": "c_sacrifice_crew",
+                    "text": "[Betrayal] \"Take one of my crew. Their life for the galaxy's.\"",
+                    "next": "end_scene_betrayal"
+                }
+            ]
+        },
+        {
+            "id": "wreck_fight_outcome",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "success"},
+            "text": "Core resonance collapsing! The manifestation is destabilizing! The wake is receding. We did it, Captain.",
+            "effects": {"set": {"ending": "victory"}},
+            "next": "end_scene"
+        },
+        {
+            "id": "wreck_invert_outcome",
+            "speaker": "science_officer_kim",
+            "conditions": {"skill_check_result": "success"},
+            "text": "It's working! The Song is canceling itself out! The manifestation is folding in on itself!",
+            "effects": {"set": {"ending": "victory"}},
+            "next": "end_scene"
+        },
+        { "id": "combat_encounter", "speaker": "SYSTEM", "text": "The Void Manifestation turns its full attention on you. The final battle for the Prometheus has begun.", "next": "end_scene" },
+        { "id": "end_scene_sacrifice", "speaker": "SYSTEM", "text": "You have sacrificed yourself to contain the Void Manifestation, your consciousness now a timeless prison for a cosmic horror. Your crew escapes, led by a new Captain, to a galaxy that will never know your name.", "effects": {"set": {"ending": "sacrifice"}}, "choices": [] },
+        { "id": "end_scene_betrayal", "speaker": "SYSTEM", "text": "You chose a member of your crew to sacrifice. The Manifestation is contained, but at the cost of your soul and the loyalty of your crew.", "effects": {"set": {"ending": "betrayal"}}, "choices": [] }
+    ]
+}

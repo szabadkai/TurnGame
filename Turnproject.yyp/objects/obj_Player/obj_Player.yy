@@ -36,10 +36,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":{
-    "name":"ch1_down_att",
-    "path":"sprites/ch1_down_att/ch1_down_att.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

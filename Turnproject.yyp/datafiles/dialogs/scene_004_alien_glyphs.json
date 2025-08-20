@@ -1,0 +1,159 @@
+{
+    "id": "scene_004_alien_glyphs",
+    "act": 2,
+    "location": "jungle_ruins_chamber",
+    "triggers": [
+        "found_glyphs"
+    ],
+    "npcs": [
+        "science_officer_kim",
+        "first_officer_torres"
+    ],
+    "nodes": [
+        {
+            "id": "kim_001",
+            "speaker": "science_officer_kim",
+            "text": "Captain, these wall markings... they're not just carvings. They resonate with a low-level energy when we approach. The patterns match subharmonics from the gates.",
+            "emotional_state": {"kim_excitement": 2, "torres_impatience": 1},
+            "choices": [
+                {
+                    "id": "c_recon",
+                    "text": "[Reconnaissance] \"Use the micro-spectrometer. I want a full analysis of the energy output.\"",
+                    "next": "kim_recon_002"
+                },
+                {
+                    "id": "c_ask_torres",
+                    "text": "Torres, what do you make of this?",
+                    "next": "torres_interjection_003"
+                },
+                {
+                    "id": "c_touch_it",
+                    "text": "Reach out and touch the glyphs.",
+                    "next": "touch_glyph_004"
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Shared Memory] \"Kim, wait. Last time, we assumed it was a language. It's not. It's a circuit diagram.\"",
+                    "conditions": { "loop_count": ">4", "shared_memory_unlocked": true },
+                    "next": "kim_meta_response_005"
+                }
+            ]
+        },
+        {
+            "id": "kim_recon_002",
+            "speaker": "science_officer_kim",
+            "text": "The energy is not native to this planet. It's... temporal. The glyphs are bleeding trace amounts of chronitons. This isn't just a message, it's a recording of a message being sent... or received.",
+            "effects": {"inc": {"intel": 1, "kim_excitement": 1}},
+            "next": "kim_main_choice_006"
+        },
+        {
+            "id": "torres_interjection_003",
+            "speaker": "first_officer_torres",
+            "text": "I make it a wall, Kim. A wall with pretty lights. There's a seam here. We could blast through it and save ourselves the headache.",
+            "effects": {"inc": {"torres_impatience": 1}},
+            "choices": [
+                {
+                    "id": "c_agree_torres",
+                    "text": "You might be right. Prepare a breaching charge.",
+                    "next": "end_scene_breach"
+                },
+                {
+                    "id": "c_disagree_torres",
+                    "text": "We're not destroying a priceless artifact, Torres. Stand down.",
+                    "effects": {"dec": {"torres_loyalty": -1}},
+                    "next": "kim_main_choice_006"
+                }
+            ]
+        },
+        {
+            "id": "touch_glyph_004",
+            "speaker": "SYSTEM",
+            "text": "As your fingers touch the glowing glyph, a jolt of ice and fire shoots up your arm. Your mind is flooded with images of burning stars and silent, floating monoliths.",
+            "effects": {
+                "effect_chance": {
+                    "probability": 0.5,
+                    "success": {"effect": "gain_status_buff", "buff": "temporal_attunement"},
+                    "failure": {"effect": "gain_status_debuff", "debuff": "chroniton_sickness"}
+                }
+            },
+            "next": "kim_main_choice_006"
+        },
+        {
+            "id": "kim_meta_response_005",
+            "speaker": "science_officer_kim",
+            "body_language": "Kim's eyes go wide as a shared memory surfaces.",
+            "text": "A circuit... yes! I remember! The polarity was inverted. If we apply a positive charge, we can... download the contents.",
+            "effects": {"inc": {"maya_awareness": 1, "kim_loyalty": 2}},
+            "next": "kim_meta_download_007"
+        },
+        {
+            "id": "kim_main_choice_006",
+            "speaker": "science_officer_kim",
+            "text": "The glyphs are cycling through patterns. I believe we can interface with them, but it might be dangerous. We could try to decipher them, activate them directly, or leave them be.",
+            "choices": [
+                {
+                    "id": "c_decipher",
+                    "text": "[Intelligence+Lore] Let's try to translate them first.",
+                    "skill_check": {"type": "intelligence+lore", "difficulty": 17},
+                    "next": "kim_decipher_outcome"
+                },
+                {
+                    "id": "c_activate",
+                    "text": "[Engineering] Let's try to activate the sequence. Feed a low-power energy stream into the primary node.",
+                    "skill_check": {"type": "engineering", "difficulty": 16},
+                    "next": "kim_activate_outcome"
+                },
+                {
+                    "id": "c_leave",
+                    "text": "It's too unpredictable. We're leaving it alone.",
+                    "next": "end_scene_leave"
+                }
+            ]
+        },
+        {
+            "id": "kim_meta_download_007",
+            "speaker": "SYSTEM",
+            "text": "Using your foreknowledge, Kim quickly reconfigures their equipment. The glyphs flare, and a massive data packet is downloaded directly to the ship's computer.",
+            "effects": {"inc": {"intel": 5, "void_knowledge": 2}, "set": {"glyph_data_downloaded": true}},
+            "next": "end_scene_meta_success"
+        },
+        {
+            "id": "kim_decipher_outcome",
+            "speaker": "science_officer_kim",
+            "conditions": {"skill_check_result": "success"},
+            "text": "It's not a language. It's a stellar map, but... it's a map of this sector 50,000 years in the future. It shows... a network of stable, thriving gates. This isn't a warning, it's a blueprint. A message of hope.",
+            "effects": {"inc": {"intel": 2, "crew_morale": 2}, "set": {"lore_unlocked": "future_gate_blueprint"}},
+            "next": "end_scene_decipher_success"
+        },
+        {
+            "id": "kim_decipher_fail",
+            "speaker": "science_officer_kim",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "I... I can't make sense of it. The patterns are recursive, paradoxical. It's like trying to read a sentence that's still being written. I think... I think I need more data on the gate network to understand this.",
+            "effects": {"set": {"opportunity_missed": "glyph_decipher"}},
+            "next": "end_scene_leave"
+        },
+        {
+            "id": "kim_activate_outcome",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "success"},
+            "text": "The glyphs have stabilized into a single, complex pattern. I am detecting a new, stable wormhole opening just outside the ruins. It appears to be a shortcut, Captain. But I do not know where it leads.",
+            "effects": {"set": {"shortcut_unlocked": "glyph_wormhole"}},
+            "next": "end_scene_activate_success"
+        },
+        {
+            "id": "kim_activate_fail",
+            "speaker": "SYSTEM",
+            "conditions": {"skill_check_result": "failure"},
+            "text": "The moment your energy stream touches the glyphs, they flare with angry red light. The chamber begins to shake, and chunks of the ceiling fall around you. The glyphs have overloaded!",
+            "effects": {"inc": {"crew_injury": 1}, "effect_delayed": {"turns": 3, "type": "ship_system_glitch", "system": "navigation"}},
+            "next": "end_scene_failure"
+        },
+        { "id": "end_scene_breach", "speaker": "SYSTEM", "text": "You blast through the wall, ignoring the ancient mystery. On the other side, you find only more jungle.", "choices": [] },
+        { "id": "end_scene_leave", "speaker": "SYSTEM", "text": "You decide the risk is not worth the reward and leave the mysterious glyphs behind.", "choices": [] },
+        { "id": "end_scene_meta_success", "speaker": "SYSTEM", "text": "Your shared memory allowed you to bypass the puzzle entirely, reaping a massive reward.", "choices": [] },
+        { "id": "end_scene_decipher_success", "speaker": "SYSTEM", "text": "You have deciphered the glyphs, revealing a blueprint for a hopeful future.", "choices": [] },
+        { "id": "end_scene_activate_success", "speaker": "SYSTEM", "text": "You activated the glyphs, revealing a mysterious new path.", "choices": [] },
+        { "id": "end_scene_failure", "speaker": "SYSTEM", "text": "Your attempt to activate the glyphs backfired, causing a dangerous cave-in.", "choices": [] }
+    ]
+}

@@ -17,6 +17,12 @@ while (ds_list_size(objects) > 0) {
 
 ds_list_destroy(objects);
 
+// === DIALOG SYSTEM INITIALIZATION ===
+// Initialize enums and dialog system early in game startup
+scr_enums();
+init_dialog_system();
+init_dialog_state();
+
 // === UI SYSTEM FAILSAFE ===
 // Force create UI objects if they don't exist - TurnManager runs early so this ensures UI is available
 alarm[1] = 5;  // Wait a few steps then force create UI objects

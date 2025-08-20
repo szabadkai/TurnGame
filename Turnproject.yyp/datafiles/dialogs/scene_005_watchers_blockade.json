@@ -1,0 +1,196 @@
+{
+    "id": "scene_005_watchers_blockade",
+    "act": 2,
+    "location": "choir_perimeter",
+    "triggers": [
+        "approach_watchers_fleet"
+    ],
+    "npcs": [
+        "ship_ai_maya",
+        "watcher_chorus",
+        "first_officer_torres",
+        "science_officer_kim"
+    ],
+    "nodes": [
+        {
+            "id": "maya_watchers_001",
+            "speaker": "ship_ai_maya",
+            "text": "Captain, multiple vessels ahead. Hulls are pitted, ancient, but their drive signatures are slaved to a common, powerful signal. They are forming a blockade around the void sphere.",
+            "emotional_state": {"chorus_patience": 5, "torres_aggression": 2, "kim_curiosity": 3},
+            "choices": [
+                {
+                    "id": "c_hail",
+                    "text": "Hail them. Standard Federation greeting.",
+                    "next": "chorus_001"
+                },
+                {
+                    "id": "c_ask_torres",
+                    "text": "Torres, tactical assessment.",
+                    "next": "torres_assessment_002"
+                },
+                {
+                    "id": "c_ask_kim",
+                    "text": "Kim, what are we looking at, scientifically?",
+                    "next": "kim_assessment_003"
+                },
+                {
+                    "id": "c_meta_aware",
+                    "text": "[Previous Loop] \"Their patrol has a gap every 11 minutes. Let's wait for it.\"",
+                    "conditions": { "loop_count": ">6", "remembered_event": "watcher_blockade_run" },
+                    "next": "meta_gap_004"
+                }
+            ]
+        },
+        {
+            "id": "torres_assessment_002",
+            "speaker": "first_officer_torres",
+            "text": "They're a fleet, but they don't move like one. They're a wall. We can try to punch a hole, but it'll be like punching through rock. I say we hit them hard and fast at a single point.",
+            "effects": {"inc": {"torres_aggression": 1}},
+            "next": "maya_main_choice_005"
+        },
+        {
+            "id": "kim_assessment_003",
+            "speaker": "science_officer_kim",
+            "text": "Fascinating! Their energy signatures are entangled. They aren't just communicating, they're a single distributed consciousness. A hive mind. Hailing them might be like trying to talk to a single neuron in a brain.",
+            "effects": {"inc": {"kim_curiosity": 1}},
+            "next": "maya_main_choice_005"
+        },
+        {
+            "id": "meta_gap_004",
+            "speaker": "ship_ai_maya",
+            "text": "Acknowledged, Captain. Holding position and monitoring their patrol vectors. There is indeed a recursive flaw in their patrol pattern that creates a temporary corridor.",
+            "effects": {"inc": {"maya_awareness": 1}},
+            "skill_check": {
+                "type": "piloting",
+                "difficulty": 14
+            },
+            "next": "meta_gap_outcome"
+        },
+        {
+            "id": "maya_main_choice_005",
+            "speaker": "ship_ai_maya",
+            "text": "We are being scanned. The scan is passive, but comprehensive. They are waiting for our move.",
+            "choices": [
+                {
+                    "id": "choice_watchers_001a",
+                    "text": "Hail them now.",
+                    "next": "chorus_001"
+                },
+                {
+                    "id": "choice_watchers_001b",
+                    "text": "Torres, prepare for a full assault. Break their line.",
+                    "next": "combat_encounter",
+                    "effects": { "set": {"watchers_hostile": true}, "dec": {"watchers_reputation": 5} }
+                },
+                {
+                    "id": "c_group_check",
+                    "text": "[Group Check] Kim, find the weakest ship. Chen, plot a course to slip past it. Torres, create a diversion. Let's do it.",
+                    "skill_check": {
+                        "type": "group_check",
+                        "skills": ["engineering", "piloting", "deception"],
+                        "difficulty": 19
+                    },
+                    "next": "group_check_outcome"
+                }
+            ]
+        },
+        {
+            "id": "chorus_001",
+            "speaker": "watcher_chorus",
+            "text": "[A thousand voices speak as one in your mind] We are the kept and the keepers. The path closes. Turn back, warm ones.",
+            "choices": [
+                {
+                    "id": "c_press_further",
+                    "text": "[Press Further] \"Keepers of what? What are you watching for?\"",
+                    "effects": {"dec": {"chorus_patience": 1}},
+                    "next": "chorus_reveal_motive"
+                },
+                {
+                    "id": "c_bluff",
+                    "text": "[Bluff] \"We are pilgrims on the Crimson Path. Our passage is sacred and must not be impeded.\"",
+                    "skill_check": {"type": "deception+lore", "difficulty": 18},
+                    "next": "chorus_bluff_outcome"
+                },
+                {
+                    "id": "c_paradox",
+                    "text": "[Paradox] \"In the last cycle, you let me pass. You said it was necessary to preserve the balance.\"",
+                    "conditions": {"has_flag": "timeline_fracture"},
+                    "next": "chorus_paradox_response"
+                }
+            ]
+        },
+        {
+            "id": "meta_gap_outcome",
+            "speaker": "SYSTEM",
+            "conditions": {"skill_check_result": "success"},
+            "text": "You time it perfectly. The fleet drifts apart for a moment, and you slip through the gap, unnoticed.",
+            "next": "end_scene_stealth"
+        },
+        {
+            "id": "group_check_outcome",
+            "speaker": "SYSTEM",
+            "conditions": {"skill_check_result": "success"},
+            "text": "It's a masterpiece of coordination. Torres's diversionary missile fire draws their attention east while Kim's sensor ghosts make them think you're flanking west. Chen finds the perfect corridor and you glide through, unnoticed.",
+            "effects": {"inc": {"crew_morale": 2}},
+            "next": "end_scene_stealth"
+        },
+        {
+            "id": "chorus_reveal_motive",
+            "speaker": "watcher_chorus",
+            "text": "We watch for the Song of Unmaking. It comes for us all. Your kind, the Prometheus, they sang it into being. Now we guard against its spread. Your presence here is a dissonance. You must leave.",
+            "next": "chorus_002a"
+        },
+        {
+            "id": "chorus_bluff_outcome",
+            "speaker": "watcher_chorus",
+            "conditions": {"skill_check_result": "success"},
+            "text": "The Crimson Path... an ancient resonance. Your claim is... unexpected. We must contemplate this. Pass, but know that your resonance will be remembered.",
+            "effects": {"scaling_effect": {"type": "watcher_interactions", "scale_factor": 1}},
+            "next": "end_scene_deception"
+        },
+        {
+            "id": "chorus_paradox_response",
+            "speaker": "watcher_chorus",
+            "text": "[The chorus is silent for a moment. A wave of confusion washes over your ship.] A cycle... that we do not remember... yet the logic holds. The balance... yes, the balance must be maintained. Pass. We will not see you.",
+            "next": "end_scene_stealth"
+        },
+        {
+            "id": "chorus_002a",
+            "speaker": "watcher_chorus",
+            "text": "Your quarry sang first. Its echo gnaws our hulls. Passage costs more than breath. What do you pay?",
+            "choices": [
+                {
+                    "id": "c_tech_hack",
+                    "text": "[Tech] Maya, while they're talking, try to hack their network. Find their command node.",
+                    "skill_check": {"type": "contested_check", "skill": "computer_science", "difficulty": 19, "vs": "chorus_firewall", "vs_difficulty": 20},
+                    "next": "chorus_hack_outcome"
+                },
+                {
+                    "id": "c_offer_data",
+                    "text": "Offer data on the gate failures in exchange for transit.",
+                    "conditions": {"intel": ">5"},
+                    "next": "chorus_002b"
+                }
+            ]
+        },
+        {
+            "id": "chorus_hack_outcome",
+            "speaker": "ship_ai_maya",
+            "conditions": {"skill_check_result": "success"},
+            "text": "I'm in, Captain. Their network is ancient, but I've found the master control signal. I can... temporarily make them think we are one of them. We can pass.",
+            "effects": {"effect_delayed": {"turns": 5, "type": "watcher_retaliation_chance", "probability": 0.3}},
+            "next": "end_scene_deception"
+        },
+        {
+            "id": "chorus_002b",
+            "speaker": "watcher_chorus",
+            "text": "Patterns aligned. Your truth buys a corridor. Do not linger in the wake.",
+            "next": "end_scene_trade"
+        },
+        { "id": "combat_encounter", "speaker": "SYSTEM", "text": "The Watchers' ships turn in perfect unison. There is no declaration of war, only the silent, terrifying launch of a hundred weapons.", "next": "end_scene_combat" },
+        { "id": "end_scene_stealth", "speaker": "SYSTEM", "text": "Through foreknowledge and skill, you slipped past the blockade without being seen.", "choices": [] },
+        { "id": "end_scene_deception", "speaker": "SYSTEM", "text": "Through lies and technological trickery, you have passed the Watchers. But you have drawn their attention in a new way.", "choices": [] },
+        { "id": "end_scene_trade", "speaker": "SYSTEM", "text": "You traded valuable information for safe passage. A fair deal, but you now owe the Watchers a debt.", "effects": {"set": {"watchers_debt": true}}, "choices": [] },
+        { "id": "end_scene_combat", "speaker": "SYSTEM", "text": "You have engaged the Watcher fleet. The odds are not in your favor.", "choices": [] }
+    ]
+}

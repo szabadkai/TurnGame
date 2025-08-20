@@ -70,6 +70,11 @@ function get_character_sprite(character_index, direction, animation_state, weapo
     // Use asset_get_index to get the sprite resource ID
     var sprite_id = asset_get_index(sprite_name);
     
+    // Debug chr2 sprite loading specifically
+    if (character_index == 2) {
+        show_debug_message("CHR2 DEBUG: Looking for sprite '" + sprite_name + "' result: " + string(sprite_id));
+    }
+    
     // Fallback to sword/idle version if pistol sprite doesn't exist
     if (sprite_id == -1 && weapon_special_type == "ranged") {
         // Try falling back to sword version for run/attack, or plain idle for idle
@@ -84,14 +89,41 @@ function get_character_sprite(character_index, direction, animation_state, weapo
         sprite_id = asset_get_index(sprite_name);
     }
     
-    // Fallback to character 1 if sprite doesn't exist
+    // Special handling for chr2 - try sword version if basic sprite doesn't exist
+    if (sprite_id == -1 && character_index == 2 && weapon_special_type == "none") {
+        // For chr2, try the sword version as the default since basic sprites don't exist
+        var sword_state_suffix = state_suffix;
+        if (animation_state == STATE_RUN) {
+            sword_state_suffix = "run_sword";
+        } else if (animation_state == STATE_ATTACK) {
+            sword_state_suffix = "attack_sword";
+        } else if (animation_state == STATE_IDLE) {
+            sword_state_suffix = "idle_sword";
+        }
+        
+        sprite_name = "chr2_" + sword_state_suffix + "_" + dir_suffix;
+        sprite_id = asset_get_index(sprite_name);
+        
+        if (character_index == 2) {
+            show_debug_message("CHR2 DEBUG: Using sword version as default: '" + sprite_name + "' result: " + string(sprite_id));
+        }
+    }
+    
+    // Fallback to character 1 if sprite still doesn't exist
     if (sprite_id == -1) {
         sprite_name = "chr1_" + state_suffix + "_" + dir_suffix;
         sprite_id = asset_get_index(sprite_name);
+        
+        if (character_index == 2) {
+            show_debug_message("CHR2 DEBUG: Fallback to chr1 sprite '" + sprite_name + "' result: " + string(sprite_id));
+        }
     }
     
     // Final fallback to dummy sprite if still not found
     if (sprite_id == -1) {
+        if (character_index == 2) {
+            show_debug_message("CHR2 DEBUG: Using dummy sprite as final fallback");
+        }
         sprite_id = dummy;
     }
     

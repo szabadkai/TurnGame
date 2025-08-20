@@ -58,7 +58,7 @@ damage_modifier = str_mod;
 defense_score = base_armor_class + dex_mod;
 
 // Assign weapon based on enemy type
-var enemy_weapon_ids = [10, 11, 12, 13, 14];  // Rusty Dagger, Club, Bone Claws, Fangs, Bandit Blade
+var enemy_weapon_ids = [11, 12, 13, 14, 15];  // Rusty Dagger, Club, Bone Claws, Fangs, Bandit Blade
 equipped_weapon_id = enemy_weapon_ids[my_index % array_length(enemy_weapon_ids)];
 
 // Update combat stats with weapon (this sets weapon_damage_dice, etc.)
@@ -74,7 +74,18 @@ xp_value = xp_values[my_index % array_length(xp_values)];
 // === SPRITE ANIMATION SYSTEM ===
 // Add sprite animation system like obj_Player
 is_anim = false;
-target_player = 0;
+target_player = noone;
+
+// === AI SYSTEM VARIABLES ===
+// Movement and action tracking
+max_moves = 0;  // Will be set to 1 when turn becomes active
+moves = 0;
+
+// AI behavior variables
+ai_behavior = "aggressive";  // Will be determined by get_ai_behavior_type()
+current_target = noone;
+last_target_check = 0;
+ai_system_ready = true;
 
 // Initialize enums (defined in scr_enums.gml)
 scr_enums();

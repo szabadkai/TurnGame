@@ -1,0 +1,115 @@
+{
+  "id": "scene_030_information_broker",
+  "act": 2,
+  "location": "trade_hub_nexus_shadow_bazaar",
+  "triggers": [
+    "player_visits_nexus"
+  ],
+  "npcs": [
+    "info_broker_xylar",
+    "first_officer_torres"
+  ],
+  "nodes": [
+    {
+      "id": "xylar_intro_001",
+      "speaker": "info_broker_xylar",
+      "text": "[The being known as Xylar is a shimmer of light and shadow, their voice a synthesized whisper.] Captain of the Meridian. Your name is a commodity in these parts. You have seen things. Things that have value. I am here to purchase that value.",
+      "emotional_state": {"torres_disgust": 2},
+      "choices": [
+        {
+          "id": "c_what_info",
+          "text": "\"What kind of information are you interested in?\"",
+          "next": "xylar_lists_wares_002"
+        },
+        {
+          "id": "c_deny",
+          "text": "\"I'm not selling anything. We're leaving.\"",
+          "next": "end_scene_refusal"
+        },
+        {
+          "id": "c_torres_interjects",
+          "text": "[Let Torres speak]",
+          "next": "torres_interjection_003"
+        }
+      ]
+    },
+    {
+      "id": "xylar_lists_wares_002",
+      "speaker": "info_broker_xylar",
+      "text": "Secrets. The location of Earth Command black sites. The frequency of the Keth'mori's final resonance. The migration patterns of the Swarm. All are valuable to the right buyer. What are you selling?",
+      "choices": [
+        {
+          "id": "c_sell_earth_secrets",
+          "text": "Sell the location of the Prometheus black site.",
+          "conditions": {"has_flag": "project_prometheus_truth"},
+          "effects": {"inc": {"credits": 50}, "dec": {"earth_reputation": -20}},
+          "next": "xylar_deal_complete"
+        },
+        {
+          "id": "c_sell_kethmori_secrets",
+          "text": "Sell the Keth'mori gate shutdown sequence.",
+          "conditions": {"has_flag": "gate_shutdown_sequence"},
+          "effects": {"inc": {"credits": 75}, "dec": {"kethmori_reputation": -30}},
+          "next": "xylar_deal_complete"
+        },
+        {
+          "id": "c_sell_swarm_secrets",
+          "text": "Sell the Swarm Queen's plans.",
+          "conditions": {"has_flag": "swarm_alliance"},
+          "effects": {"inc": {"credits": 40}, "dec": {"swarm_reputation": -25}},
+          "next": "xylar_deal_complete"
+        },
+        {
+            "id": "c_negotiate",
+            "text": "[Diplomacy] \"My information is worth more than you're offering.\"",
+            "skill_check": {"type": "diplomacy", "difficulty": 17},
+            "next": "xylar_negotiate_outcome"
+        }
+      ]
+    },
+    {
+      "id": "torres_interjection_003",
+      "speaker": "first_officer_torres",
+      "text": "Captain, we can't do this. This is treason. We're talking about selling out our allies, our own people!",
+      "effects": {"inc": {"torres_disgust": 2}},
+      "choices": [
+        {
+          "id": "c_reassure_torres",
+          "text": "\"It's just business, Torres. A means to an end.\"",
+          "effects": {"dec": {"torres_loyalty": 2}},
+          "next": "xylar_lists_wares_002"
+        },
+        {
+          "id": "c_threaten_torres",
+          "text": "[Intimidation] \"You will follow my orders, First Officer. Or you will be relieved of duty.\"",
+          "skill_check": {"type": "intimidation", "difficulty": 16},
+          "next": "torres_threatened_outcome"
+        }
+      ]
+    },
+    {
+      "id": "xylar_deal_complete",
+      "speaker": "info_broker_xylar",
+      "text": "The transaction is complete. Your account has been credited. A pleasure doing business with you, Captain. Try not to spend it all in one timeline.",
+      "next": "end_scene_deal"
+    },
+    {
+      "id": "xylar_negotiate_outcome",
+      "speaker": "info_broker_xylar",
+      "conditions": {"skill_check_result": "success"},
+      "text": "Indeed. Your reputation precedes you. Very well. A 25% bonus on all transactions. Your secrets are... premium quality.",
+      "effects": {"set": {"broker_deal_bonus": 1.25}},
+      "next": "xylar_lists_wares_002"
+    },
+    {
+      "id": "torres_threatened_outcome",
+      "speaker": "first_officer_torres",
+      "conditions": {"skill_check_result": "success"},
+      "text": "[Torres falls silent, their face a mask of cold fury.] Yes, Captain.",
+      "effects": {"set": {"torres_loyalty": "compromised"}, "effect_delayed": {"turns": 5, "type": "torres_mutiny_chance", "probability": 0.4}},
+      "next": "xylar_lists_wares_002"
+    },
+    { "id": "end_scene_deal", "speaker": "SYSTEM", "text": "You have sold your secrets for a handsome price. You are richer, but your soul is poorer.", "choices": [] },
+    { "id": "end_scene_refusal", "speaker": "SYSTEM", "text": "You refused to deal with the information broker, choosing loyalty over profit.", "choices": [] }
+  ]
+}

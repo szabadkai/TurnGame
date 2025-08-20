@@ -1,0 +1,115 @@
+{
+  "id": "scene_031_nexus_recruitment",
+  "act": 2,
+  "location": "trade_hub_nexus_cantina",
+  "triggers": [
+    "player_visits_nexus_after_prometheus"
+  ],
+  "npcs": [
+    "free_colonies_captain_rex",
+    "first_officer_torres"
+  ],
+  "nodes": [
+    {
+      "id": "rex_intro_001",
+      "speaker": "free_colonies_captain_rex",
+      "text": "[A man with a rugged charm and a cybernetic arm slides into your booth.] Captain of the Meridian. You've been making waves. The kind of waves that get you noticed. My name is Rex. I hear you're looking for ghosts.",
+      "emotional_state": {"torres_suspicion": 3, "rex_confidence": 4},
+      "choices": [
+        {
+          "id": "c_who_are_you",
+          "text": "\"And who are you to be listening to my business?\"",
+          "next": "rex_explains_002"
+        },
+        {
+          "id": "c_let_torres_speak",
+          "text": "[Let Torres handle this]",
+          "next": "torres_interjects_003"
+        },
+        {
+          "id": "c_play_dumb",
+          "text": "[Deception] \"I think you have me mistaken for someone else.\"",
+          "skill_check": {"type": "deception", "difficulty": 15},
+          "next": "rex_sees_through_bluff"
+        }
+      ]
+    },
+    {
+      "id": "rex_explains_002",
+      "speaker": "free_colonies_captain_rex",
+      "text": "I'm a free trader. A captain, like you. I represent a... consortium of interests. The Free Colonies. We believe in self-reliance, not bureaucracy. And we believe Earth Command sent you on a suicide mission.",
+      "effects": {"inc": {"colonies_reputation": 1}},
+      "next": "rex_offer_004"
+    },
+    {
+      "id": "torres_interjects_003",
+      "speaker": "first_officer_torres",
+      "text": "The Free Colonies is just a nice name for a pirate syndicate. Whatever you're selling, we're not buying.",
+      "effects": {"inc": {"torres_suspicion": 2}},
+      "next": "rex_intro_001"
+    },
+    {
+      "id": "rex_sees_through_bluff",
+      "speaker": "free_colonies_captain_rex",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "[He chuckles.] Nice try, Captain. But the whole Nexus is buzzing about the Meridian's return from the void. Don't be shy. We're all friends here.",
+      "next": "rex_explains_002"
+    },
+    {
+      "id": "rex_offer_004",
+      "speaker": "free_colonies_captain_rex",
+      "text": "We know what you found out there. The Prometheus. The whispers. Earth Command is playing a dangerous game, and you're the pawn. We're offering you a chance to become a player. Work with us. Share your intel, and we'll give you safe harbor, resources, and ships. Real support, not just a pat on the back and a death sentence.",
+      "choices": [
+        {
+          "id": "c_accept_offer",
+          "text": "You make a compelling argument. You have a deal.",
+          "next": "rex_deal_accepted"
+        },
+        {
+          "id": "c_reject_offer",
+          "text": "My loyalty is to the Federation. Not to a band of opportunists.",
+          "next": "rex_deal_rejected"
+        },
+        {
+          "id": "c_play_both_sides",
+          "text": "[Deception] \"I'll consider your offer. I'll be in touch.\"",
+          "skill_check": {"type": "deception", "difficulty": 17},
+          "next": "rex_play_both_sides_outcome"
+        }
+      ]
+    },
+    {
+      "id": "rex_deal_accepted",
+      "speaker": "free_colonies_captain_rex",
+      "text": "Excellent. You've made the right choice, Captain. Welcome to the revolution. My network is now your network.",
+      "effects": {"set": {"alliance": "free_colonies"}, "inc": {"colonies_reputation": 10}, "dec": {"earth_reputation": -5}},
+      "next": "end_scene_deal"
+    },
+    {
+      "id": "rex_deal_rejected",
+      "speaker": "free_colonies_captain_rex",
+      "text": "A shame. Loyalty is a fine quality, until it gets you killed. The offer stands, for now. But don't expect us to be so friendly next time we meet.",
+      "effects": {"dec": {"colonies_reputation": -5}},
+      "next": "end_scene_rejection"
+    },
+    {
+      "id": "rex_play_both_sides_outcome",
+      "speaker": "free_colonies_captain_rex",
+      "conditions": {"skill_check_result": "success"},
+      "text": "You do that, Captain. But don't take too long. The game is already in motion.",
+      "effects": {"set": {"flag": "playing_both_sides"}},
+      "next": "end_scene_neutral"
+    },
+    {
+      "id": "rex_play_both_sides_fail",
+      "speaker": "free_colonies_captain_rex",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "You're a bad liar, Captain. You're just trying to string me along. That's insulting. Now you've made an enemy of the Free Colonies, and you've gained nothing. Not smart.",
+      "effects": {"dec": {"colonies_reputation": -10}},
+      "next": "end_scene_rejection"
+    },
+    { "id": "end_scene_deal", "speaker": "SYSTEM", "text": "You have forged an alliance with the Free Colonies, casting your lot with the rebels and traders of the outer rim.", "choices": [] },
+    { "id": "end_scene_rejection", "speaker": "SYSTEM", "text": "You have rejected the Free Colonies' offer, choosing to remain loyal to Earth Command.", "choices": [] },
+    { "id": "end_scene_neutral", "speaker": "SYSTEM", "text": "You have left the door open with the Free Colonies, playing a dangerous game between two powerful factions.", "choices": [] }
+  ]
+}

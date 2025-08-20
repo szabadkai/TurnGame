@@ -1,0 +1,114 @@
+{
+  "id": "scene_018_planetfall_descent",
+  "act": 2,
+  "location": "stormy_atmosphere_entry",
+  "triggers": [
+    "approach_ruins_planet"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "first_officer_torres",
+    "navigator_chen"
+  ],
+  "nodes": [
+    {
+      "id": "planetfall_001",
+      "speaker": "ship_ai_maya",
+      "text": "Entering upper atmosphere. Turbulence is 40% above predicted models. The planet's crystal spires are generating massive electrical discharges.",
+      "emotional_state": {"chen_anxiety": 2, "torres_confidence": 3},
+      "choices": [
+        {
+          "id": "c_ask_chen",
+          "text": "Chen, find us a calmer approach vector.",
+          "next": "chen_vector_002"
+        },
+        {
+          "id": "c_ask_torres",
+          "text": "Torres, landing party status?",
+          "next": "torres_status_003"
+        },
+        {
+          "id": "c_direct_descent",
+          "text": "No deviations. Power through the storm.",
+          "next": "direct_descent_004"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"There's a thermal updraft on the leeward side of the largest spire. Use it to cushion our descent.\"",
+          "conditions": { "loop_count": ">3", "remembered_death": "crash_landing" },
+          "next": "meta_descent_005"
+        }
+      ]
+    },
+    {
+      "id": "chen_vector_002",
+      "speaker": "navigator_chen",
+      "text": "There's a gap in the storm front 200 kilometers north, but it's closing fast. We can try to thread it, but it'll be tight. Or we can ride a lightning channel down, using its magnetic field to stabilize us. Risky, but fast.",
+      "effects": {"inc": {"chen_anxiety": 1}},
+      "choices": [
+        {
+          "id": "c_vector_gap",
+          "text": "[Piloting] Go for the gap. Precision flying.",
+          "skill_check": {"type": "piloting", "difficulty": 16},
+          "next": "landing_outcome"
+        },
+        {
+          "id": "c_vector_lightning",
+          "text": "[Science] Ride the lightning. Kim, give Chen the discharge timings.",
+          "skill_check": {"type": "science+piloting", "difficulty": 18},
+          "next": "landing_outcome"
+        }
+      ]
+    },
+    {
+      "id": "torres_status_003",
+      "speaker": "first_officer_torres",
+      "text": "Landing party is strapped in and ready, Captain. We can handle a rough landing, but the shuttle might not. Your call.",
+      "next": "planetfall_001"
+    },
+    {
+      "id": "direct_descent_004",
+      "speaker": "ship_ai_maya",
+      "text": "Acknowledged. Hull integrity is dropping. Brace for impact.",
+      "skill_check": {
+          "type": "group_check",
+          "skills": ["piloting", "engineering"],
+          "difficulty": 17
+      },
+      "next": "landing_outcome"
+    },
+    {
+      "id": "meta_descent_005",
+      "speaker": "navigator_chen",
+      "text": "An updraft? My scans show nothing... but if you say so, Captain. Adjusting our angle of attack.",
+      "effects": {"set": {"advantage": "perfect_landing"}},
+      "next": "landing_outcome"
+    },
+    {
+        "id": "landing_outcome",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "success", "advantage": "perfect_landing"},
+        "text": "Touchdown complete. Zero stress on the hull. A perfect landing, against all odds.",
+        "next": "end_scene_perfect"
+    },
+    {
+        "id": "landing_outcome_success",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "success"},
+        "text": "Touchdown. We've sustained minor hull damage, but the landing was successful.",
+        "effects": {"inc": {"hull_damage": 5}},
+        "next": "end_scene_standard"
+    },
+    {
+        "id": "landing_outcome_fail",
+        "speaker": "ship_ai_maya",
+        "conditions": {"skill_check_result": "failure"},
+        "text": "Brace! Brace! Brace! Mayday, mayday, we are going down! Hull breach on decks 4 and 5!",
+        "effects": {"inc": {"hull_damage": 25, "crew_injury": 2}},
+        "next": "end_scene_rough"
+    },
+    { "id": "end_scene_perfect", "speaker": "SYSTEM", "text": "You have landed safely and flawlessly.", "choices": [] },
+    { "id": "end_scene_standard", "speaker": "SYSTEM", "text": "You have landed safely, with minor damage to the ship.", "choices": [] },
+    { "id": "end_scene_rough", "speaker": "SYSTEM", "text": "You have crash-landed. The mission continues, but your ship is in a critical state.", "choices": [] }
+  ]
+}

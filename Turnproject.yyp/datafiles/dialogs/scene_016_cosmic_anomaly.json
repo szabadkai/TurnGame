@@ -1,0 +1,112 @@
+{
+  "id": "scene_016_cosmic_anomaly",
+  "act": 2,
+  "location": "purple_rift_vicinity",
+  "triggers": [
+    "cosmic_anomaly_detected"
+  ],
+  "npcs": [
+    "ship_ai_maya",
+    "science_officer_kim",
+    "navigator_chen"
+  ],
+  "nodes": [
+    {
+      "id": "anomaly_001",
+      "speaker": "navigator_chen",
+      "text": "Captain, spatial rift dead ahead. It's not on any of our charts. The 'lightning' inside is... space-time tearing itself apart. I recommend we give it a wide berth.",
+      "emotional_state": {"kim_fascination": 2, "chen_anxiety": 3},
+      "choices": [
+        {
+          "id": "c_ask_kim",
+          "text": "Kim, what's your take? Can we study it?",
+          "next": "kim_study_options_002"
+        },
+        {
+          "id": "c_bypass",
+          "text": "Chen is right. Plot a course around it. No risks.",
+          "next": "end_scene_bypass"
+        },
+        {
+          "id": "c_fly_closer",
+          "text": "Take us closer. I want to see it with my own eyes.",
+          "next": "anomaly_fly_closer_003"
+        },
+        {
+          "id": "c_meta_aware",
+          "text": "[Previous Loop] \"That's not a rift, it's a wound. A scar left over from when the 'Prometheus' fired its main weapon in two separate timelines at once.\"",
+          "conditions": { "loop_count": ">7", "remembered_event": "prometheus_weapon_fire" },
+          "next": "meta_anomaly_insight"
+        }
+      ]
+    },
+    {
+      "id": "kim_study_options_002",
+      "speaker": "science_officer_kim",
+      "text": "Study it? Captain, this is a once-in-a-lifetime opportunity! We could launch a probe to gather data, or even try to collect some of the energy it's venting. The scientific value would be immense!",
+      "effects": {"inc": {"kim_fascination": 2}},
+      "choices": [
+        {
+          "id": "c_launch_probe",
+          "text": "[Launch Probe] Get hard data, but risk the probe.",
+          "conditions": {"resources": {"probes": ">0"}},
+          "effects": {"dec": {"resources.probes": 1}},
+          "next": "anomaly_probe_outcome"
+        },
+        {
+          "id": "c_harvest_energy",
+          "text": "[Engineering] Try to harvest the vented energy.",
+          "skill_check": {"type": "engineering", "difficulty": 18},
+          "next": "anomaly_harvest_outcome"
+        },
+        {
+            "id": "c_back_away",
+            "text": "[Second Thoughts] Too dangerous. We're leaving.",
+            "next": "end_scene_bypass"
+        }
+      ]
+    },
+    {
+      "id": "anomaly_fly_closer_003",
+      "speaker": "ship_ai_maya",
+      "text": "Approaching the rift. Proximity is causing minor fluctuations in our own ship's temporal field. We are... echoing slightly.",
+      "effects": {"inc": {"crew_fear": 1}},
+      "next": "kim_study_options_002"
+    },
+    {
+      "id": "meta_anomaly_insight",
+      "speaker": "science_officer_kim",
+      "text": "A scar... from a paradoxical event? That... would explain the energy readings. If we scan for specific weapon isotopes, we might be able to trace where—or when—the 'Prometheus' went.",
+      "effects": {"inc": {"intel": 3}},
+      "next": "end_scene_meta"
+    },
+    {
+      "id": "anomaly_probe_outcome",
+      "speaker": "ship_ai_maya",
+      "text": "The probe is transmitting... it captured the life cycle of a pocket universe, from big bang to heat death, in the space of 1.7 seconds. Then it was annihilated.",
+      "effects": {"inc": {"intel": 2, "void_knowledge": 1}},
+      "next": "end_scene_data"
+    },
+    {
+      "id": "anomaly_harvest_outcome",
+      "speaker": "science_officer_kim",
+      "conditions": {"skill_check_result": "success"},
+      "text": "We did it! The capacitors are overflowing with exotic energy. We can use this to temporarily boost our shields to an unbelievable degree.",
+      "effects": {"set": {"resource_gained": "exotic_energy_charge"}},
+      "next": "end_scene_harvest"
+    },
+    {
+      "id": "anomaly_harvest_fail",
+      "speaker": "ship_ai_maya",
+      "conditions": {"skill_check_result": "failure"},
+      "text": "Feedback loop! The rift's energy is not stable! It's surged back through the collection field! Multiple system failures reported!",
+      "effects": {"inc": {"hull_damage": 15}, "effect_delayed": {"turns": 1, "type": "random_system_failure"}},
+      "next": "end_scene_fail"
+    },
+    { "id": "end_scene_bypass", "speaker": "SYSTEM", "text": "You wisely chose to avoid the anomaly, leaving its mysteries for another time, or another crew.", "choices": [] },
+    { "id": "end_scene_data", "speaker": "SYSTEM", "text": "You sacrificed a probe to gain invaluable, if terrifying, data about the nature of the rifts.", "choices": [] },
+    { "id": "end_scene_harvest", "speaker": "SYSTEM", "text": "You successfully harvested a rare and powerful energy source from the anomaly.", "choices": [] },
+    { "id": "end_scene_fail", "speaker": "SYSTEM", "text": "Your attempt to tamper with the anomaly backfired, causing significant damage to your ship.", "choices": [] },
+    { "id": "end_scene_meta", "speaker": "SYSTEM", "text": "Your impossible knowledge has turned a random anomaly into a vital clue in your search for the Prometheus.", "choices": [] }
+  ]
+}
