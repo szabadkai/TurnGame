@@ -76,6 +76,15 @@ function gain_xp(character, xp_amount) {
                 }
             }
         }
+        
+        // Auto-save after level up if it's a player character
+        if (object_get_name(character.object_index) == "obj_Player") {
+            try {
+                auto_save_game();
+            } catch (e) {
+                show_debug_message("Auto-save after level up failed: " + string(e));
+            }
+        }
     }
 }
 

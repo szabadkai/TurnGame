@@ -14,6 +14,20 @@ if (keyboard_check_pressed(ord("R"))) {
   game_restart();
 }
 
+///Return to Main Menu
+if (keyboard_check_pressed(vk_f10)) {
+  show_debug_message("=== RETURNING TO MAIN MENU ===");
+  // Quick save current game state if auto-save is enabled
+  if (variable_global_exists("game_settings") && global.game_settings.auto_save) {
+    try {
+      auto_save_game();
+    } catch (e) {
+      show_debug_message("Auto-save failed: " + string(e));
+    }
+  }
+  room_goto(Room_MainMenu);
+}
+
 // camera follow player (center view on first player)
 if (variable_instance_exists(id, "cam")) {
   

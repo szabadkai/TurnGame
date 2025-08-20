@@ -1,0 +1,66 @@
+// Menu system enumerations
+
+enum MENUSTATE {
+    MAIN,
+    SETTINGS,
+    SCENE_GALLERY,
+    SAVE_LOAD,
+    SETTINGS_AUDIO,
+    SETTINGS_GRAPHICS,
+    SETTINGS_CONTROLS,
+    SETTINGS_GAMEPLAY,
+    TRANSITION,
+    QUIT_CONFIRM
+}
+
+enum MAINMENU_OPTION {
+    NEW_GAME,
+    CONTINUE,
+    SETTINGS,
+    SCENE_GALLERY,
+    QUIT,
+    COUNT
+}
+
+enum SETTINGS_OPTION {
+    AUDIO,
+    GRAPHICS,
+    CONTROLS,
+    GAMEPLAY,
+    BACK,
+    COUNT
+}
+
+enum AUDIO_OPTION {
+    MASTER_VOLUME,
+    SFX_VOLUME,
+    MUSIC_VOLUME,
+    BACK,
+    COUNT
+}
+
+enum GRAPHICS_OPTION {
+    FULLSCREEN,
+    ZOOM_LEVEL,
+    BACK,
+    COUNT
+}
+
+enum CONTROLS_OPTION {
+    MOVE_UP,
+    MOVE_DOWN,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    ATTACK,
+    DETAILS,
+    BACK,
+    COUNT
+}
+
+enum GAMEPLAY_OPTION {
+    COMBAT_SPEED,
+    AUTO_SAVE,
+    DIFFICULTY,
+    BACK,
+    COUNT
+}

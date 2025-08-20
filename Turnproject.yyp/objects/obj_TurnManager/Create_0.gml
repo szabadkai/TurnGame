@@ -26,3 +26,9 @@ init_dialog_state();
 // === UI SYSTEM FAILSAFE ===
 // Force create UI objects if they don't exist - TurnManager runs early so this ensures UI is available
 alarm[1] = 5;  // Wait a few steps then force create UI objects
+
+// === SAVE SYSTEM ===
+// Apply loaded save data if we're loading a game
+if (variable_global_exists("loading_save") && global.loading_save) {
+    alarm[2] = 10; // Apply save data after UI is created
+}
