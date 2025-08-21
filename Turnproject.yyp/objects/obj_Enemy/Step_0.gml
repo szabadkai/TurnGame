@@ -166,7 +166,7 @@ if (state == TURNSTATE.active && !is_anim) {
                 }
                 
                 // Check if position is free (walls and characters)
-                can_move_primary = place_free(new_x, new_y);
+                can_move_primary = can_move_to(new_x, new_y);
                 if (can_move_primary) {
                     // Check for ALL players at exact position
                     with (obj_Player) {
@@ -216,7 +216,7 @@ if (state == TURNSTATE.active && !is_anim) {
                         // Try each flanking position
                         for (var i = 0; i < array_length(flanking_positions); i++) {
                             var pos = flanking_positions[i];
-                            var pos_free = place_free(pos.x, pos.y);
+                            var pos_free = can_move_to(pos.x, pos.y);
                             
                             if (pos_free) {
                                 // Check for players at position
@@ -263,7 +263,7 @@ if (state == TURNSTATE.active && !is_anim) {
                                 case Dir.DOWN:  new_y += 16; break;
                             }
                             
-                            var alt_free = place_free(new_x, new_y);
+                            var alt_free = can_move_to(new_x, new_y);
                             if (alt_free) {
                                 // Check for players at position
                                 with (obj_Player) {
@@ -337,7 +337,7 @@ if (state == TURNSTATE.active && !is_anim) {
                 }
                 
                 // Double-check movement is valid before executing
-                var can_execute_move = place_free(new_x, new_y);
+                var can_execute_move = can_move_to(new_x, new_y);
                 
                 // Check for players at the destination
                 if (can_execute_move) {

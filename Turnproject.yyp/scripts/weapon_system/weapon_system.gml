@@ -270,9 +270,13 @@ function find_enemies_in_line(attacker, direction, max_range) {
         current_y += dy;
         
         // Check for walls/obstacles (assuming solid objects block shots)
-        if (!place_free(current_x, current_y)) {
-            break; // Hit wall, stop scanning
+        // Use character base collision system to check for walls and tiles
+        with (attacker) {
+            if (!can_move_to(current_x, current_y)) {
+                other.i = max_range + 1; // Break the loop
+            }
         }
+        if (i > max_range) break; // Hit wall or tile collision, stop scanning
         
         // Check for enemy at this position
         var enemy = instance_position(current_x, current_y, obj_Enemy);

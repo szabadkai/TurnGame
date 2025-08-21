@@ -64,3 +64,27 @@ burn_turns = 0;
 damage_flash = 0;
 sprite_color = c_white;  // Default sprite color (can be overridden by child objects)
 
+// === MOVEMENT & COLLISION SYSTEM ===
+function can_move_to(check_x, check_y) {
+    // Check object collision first (walls, other characters, etc.)
+    if (!place_free(check_x, check_y)) {
+        return false;
+    }
+    
+    // Check tile collision on Tiles_Col layer
+    var tile_layer = layer_tilemap_get_id("Tiles_Col");
+    if (tile_layer != -1) {
+        var tile_data = tilemap_get_at_pixel(tile_layer, check_x, check_y);
+        if (tile_data != 0) {  // 0 = empty, anything else = collision
+            // Debug: uncomment the next line to see tile collision detection
+            // show_debug_message("Tile collision at (" + string(check_x) + "," + string(check_y) + ") - tile_data: " + string(tile_data));
+            return false;
+        }
+    } else {
+        // Debug: uncomment the next line to troubleshoot layer issues
+        // show_debug_message("Warning: Tiles_Col layer not found!");
+    }
+    
+    return true;  // Position is clear for movement
+}
+

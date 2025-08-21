@@ -85,7 +85,7 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim && mouse_check_button_pre
 if (state == TURNSTATE.active && moves > 0 && !is_anim) {
 
     // Right
-    if (keyboard_check_pressed(ord("D")) && place_free(x + 16, y)) {
+    if (keyboard_check_pressed(ord("D")) && can_move_to(x + 16, y)) {
         dir = Dir.RIGHT;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -95,7 +95,7 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
     }
 
     // Left
-    else if (keyboard_check_pressed(ord("A")) && place_free(x - 16, y)) {
+    else if (keyboard_check_pressed(ord("A")) && can_move_to(x - 16, y)) {
         dir = Dir.LEFT;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -105,7 +105,7 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
     }
 
     // Up
-    else if (keyboard_check_pressed(ord("W")) && place_free(x, y - 16)) {
+    else if (keyboard_check_pressed(ord("W")) && can_move_to(x, y - 16)) {
         dir = Dir.UP;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -115,7 +115,7 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
     }
 
     // Down
-    else if (keyboard_check_pressed(ord("S")) && place_free(x, y + 16)) {
+    else if (keyboard_check_pressed(ord("S")) && can_move_to(x, y + 16)) {
         dir = Dir.DOWN;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];

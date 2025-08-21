@@ -36,7 +36,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":null,
+  "spriteId":{
+    "name":"chr1_attack_sword_down",
+    "path":"sprites/chr1_attack_sword_down/chr1_attack_sword_down.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

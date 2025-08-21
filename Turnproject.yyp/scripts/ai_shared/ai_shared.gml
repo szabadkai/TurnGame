@@ -102,10 +102,12 @@ function get_position_in_direction(start_x, start_y, direction, distance = 16) {
 
 function can_move_to_position(mover, target_x, target_y) {
     // Check if a character can move to a specific position
+    // Use the unified collision system from character_base
     
-    // Check for solid obstacles (walls, etc.)
-    if (!place_free(target_x, target_y)) {
-        return false;
+    with (mover) {
+        if (!can_move_to(target_x, target_y)) {
+            return false;
+        }
     }
     
     // Check for other characters at that exact position
@@ -117,30 +119,7 @@ function can_move_to_position(mover, target_x, target_y) {
         }
     }
     
-    if (collision) {
-        return false;
-    }
-    
-    // Additional check: make sure no character is already at the target position
-    // This catches cases where characters might be moving simultaneously
-    var occupied = false;
-    with (obj_Player) {
-        if (x == target_x && y == target_y) {
-            occupied = true;
-            break;
-        }
-    }
-    
-    if (!occupied) {
-        with (obj_Enemy) {
-            if (id != mover.id && x == target_x && y == target_y) {
-                occupied = true;
-                break;
-            }
-        }
-    }
-    
-    return !occupied;
+    return !collision;
 }
 
 function find_valid_move_direction(mover, target_x, target_y) {

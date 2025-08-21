@@ -39,8 +39,8 @@
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"chr3_attack_sword_left",
-    "path":"sprites/chr3_attack_sword_left/chr3_attack_sword_left.yy",
+    "name":"chr2_idle_pistol_left",
+    "path":"sprites/chr2_idle_pistol_left/chr2_idle_pistol_left.yy",
   },
   "spriteMaskId":null,
   "visible":true,

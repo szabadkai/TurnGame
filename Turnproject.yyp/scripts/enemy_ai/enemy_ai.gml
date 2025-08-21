@@ -85,11 +85,14 @@ function can_move_in_direction(enemy, direction) {
 }
 
 function place_free_position(check_x, check_y, checker) {
-    // Check if position is free of obstacles and other characters
-    // This is a simplified version - you may need to adjust based on your collision system
+    // Check if position is free using character base collision system
+    // This now includes both object collision and tile collision
     
-    // Check for solid objects at this position
-    if (!place_free(check_x, check_y)) return false;
+    with (checker) {
+        if (!can_move_to(check_x, check_y)) {
+            return false;
+        }
+    }
     
     // Check for other characters (players and enemies) at this position
     var collision = false;
