@@ -177,8 +177,9 @@ function handle_main_menu_selection() {
             break;
         case MAINMENU_OPTION.SCENE_GALLERY:
             play_menu_select_sound();
-            // Launch scene selector directly instead of menu
+            // Launch scene selector directly by going to dialog room and starting selection
             start_scene_selection();
+            room_goto(Room_Dialog);
             break;
         case MAINMENU_OPTION.QUIT:
             play_menu_select_sound();
@@ -251,13 +252,16 @@ function check_save_slots() {
 
 // Load menu background image
 function load_menu_background_image() {
-    // Try different paths for the promo image (020.png now included in datafiles)
+    // Get the current promo image filename
+    var promo_filename = promo_images[current_promo_index] + ".png";
+    
+    // Try different paths for the selected promo image
     var image_paths = [
-        "020.png",                                    // Included file by filename (primary)
-        "datafiles/020.png",                         // Full datafiles path
-        working_directory + "020.png",               // Working directory
-        "docs/promo/020.png",                        // Original location (fallback)
-        working_directory + "docs/promo/020.png"     // Working directory + original path
+        promo_filename,                              // Included file by filename (primary)
+        "datafiles/" + promo_filename,               // Full datafiles path
+        working_directory + promo_filename,          // Working directory
+        "docs/promo/" + promo_filename,              // Original location (fallback)
+        working_directory + "docs/promo/" + promo_filename // Working directory + original path
     ];
     
     for (var i = 0; i < array_length(image_paths); i++) {
@@ -283,7 +287,7 @@ function load_menu_background_image() {
         }
     }
     
-    show_debug_message("No menu background image could be loaded");
+    show_debug_message("No menu background image could be loaded for: " + promo_filename);
     background_image = noone;
     return false;
 }

@@ -37,14 +37,10 @@ if (show_promo_background && background_image != noone && sprite_exists(backgrou
     
     draw_sprite_ext(background_image, 0, draw_x, draw_y, scale, scale, 0, c_white, alpha_mod);
     
-    // Add fade-to-black overlay as we approach the transition
-    var fade_progress = background_fade_timer / background_fade_duration;
-    if (fade_progress > 0.7) {
-        var overlay_alpha = (fade_progress - 0.7) / 0.3; // Start fading at 70%
-        draw_set_alpha(overlay_alpha * 0.8 * alpha_mod);
-        draw_set_color(c_black);
-        draw_rectangle(0, 0, screen_w, screen_h, false);
-    }
+    // Add subtle dark overlay for better text readability without fully fading out the image
+    draw_set_alpha(0.3 * alpha_mod); // Light overlay for text readability
+    draw_set_color(c_black);
+    draw_rectangle(0, 0, screen_w, screen_h, false);
 } else {
     // Draw semi-transparent black backdrop
     draw_set_alpha(0.8 * alpha_mod);

@@ -5,18 +5,23 @@ if (menu_appear_timer < menu_appear_duration) {
     menu_appear_timer++;
 }
 
-// Handle background fade transition
+// Handle background fade transition (much longer duration now)
 if (show_promo_background && background_fade_timer < background_fade_duration) {
     background_fade_timer++;
     
-    // After fade duration, switch to semi-transparent backdrop
+    // After a very long duration, optionally switch to semi-transparent backdrop
+    // But now we keep the promo image for 30 seconds instead of 3
     if (background_fade_timer >= background_fade_duration) {
+        // Option 1: Keep promo background forever (comment out the fade)
+        // Option 2: Eventually fade to semi-transparent (uncomment lines below)
+        /*
         show_promo_background = false;
         // Clean up background image
         if (background_image != noone && sprite_exists(background_image)) {
             sprite_delete(background_image);
             background_image = noone;
         }
+        */
     }
 }
 

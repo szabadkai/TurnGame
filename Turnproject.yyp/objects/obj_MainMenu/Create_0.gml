@@ -1,5 +1,8 @@
 // Main Menu Manager - Create Event
 
+// CRITICAL: Initialize enums FIRST before using them
+menu_enums();
+
 // Menu state variables
 menu_state = MENUSTATE.MAIN;
 previous_menu_state = MENUSTATE.MAIN;
@@ -114,10 +117,18 @@ menu_appear_duration = 30;
 // Background image variables
 background_image = noone;
 background_fade_timer = 0;
-background_fade_duration = 180; // 3 seconds at 60fps
+background_fade_duration = 1800; // 30 seconds at 60fps (much longer)
 show_promo_background = true;
+current_promo_index = 0;
 
-// Load promo background image
+// Promo image cycle arrays (013-019 and 026-032)
+promo_images = ["013", "014", "015", "016", "017", "018", "019", "026", "027", "028", "029", "030", "031", "032"];
+
+// Select random promo image for this session
+randomize(); // Ensure true randomness
+current_promo_index = irandom(array_length(promo_images) - 1);
+
+// Load current promo background image
 load_menu_background_image();
 
 // Initialize current options
