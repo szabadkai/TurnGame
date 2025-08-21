@@ -45,25 +45,31 @@ function update_current_options() {
 
 // Get menu title based on current state
 function get_menu_title() {
-    switch (menu_state) {
-        case MENUSTATE.MAIN:
-            return "TURN PROJECT";
-        case MENUSTATE.SETTINGS:
-            return "SETTINGS";
-        case MENUSTATE.SETTINGS_AUDIO:
-            return "AUDIO SETTINGS";
-        case MENUSTATE.SETTINGS_GRAPHICS:
-            return "GRAPHICS SETTINGS";
-        case MENUSTATE.SETTINGS_CONTROLS:
-            return "CONTROLS";
-        case MENUSTATE.SETTINGS_GAMEPLAY:
-            return "GAMEPLAY";
-        case MENUSTATE.SAVE_LOAD:
-            return "LOAD GAME";
-        case MENUSTATE.QUIT_CONFIRM:
-            return "QUIT GAME?";
-        default:
-            return "MENU";
+    // Use base menu function if it exists, otherwise use original logic
+    if (variable_instance_exists(id, "menu_context")) {
+        return get_menu_title_base();
+    } else {
+        // Original main menu logic
+        switch (menu_state) {
+            case MENUSTATE.MAIN:
+                return "TURN PROJECT";
+            case MENUSTATE.SETTINGS:
+                return "SETTINGS";
+            case MENUSTATE.SETTINGS_AUDIO:
+                return "AUDIO SETTINGS";
+            case MENUSTATE.SETTINGS_GRAPHICS:
+                return "GRAPHICS SETTINGS";
+            case MENUSTATE.SETTINGS_CONTROLS:
+                return "CONTROLS";
+            case MENUSTATE.SETTINGS_GAMEPLAY:
+                return "GAMEPLAY";
+            case MENUSTATE.SAVE_LOAD:
+                return "LOAD GAME";
+            case MENUSTATE.QUIT_CONFIRM:
+                return "QUIT GAME?";
+            default:
+                return "MENU";
+        }
     }
 }
 
@@ -156,8 +162,8 @@ function get_instruction_text() {
     }
 }
 
-// Handle main menu selection
-function handle_main_menu_selection() {
+// Handle main menu selection (original)
+function handle_main_menu_selection_original() {
     switch (selected_option) {
         case MAINMENU_OPTION.NEW_GAME:
             play_menu_select_sound();

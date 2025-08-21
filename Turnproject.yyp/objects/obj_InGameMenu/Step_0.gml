@@ -1,24 +1,4 @@
-// Main Menu Manager - Step Event
-
-// Handle background fade transition (much longer duration now)
-if (show_promo_background && background_fade_timer < background_fade_duration) {
-    background_fade_timer++;
-    
-    // After a very long duration, optionally switch to semi-transparent backdrop
-    // But now we keep the promo image for 30 seconds instead of 3
-    if (background_fade_timer >= background_fade_duration) {
-        // Option 1: Keep promo background forever (comment out the fade)
-        // Option 2: Eventually fade to semi-transparent (uncomment lines below)
-        /*
-        show_promo_background = false;
-        // Clean up background image
-        if (background_image != noone && sprite_exists(background_image)) {
-            sprite_delete(background_image);
-            background_image = noone;
-        }
-        */
-    }
-}
+// In-Game Menu Manager - Step Event
 
 // Use base menu step handling
 if (handle_base_menu_step()) {
@@ -32,7 +12,10 @@ var inputs = handle_base_menu_navigation();
 switch (menu_state) {
     case MENUSTATE.MAIN:
         if (inputs.select) {
-            handle_main_menu_selection_original();
+            handle_in_game_menu_selection();
+        } else if (inputs.back) {
+            // ESC in main in-game menu = close menu and resume
+            close_menu();
         }
         break;
         
@@ -67,8 +50,10 @@ switch (menu_state) {
     case MENUSTATE.QUIT_CONFIRM:
         if (inputs.select) {
             if (selected_option == 0) {
-                game_end();
+                // Yes - Return to main menu
+                room_goto(Room_MainMenu);
             } else {
+                // No - Back to in-game menu
                 change_menu_state(MENUSTATE.MAIN);
             }
         } else if (inputs.back) {

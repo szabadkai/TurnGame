@@ -3,16 +3,8 @@
 // CRITICAL: Initialize enums FIRST before using them
 menu_enums();
 
-// Menu state variables
-menu_state = MENUSTATE.MAIN;
-previous_menu_state = MENUSTATE.MAIN;
-selected_option = 0;
-transition_alpha = 0;
-transition_speed = 0.05;
-transition_direction = 1; // 1 = fade in, -1 = fade out
-
-// Menu option arrays
-main_menu_options = [
+// Initialize base menu system with main menu context
+var main_menu_option_array = [
     "New Game",
     "Continue", 
     "Settings",
@@ -20,59 +12,7 @@ main_menu_options = [
     "Quit"
 ];
 
-settings_options = [
-    "Audio",
-    "Graphics", 
-    "Controls",
-    "Gameplay",
-    "Back"
-];
-
-audio_options = [
-    "Master Volume",
-    "SFX Volume",
-    "Music Volume",
-    "Back"
-];
-
-graphics_options = [
-    "Fullscreen",
-    "Zoom Level",
-    "Back"
-];
-
-controls_options = [
-    "Move Up",
-    "Move Down", 
-    "Move Left",
-    "Move Right",
-    "Attack",
-    "Player Details",
-    "Back"
-];
-
-gameplay_options = [
-    "Combat Speed",
-    "Auto Save",
-    "Difficulty",
-    "Back"
-];
-
-// Current menu options reference
-current_options = main_menu_options;
-
-// Menu positioning
-menu_x = room_width / 2;
-menu_y = room_height / 2;
-option_spacing = 16;
-title_y_offset = -60;
-
-// Font and colors
-menu_font = Font1;
-title_color = c_white;
-selected_color = c_yellow;
-normal_color = c_ltgray;
-disabled_color = c_gray;
+init_base_menu(MENU_CONTEXT.MAIN_MENU, main_menu_option_array);
 
 // Settings values initialization
 if (!variable_global_exists("game_settings")) {
@@ -96,23 +36,12 @@ if (!variable_global_exists("game_settings")) {
     };
 }
 
-// Scene gallery variables
+// Scene gallery variables (main menu specific)
 scene_list = [];
 selected_scene_index = 0;
 
-// Save system variables
-save_slots = [];
-selected_save_slot = 0;
-
-// Initialize save slot checking
-check_save_slots();
-
 // Load settings from file
 load_settings();
-
-// Menu animation variables
-menu_appear_timer = 0;
-menu_appear_duration = 30;
 
 // Background image variables
 background_image = noone;
@@ -131,7 +60,7 @@ current_promo_index = irandom(array_length(promo_images) - 1);
 // Load current promo background image
 load_menu_background_image();
 
-// Initialize current options
+// Initialize current options using base menu system
 update_current_options();
 
 show_debug_message("Main Menu Manager initialized");
