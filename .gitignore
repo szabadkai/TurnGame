@@ -1,0 +1,126 @@
+# GameMaker Studio 2 .gitignore
+
+# GameMaker Studio 2 temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.autosave
+
+# GameMaker Studio 2 build outputs
+/builds/
+/cache/
+/logs/
+/output/
+/temp/
+
+# GameMaker Studio 2 user-specific files
+*.yyp.bak
+*.yy.bak
+options/main/inherited/options_main.inherited.yy
+options/*/inherited/
+config.json
+
+# GameMaker Studio 2 runtime and IDE files
+*.yydebug
+*.yymp
+*.yymps
+datafiles_yy/
+export_presets.cfg
+
+# GameMaker Studio 2 compilation cache
+.import/
+.build/
+
+# Project history (Claude Code specific)
+.history/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.AppleDouble
+.LSOverride
+Icon
+.DocumentRevisions-V100
+.fseventsd
+.Temporal
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+*.db
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary folders
+tmp/
+temp/
+logs/
+
+# Archive files (optional - uncomment if you don't want to track archives)
+# *.7z
+# *.dmg
+# *.gz
+# *.iso
+# *.jar
+# *.rar
+# *.tar
+# *.zip
+
+# Save files and user data (uncomment if you don't want to track save files)
+# *.sav
+# *.save
+# save_slot_*.sav
+
+# Compiled sprites (if auto-generated)
+# sprites/compiled/
+
+# Audio cache
+# audio/cache/
+
+# Image cache
+# images/cache/
