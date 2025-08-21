@@ -8,13 +8,20 @@ if (handle_base_menu_step()) {
 // Use base menu navigation
 var inputs = handle_base_menu_navigation();
 
+// If we're in main menu and ESC was pressed, mark it as consumed to prevent UIManager from processing it
+if (menu_state == MENUSTATE.MAIN && inputs.back) {
+    // Consume the ESC key by clearing the keyboard buffer for this key
+    keyboard_clear(vk_escape);
+}
+
 // State-specific input handling
 switch (menu_state) {
     case MENUSTATE.MAIN:
         if (inputs.select) {
             handle_in_game_menu_selection();
         } else if (inputs.back) {
-            // ESC in main in-game menu = close menu and resume
+            // ESC in main in-game menu = Resume Game
+            play_menu_select_sound();
             close_menu();
         }
         break;

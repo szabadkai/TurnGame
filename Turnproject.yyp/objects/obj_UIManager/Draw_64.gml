@@ -4,15 +4,13 @@ if (keyboard_check_pressed(vk_escape)) {
     if (ui_state != "none") {
         close_all_ui();
     } else {
-        // Priority 2: If no UI is showing, toggle in-game menu
+        // Priority 2: If no UI is showing, create in-game menu
         var existing_menu = instance_find(obj_InGameMenu, 0);
         if (existing_menu == noone) {
             // No in-game menu exists, create one
             instance_create_layer(0, 0, "Instances", obj_InGameMenu);
-        } else {
-            // In-game menu exists, close it
-            existing_menu.close_menu();
         }
+        // Note: If menu exists, it handles ESC itself via keyboard_clear()
     }
 }
 
