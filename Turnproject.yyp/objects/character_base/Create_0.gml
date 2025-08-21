@@ -68,6 +68,7 @@ sprite_color = c_white;  // Default sprite color (can be overridden by child obj
 function can_move_to(check_x, check_y) {
     // Check object collision first (walls, other characters, etc.)
     if (!place_free(check_x, check_y)) {
+        show_debug_message("COLLISION: place_free() blocked at (" + string(check_x) + "," + string(check_y) + ")");
         return false;
     }
     
@@ -75,16 +76,16 @@ function can_move_to(check_x, check_y) {
     var tile_layer = layer_tilemap_get_id("Tiles_Col");
     if (tile_layer != -1) {
         var tile_data = tilemap_get_at_pixel(tile_layer, check_x, check_y);
-        if (tile_data != 0) {  // 0 = empty, anything else = collision
-            // Debug: uncomment the next line to see tile collision detection
-            // show_debug_message("Tile collision at (" + string(check_x) + "," + string(check_y) + ") - tile_data: " + string(tile_data));
+        show_debug_message("TILE CHECK at (" + string(check_x) + "," + string(check_y) + "): tile_data = " + string(tile_data));
+        if (tile_data > 0 && tile_data != -2147483648) {  // Positive values = collision tiles
+            show_debug_message("COLLISION: Tile blocked with data " + string(tile_data));
             return false;
         }
     } else {
-        // Debug: uncomment the next line to troubleshoot layer issues
-        // show_debug_message("Warning: Tiles_Col layer not found!");
+        show_debug_message("WARNING: Tiles_Col layer not found!");
     }
     
+    show_debug_message("CLEAR: Position (" + string(check_x) + "," + string(check_y) + ") is free");
     return true;  // Position is clear for movement
 }
 

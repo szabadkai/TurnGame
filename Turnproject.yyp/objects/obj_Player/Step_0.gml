@@ -292,3 +292,26 @@ if (state == TURNSTATE.active && moves == 0) {
 	alarm[0] = 1;
 }
 
+// === DEBUG: Test collision at current position ===
+if (keyboard_check_pressed(ord("T"))) {
+    show_debug_message("=== COLLISION DEBUG TEST ===");
+    show_debug_message("Player at: (" + string(x) + "," + string(y) + ")");
+    
+    // Test current position and adjacent positions
+    var test_positions = [
+        {name: "Current", test_x: x, test_y: y},
+        {name: "Right", test_x: x + 16, test_y: y},
+        {name: "Left", test_x: x - 16, test_y: y},
+        {name: "Up", test_x: x, test_y: y - 16},
+        {name: "Down", test_x: x, test_y: y + 16}
+    ];
+    
+    for (var i = 0; i < array_length(test_positions); i++) {
+        var pos = test_positions[i];
+        show_debug_message("--- Testing " + pos.name + " position ---");
+        var result = can_move_to(pos.test_x, pos.test_y);
+        show_debug_message("Result for " + pos.name + ": " + (result ? "CLEAR" : "BLOCKED"));
+    }
+}
+
+

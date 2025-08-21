@@ -261,7 +261,7 @@ function find_enemies_in_line(attacker, direction, max_range) {
         case Dir.DOWN:  dx = 0; dy = 16; break;
     }
     
-    // Scan along the direction
+    // Scan along the direction in 16-pixel steps
     var current_x = attacker.x;
     var current_y = attacker.y;
     
@@ -269,14 +269,14 @@ function find_enemies_in_line(attacker, direction, max_range) {
         current_x += dx;
         current_y += dy;
         
-        // Check for walls/obstacles (assuming solid objects block shots)
-        // Use character base collision system to check for walls and tiles
-        with (attacker) {
-            if (!can_move_to(current_x, current_y)) {
-                other.i = max_range + 1; // Break the loop
+        // Check for tile collision
+        var tile_layer = layer_tilemap_get_id("Tiles_Col");
+        if (tile_layer != -1) {
+            var tile_data = tilemap_get_at_pixel(tile_layer, current_x, current_y);
+            if (tile_data > 0 && tile_data != -2147483648) {
+                break; // Hit wall, stop scanning
             }
         }
-        if (i > max_range) break; // Hit wall or tile collision, stop scanning
         
         // Check for enemy at this position
         var enemy = instance_position(current_x, current_y, obj_Enemy);
@@ -289,21 +289,33 @@ function find_enemies_in_line(attacker, direction, max_range) {
 }
 
 function is_enemy_in_pistol_range(player, enemy) {
-    // Calculate distance in grid tiles
-    var dx = abs(enemy.x - player.x) / 16; // Convert pixels to tiles
-    var dy = abs(enemy.y - player.y) / 16;
-    
-    // Use Manhattan distance (grid-based movement)
-    var distance = max(dx, dy); // Chebyshev distance for 8-directional range
-    
-    // Check if within pistol range (4 tiles)
-    if (distance > 4) {
+    // Simple distance check - 4 tiles = 64 pixels
+    var distance = point_distance(player.x, player.y, enemy.x, enemy.y);
+    if (distance > 64) {
         return false;
     }
     
-    // For now, skip line of sight check as it's causing issues
-    // TODO: Implement proper wall-only line of sight later
-    return true;
+    // Check for tile collision along the line
+    var tile_layer = layer_tilemap_get_id("Tiles_Col");
+    if (tile_layer != -1) {
+        // Sample the line at regular intervals to check for tile collision
+        var steps = ceil(distance / 8); // Check every 8 pixels for good coverage
+        var dx = (enemy.x - player.x) / steps;
+        var dy = (enemy.y - player.y) / steps;
+        
+        for (var i = 1; i < steps; i++) { // Skip start and end points
+            var check_x = player.x + (dx * i);
+            var check_y = player.y + (dy * i);
+            var tile_data = tilemap_get_at_pixel(tile_layer, check_x, check_y);
+            
+            if (tile_data > 0 && tile_data != -2147483648) {
+                return false; // Tile blocks line of sight
+            }
+        }
+    }
+    
+    return true; // Clear line of sight
 }
+
 
 
