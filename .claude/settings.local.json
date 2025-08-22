@@ -7,7 +7,9 @@
       "Bash(for i in {013..019} {026..032})",
       "Bash(do cp \"/Users/lszabadkai/Downloads/Turnproject/Turnproject.yyp.converted/docs/promo/$i.png\" \"/Users/lszabadkai/Downloads/Turnproject/Turnproject.yyp.converted/Turnproject.yyp/datafiles/\")",
       "Bash(echo:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "WebSearch",
+      "WebFetch(domain:medium.com)"
     ],
     "deny": [],
     "ask": []

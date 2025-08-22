@@ -30,4 +30,6 @@ dialog_debug = true;
 preview_scene_id = "";
 preview_sprite = noone;
 
+// Pending scene handling is done in Room Start event (Other_4)
+
 show_debug_message("DialogManager initialized");

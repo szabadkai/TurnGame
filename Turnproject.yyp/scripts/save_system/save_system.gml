@@ -49,6 +49,11 @@ function save_game_to_slot(slot_index) {
         save_data.loop_count = global.loop_count;
     }
     
+    // Collect star map state if it exists
+    if (variable_global_exists("star_map_state")) {
+        save_data.star_map_state = get_star_map_save_data();
+    }
+    
     // Save enemy states (for persistent encounters)
     save_data.enemies = [];
     var enemy_count = instance_number(obj_Enemy);
@@ -170,6 +175,11 @@ function apply_loaded_save_data() {
     
     if (variable_struct_exists(save_data, "loop_count")) {
         global.loop_count = save_data.loop_count;
+    }
+    
+    // Restore star map state
+    if (variable_struct_exists(save_data, "star_map_state")) {
+        apply_star_map_save_data(save_data.star_map_state);
     }
     
     // Restore enemies (remove current enemies and create saved ones)

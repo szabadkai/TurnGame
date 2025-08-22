@@ -7,6 +7,7 @@ menu_enums();
 var main_menu_option_array = [
     "New Game",
     "Continue", 
+    "Star Map",
     "Settings",
     "Scene Gallery",
     "Quit"

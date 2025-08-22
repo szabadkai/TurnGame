@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"starmap_system",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"starmap_system",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

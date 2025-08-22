@@ -177,6 +177,20 @@ function handle_main_menu_selection_original() {
                 play_menu_error_sound();
             }
             break;
+        case MAINMENU_OPTION.STAR_MAP:
+            play_menu_select_sound();
+            // Initialize star map system if not already done
+            if (!variable_global_exists("star_map_state")) {
+                if (script_exists(init_star_map)) {
+                    init_star_map();
+                } else {
+                    show_debug_message("Star map system not available");
+                    play_menu_error_sound();
+                    break;
+                }
+            }
+            room_goto(Room_StarMap);
+            break;
         case MAINMENU_OPTION.SETTINGS:
             play_menu_select_sound();
             change_menu_state(MENUSTATE.SETTINGS);

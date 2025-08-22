@@ -615,10 +615,26 @@ function find_dialog_node(node_id) {
 
 // Navigate to next dialog node
 function goto_dialog_node(node_id) {
+    // Handle special case where node_id is "end_scene" (generic) - this node doesn't exist
+    if (node_id == "end_scene") {
+        show_debug_message("Generic end_scene node requested - will transition to combat");
+        global.transition_to_combat_after_dialog = true;
+        end_dialog_scene();
+        return true;
+    }
+    
     var next_node = find_dialog_node(node_id);
     if (next_node != undefined) {
         global.current_dialog_node = next_node;
         global.dialog_state = 1; // DialogState.ACTIVE
+        
+        // Check if this is an end_scene node - these should trigger combat
+        if (string_pos("end_scene", node_id) == 1) {
+            show_debug_message("End scene node reached: " + node_id + " - will transition to combat after display");
+            // Set flag to transition to combat when dialog ends
+            global.transition_to_combat_after_dialog = true;
+        }
+        
         return true;
     } else {
         show_debug_message("Could not find dialog node: " + node_id);
@@ -669,7 +685,13 @@ function select_dialog_choice(choice) {
     // Navigate to next node
     if (variable_struct_exists(choice, "next")) {
         if (choice.next == "end_scene") {
+            // Generic end_scene - set combat transition flag and end dialog
+            show_debug_message("Generic end_scene choice - will transition to combat");
+            global.transition_to_combat_after_dialog = true;
             end_dialog_scene();
+        } else if (string_pos("end_scene", choice.next) == 1) {
+            // Specific end_scene node - this will trigger combat transition
+            goto_dialog_node(choice.next);
         } else {
             goto_dialog_node(choice.next);
         }
@@ -681,6 +703,19 @@ function select_dialog_choice(choice) {
 
 // End current dialog scene
 function end_dialog_scene() {
+    var scene_id = "";
+    var scene_effects = {};
+    
+    // Store scene information before cleanup
+    if (global.current_dialog_scene != undefined) {
+        scene_id = global.current_dialog_scene.id;
+    }
+    
+    // Collect all effects from the completed scene
+    if (variable_global_exists("dialog_flags")) {
+        scene_effects = global.dialog_flags;
+    }
+    
     global.dialog_state = 0; // DialogState.INACTIVE
     global.current_dialog_scene = undefined;
     global.current_dialog_node = undefined;
@@ -691,14 +726,36 @@ function end_dialog_scene() {
         global.current_scene_image = noone;
     }
     
-    show_debug_message("Dialog scene ended");
+    show_debug_message("Dialog scene ended: " + scene_id);
+    
+    // Process star map progression based on completed scene
+    if (scene_id != "") {
+        handle_dialog_scene_completion(scene_id, scene_effects);
+    }
+
+    // Check if we should transition to combat (for end_scene nodes)
+    if (variable_global_exists("transition_to_combat_after_dialog") && global.transition_to_combat_after_dialog) {
+        show_debug_message("End scene node completed - transitioning to combat (Room1)");
+        global.transition_to_combat_after_dialog = false; // Reset flag
+        global.return_to_star_map_after_combat = true; // Return to star map after combat
+        room_goto(Room1);
+        return;
+    }
 
     // Optional: transition to a target room if configured
     if (global.dialog_exit_room != -1) {
+        if (global.dialog_exit_room == Room_StarMap) {
+            // When coming from star map, always go to combat first
+            show_debug_message("Dialog completed from star map - transitioning to combat (Room1)");
+            // Set a flag to indicate we should return to star map after combat
+            global.return_to_star_map_after_combat = true;
             room_goto(Room1);
-            return;
+        } else {
+            room_goto(Room1);
         }
+        return;
     }
+}
 
 
 // Get scene metadata
@@ -940,6 +997,9 @@ function init_dialog_system() {
     if (!variable_global_exists("loop_count")) {
         global.loop_count = 0;
     }
+    if (!variable_global_exists("transition_to_combat_after_dialog")) {
+        global.transition_to_combat_after_dialog = false;
+    }
     
     // Check what files are available
     show_debug_message("Dialog system initialized");
@@ -984,4 +1044,116 @@ function set_dialog_exit_room(room_ref) {
         global.dialog_exit_room = room_ref;
     }
     show_debug_message("Dialog exit room set to: " + string(room_ref));
+}
+
+// Handle dialog scene completion for star map progression
+function handle_dialog_scene_completion(scene_id, scene_effects) {
+    show_debug_message("Processing scene completion: " + scene_id);
+    
+    // Mark the current system as visited
+    var current_system = get_current_star_system();
+    mark_star_system_visited(current_system);
+    
+    // Process star map progression based on scene and effects
+    process_star_map_progression(scene_effects);
+    
+    // Handle specific scene completion unlocks
+    switch(scene_id) {
+        case "scene_001_prometheus_discovery":
+            // Prometheus discovery unlocks threshold
+            unlock_star_system("system_002");
+            // Set progression flag
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.prometheus_explored = true;
+            break;
+            
+        case "scene_002_keth_mori_threshold":
+            // First contact with Keth'mori
+            unlock_star_system("system_003");
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.kethmori_contact = true;
+            break;
+            
+        case "scene_003_pirate_ambush":
+            // Pirate encounter
+            unlock_star_system("system_004");
+            unlock_star_system("system_009");
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.pirate_encounter = true;
+            break;
+            
+        case "scene_004_alien_glyphs":
+            // Ancient ruins unlock further systems
+            unlock_star_system("system_005");
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.ancient_ruins_explored = true;
+            break;
+            
+        case "scene_005_watchers_blockade":
+            // Watcher station access
+            unlock_star_system("system_006");
+            unlock_star_system("system_007");
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.watcher_station_accessed = true;
+            break;
+            
+        case "scene_006_loop_discovery":
+            // Loop discovery opens awareness path
+            unlock_star_system("system_026");
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.loop_nexus_accessed = true;
+            break;
+            
+        case "scene_007_crystal_guardian":
+            // Crystal fields unlock Earth Command path
+            unlock_star_system("system_008");
+            break;
+            
+        case "scene_027_kethmori_sanctuary":
+            // Keth'mori trust opens special paths
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.kethmori_trust_gained = true;
+            // Update faction control
+            set_system_faction_control("system_027", 2);
+            break;
+            
+        case "scene_029_swarm_queen_gambit":
+            // Swarm encounter
+            if (!variable_global_exists("dialog_flags")) global.dialog_flags = {};
+            global.dialog_flags.swarm_intelligence_located = true;
+            // Update faction control
+            set_system_faction_control("system_029", 3);
+            break;
+    }
+    
+    // Check for final system unlock
+    check_final_system_unlock();
+    
+    show_debug_message("Scene completion processing finished");
+}
+
+// Check if final system should be unlocked
+function check_final_system_unlock() {
+    if (!variable_global_exists("dialog_flags")) return;
+    
+    var flags = global.dialog_flags;
+    var required_flags = [
+        "prometheus_explored",
+        "kethmori_contact", 
+        "ancient_ruins_explored",
+        "loop_nexus_accessed"
+    ];
+    
+    var flags_met = 0;
+    for (var i = 0; i < array_length(required_flags); i++) {
+        if (variable_struct_exists(flags, required_flags[i]) && flags[$ required_flags[i]]) {
+            flags_met++;
+        }
+    }
+    
+    // Unlock final system if enough progress made
+    if (flags_met >= 3) {
+        unlock_star_system("system_010");
+        show_debug_message("Final gateway unlocked!");
+    }
 }

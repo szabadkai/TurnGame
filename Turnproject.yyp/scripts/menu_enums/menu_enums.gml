@@ -16,6 +16,7 @@ enum MENUSTATE {
 enum MAINMENU_OPTION {
     NEW_GAME,
     CONTINUE,
+    STAR_MAP,
     SETTINGS,
     SCENE_GALLERY,
     QUIT,
