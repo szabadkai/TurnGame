@@ -21,9 +21,9 @@
                     "text": "The flagship? After twenty years? All crew, battle stations.",
                     "next": "chen_002a",
                     "effects": {
-                        "crew_alert": "high",
-                        "torres_trust": -1,
-                        "chen_fear": 1
+                        "set": {"crew_alert": "high"},
+                        "dec": {"torres_trust": 1},
+                        "inc": {"chen_fear": 1}
                     }
                 },
                 {
@@ -31,8 +31,8 @@
                     "text": "That's impossible. Double-check those readings.",
                     "next": "chen_002b",
                     "effects": {
-                        "chen_trust": -1,
-                        "chen_fear": 1
+                        "dec": {"chen_trust": 1},
+                        "inc": {"chen_fear": 1}
                     }
                 },
                 {
@@ -40,8 +40,8 @@
                     "text": "Finally. Set course immediately, but approach with caution.",
                     "next": "chen_002a",
                     "effects": {
-                        "crew_morale": 1,
-                        "chen_fear": 0
+                        "inc": {"crew_morale": 1},
+                        "set": {"chen_fear": 0}
                     }
                 },
                 {
@@ -52,9 +52,11 @@
                     },
                     "next": "chen_002c",
                     "effects": {
-                        "void_awareness": 1,
-                        "crew_fear": 1,
-                        "chen_fear": 2,
+                        "inc": {
+                            "void_awareness": 1,
+                            "crew_fear": 1,
+                            "chen_fear": 2
+                        },
                         "effect_chance": {
                             "probability": 0.25,
                             "effect": "phantom_attention"
@@ -66,7 +68,7 @@
                     "text": "[Remain Silent]",
                     "next": "silence_reveal_001",
                     "effects": {
-                        "information_seeking": 1
+                        "inc": {"information_seeking": 1}
                     }
                 }
             ]
@@ -105,8 +107,10 @@
                     "text": "[Interrupt] Enough theory. Survivors first—now.",
                     "next": "chen_scan_001",
                     "effects": {
-                        "contradictions": 1,
-                        "chen_fear": 1
+                        "inc": {
+                            "contradictions": 1,
+                            "chen_fear": 1
+                        }
                     }
                 },
                 {
@@ -114,7 +118,7 @@
                     "text": "[Remain Silent] (Let Chen keep talking.)",
                     "next": "chen_tech_001_more",
                     "effects": {
-                        "intel": 1
+                        "inc": {"intel": 1}
                     }
                 },
                 {
@@ -126,11 +130,14 @@
                     },
                     "next": "maya_comms_001",
                     "effects": {
-                        "intel": 2,
-                        "void_knowledge": 1,
+                        "inc": {
+                            "intel": 2,
+                            "void_knowledge": 1
+                        },
                         "scaling_effect": {
                             "counter": "analysis_calls",
-                            "effect": "insight_stacking"
+                            "effect": "insight_stacking",
+                            "scale_factor": 1
                         }
                     }
                 },
@@ -143,8 +150,10 @@
                     },
                     "next": "torres_pre_001",
                     "effects": {
-                        "lie_stress": 1,
-                        "kept_secrets": 1,
+                        "inc": {
+                            "lie_stress": 1,
+                            "kept_secrets": 1
+                        },
                         "effect_delayed": {
                             "turns": 5,
                             "type": "crew_betrayal",
@@ -160,8 +169,8 @@
                     },
                     "next": "maya_comms_001",
                     "effects": {
-                        "meta_aware": true,
-                        "intel": 2
+                        "set": {"meta_aware": true},
+                        "inc": {"intel": 2}
                     }
                 }
             ]
@@ -176,8 +185,8 @@
                     "text": "Low-power ping. Keep us cold.",
                     "next": "maya_comms_001",
                     "effects": {
-                        "intel": 1,
-                        "crew_alert": "medium"
+                        "inc": {"intel": 1},
+                        "set": {"crew_alert": "medium"}
                     }
                 },
                 {
@@ -185,7 +194,7 @@
                     "text": "Run a biosign sweep for cryo leakage.",
                     "next": "chen_scan_001",
                     "effects": {
-                        "intel": 1
+                        "inc": {"intel": 1}
                     }
                 },
                 {
@@ -193,8 +202,10 @@
                     "text": "[Interrupt] We’re done waiting. Line up a docking approach.",
                     "next": "board_order_001",
                     "effects": {
-                        "torres_suspicion": 1,
-                        "chen_fear": 1
+                        "inc": {
+                            "torres_suspicion": 1,
+                            "chen_fear": 1
+                        }
                     }
                 }
             ]
@@ -209,7 +220,7 @@
                     "text": "[Remain Silent]",
                     "next": "crew_interject_maya",
                     "effects": {
-                        "intel": 1
+                        "inc": {"intel": 1}
                     }
                 },
                 {
@@ -224,7 +235,7 @@
                     },
                     "next": "press_further_001",
                     "effects": {
-                        "intel": 2
+                        "inc": {"intel": 2}
                     }
                 },
                 {
@@ -250,7 +261,7 @@
                     },
                     "next": "interrupt_outcome_001",
                     "effects": {
-                        "watchers_attention": 1
+                        "inc": {"watchers_attention": 1}
                     }
                 }
             ]
@@ -270,9 +281,9 @@
                     },
                     "next": "press_further_001",
                     "effects": {
-                        "fuel": -2,
-                        "intel": 2,
-                        "survivor_scan": true
+                        "dec": {"fuel": 2},
+                        "inc": {"intel": 2},
+                        "set": {"survivor_scan": true}
                     }
                 },
                 {
@@ -280,9 +291,9 @@
                     "text": "Minimal sweep only. Conserve fuel.",
                     "next": "torres_pre_001",
                     "effects": {
-                        "fuel": -1,
-                        "intel": 1,
-                        "cascade_tag": "low_confidence_reads"
+                        "dec": {"fuel": 1},
+                        "inc": {"intel": 1},
+                        "set": {"cascade_tag": "low_confidence_reads"}
                     }
                 },
                 {
@@ -290,8 +301,10 @@
                     "text": "Skip scan. We go in blind.",
                     "next": "board_order_001",
                     "effects": {
-                        "crew_fear": 1,
-                        "torres_suspicion": 1
+                        "inc": {
+                            "crew_fear": 1,
+                            "torres_suspicion": 1
+                        }
                     }
                 }
             ]
@@ -306,8 +319,10 @@
                     "text": "Board with containment protocols. No heroics.",
                     "next": "board_order_001",
                     "effects": {
-                        "crew_alert": "medium",
-                        "contingency_prepped": true
+                        "set": {
+                            "crew_alert": "medium",
+                            "contingency_prepped": true
+                        }
                     }
                 },
                 {
@@ -322,8 +337,10 @@
                     },
                     "next": "torres_pre_001",
                     "effects": {
-                        "lie_stress": 1,
-                        "kept_secrets": 1,
+                        "inc": {
+                            "lie_stress": 1,
+                            "kept_secrets": 1
+                        },
                         "effect_chance": {
                             "probability": 0.3,
                             "effect": "phantom_attention"
@@ -335,9 +352,11 @@
                     "text": "Hold position. Watch for external movement.",
                     "next": "torres_pre_001",
                     "effects": {
-                        "auto_select_after": 8,
-                        "auto_next": "interrupt_outcome_001",
-                        "note": "If the player hesitates too long, the distress packet escalates."
+                        "set": {
+                            "auto_select_after": 8,
+                            "auto_next": "interrupt_outcome_001",
+                            "note": "If the player hesitates too long, the distress packet escalates."
+                        }
                     }
                 }
             ]
@@ -352,8 +371,10 @@
                     "text": "We’ve been seen. Push in before we lose the trail.",
                     "next": "board_order_001",
                     "effects": {
-                        "crew_fear": 1,
-                        "determination": 1
+                        "inc": {
+                            "crew_fear": 1,
+                            "determination": 1
+                        }
                     }
                 },
                 {
@@ -361,8 +382,8 @@
                     "text": "Back off. Report this to Earth.",
                     "next": "end_scene_report",
                     "effects": {
-                        "earth_reputation": 1,
-                        "followed_protocol": true
+                        "inc": {"earth_reputation": 1},
+                        "set": {"followed_protocol": true}
                     }
                 }
             ]
@@ -377,8 +398,10 @@
                     "text": "Because Command buried what happened. We're not giving them a head start.",
                     "next": "torres_001",
                     "effects": {
-                        "conspiracy_awareness": 1,
-                        "torres_doubt": 1
+                        "inc": {
+                            "conspiracy_awareness": 1,
+                            "torres_doubt": 1
+                        }
                     }
                 },
                 {
@@ -395,8 +418,8 @@
                     },
                     "next": "torres_001",
                     "effects": {
-                        "torres_trust": -2,
-                        "lie_stress": 1,
+                        "dec": {"torres_trust": 2},
+                        "inc": {"lie_stress": 1},
                         "effect_delayed": {
                             "turns": 5,
                             "type": "crew_betrayal",
@@ -412,8 +435,8 @@
                     },
                     "next": "torres_001",
                     "effects": {
-                        "meta_aware": true,
-                        "torres_suspicion": 2
+                        "set": {"meta_aware": true},
+                        "inc": {"torres_suspicion": 2}
                     }
                 },
                 {
@@ -421,7 +444,7 @@
                     "text": "[Remain Silent]",
                     "next": "torres_001",
                     "effects": {
-                        "torres_suspicion": 1
+                        "inc": {"torres_suspicion": 1}
                     }
                 }
             ]
@@ -441,8 +464,10 @@
                     },
                     "next": "crew_interject_maya",
                     "effects": {
-                        "crew_alert": "high",
-                        "boarding_committed": true
+                        "set": {
+                            "crew_alert": "high",
+                            "boarding_committed": true
+                        }
                     }
                 },
                 {
@@ -450,8 +475,10 @@
                     "text": "[Second Thought] Hold. One more pass around the hull.",
                     "next": "maya_comms_001",
                     "effects": {
-                        "intel": 1,
-                        "contradictions": 1
+                        "inc": {
+                            "intel": 1,
+                            "contradictions": 1
+                        }
                     }
                 },
                 {
@@ -468,8 +495,10 @@
                     },
                     "next": "crew_interject_maya",
                     "effects": {
-                        "chen_trust": -1,
-                        "crew_morale": -1
+                        "dec": {
+                            "chen_trust": 1,
+                            "crew_morale": 1
+                        }
                     }
                 }
             ]
@@ -484,8 +513,8 @@
                     "text": "We report this to Earth. Now.",
                     "next": "end_scene_report",
                     "effects": {
-                        "earth_reputation": 2,
-                        "followed_protocol": true
+                        "inc": {"earth_reputation": 2},
+                        "set": {"followed_protocol": true}
                     }
                 },
                 {
@@ -493,9 +522,8 @@
                     "text": "No reports. We keep this quiet and get inside.",
                     "next": "torres_001",
                     "effects": {
-                        "independent_path": 1,
-                        "earth_reputation": -2,
-                        "kept_secrets": 1
+                        "inc": {"independent_path": 1, "kept_secrets": 1},
+                        "dec": {"earth_reputation": 2}
                     }
                 },
                 {
@@ -511,7 +539,7 @@
                     },
                     "next": "paradox_001",
                     "effects": {
-                        "timeline_fracture": true,
+                        "set": {"timeline_fracture": true},
                         "effect_chance": {
                             "probability": 0.5,
                             "effect": "phantom_attention"
@@ -530,12 +558,16 @@
                     "text": "We're reporting nothing until we know what happened.",
                     "next": "end_scene_independent",
                     "effects": {
-                        "earth_reputation": -2,
-                        "torres_trust": -1,
-                        "independent_path": 1,
-                        "contradictions": {
-                            "scale_with": "lie_stress",
-                            "max": 2
+                        "dec": {
+                            "earth_reputation": 2,
+                            "torres_trust": 1
+                        },
+                        "inc": {"independent_path": 1},
+                        "set": {
+                            "contradictions": {
+                                "scale_with": "lie_stress",
+                                "max": 2
+                            }
                         }
                     }
                 },
@@ -544,9 +576,11 @@
                     "text": "Send the report. But we're going in first.",
                     "next": "end_scene_report",
                     "effects": {
-                        "earth_reputation": 1,
-                        "followed_protocol": true,
-                        "path_tracking": "protocol_but_risky"
+                        "inc": {"earth_reputation": 1},
+                        "set": {
+                            "followed_protocol": true,
+                            "path_tracking": "protocol_but_risky"
+                        }
                     }
                 },
                 {
@@ -554,8 +588,10 @@
                     "text": "Torres, how much do you think Earth Command really wants us to find them?",
                     "next": "torres_002",
                     "effects": {
-                        "torres_doubt": 1,
-                        "conspiracy_awareness": 1
+                        "inc": {
+                            "torres_doubt": 1,
+                            "conspiracy_awareness": 1
+                        }
                     }
                 },
                 {
@@ -567,9 +603,11 @@
                     },
                     "next": "end_scene_independent",
                     "effects": {
-                        "torres_trust": -2,
-                        "kept_secrets": 1,
-                        "lie_stress": 1,
+                        "dec": {"torres_trust": 2},
+                        "inc": {
+                            "kept_secrets": 1,
+                            "lie_stress": 1
+                        },
                         "effect_delayed": {
                             "turns": 5,
                             "type": "crew_betrayal",
@@ -590,8 +628,8 @@
                     },
                     "next": "end_scene_independent",
                     "effects": {
-                        "torres_trust": 2,
-                        "torres_suspicion": -1
+                        "inc": {"torres_trust": 2},
+                        "dec": {"torres_suspicion": 1}
                     }
                 }
             ]
@@ -612,7 +650,7 @@
                     "text": "Report and request orders.",
                     "next": "end_scene_report",
                     "effects": {
-                        "loop_awareness": true
+                        "set": {"loop_awareness": true}
                     }
                 },
                 {
@@ -620,8 +658,8 @@
                     "text": "Say nothing and move to dock.",
                     "next": "end_scene_independent",
                     "effects": {
-                        "loop_awareness": true,
-                        "kept_secrets": 1
+                        "set": {"loop_awareness": true},
+                        "inc": {"kept_secrets": 1}
                     }
                 }
             ]
@@ -636,8 +674,8 @@
                     "text": "Take us in. We finish this.",
                     "next": "end_scene_paradox",
                     "effects": {
-                        "paradox_path": 1,
-                        "hidden_effect": "phantom_seed",
+                        "inc": {"paradox_path": 1},
+                        "set": {"hidden_effect": "phantom_seed"},
                         "effect_delayed": {
                             "turns": 3,
                             "type": "gate_glitch"
@@ -649,8 +687,8 @@
                     "text": "Abort. We've pushed too far.",
                     "next": "end_scene_report",
                     "effects": {
-                        "followed_protocol": true,
-                        "earth_reputation": 1
+                        "set": {"followed_protocol": true},
+                        "inc": {"earth_reputation": 1}
                     }
                 }
             ]
@@ -660,12 +698,14 @@
             "speaker": "ship_ai_maya",
             "text": "Report packet queued and transmitted over tight-beam. Earth Command will have it in minutes. The crew exhales—some with relief, some with regret.",
             "effects": {
-                "ending": "reported_to_earth",
-                "crew_morale": 1,
-                "reputation": {
-                    "earth": 2
+                "set": {
+                    "ending": "reported_to_earth",
+                    "hidden_effect": "earth_moving_pieces"
                 },
-                "hidden_effect": "earth_moving_pieces"
+                "inc": {
+                    "crew_morale": 1,
+                    "earth_reputation": 2
+                }
             },
             "next": "end_scene"
         },
@@ -674,14 +714,17 @@
             "speaker": "first_officer_torres",
             "text": "Aye, Captain. No reports. Helm, take us in. If this goes sideways, we're alone.",
             "effects": {
-                "ending": "independent_boarding",
-                "independent_path": 1,
-                "stress": {
-                    "from_lies": "lie_stress"
+                "set": {
+                    "ending": "independent_boarding",
+                    "stress": {
+                        "from_lies": "lie_stress"
+                    }
                 },
+                "inc": {"independent_path": 1},
                 "scaling_effect": {
                     "counter": "independent_calls",
-                    "effect": "watchlist_risk"
+                    "effect": "watchlist_risk",
+                    "scale_factor": 1
                 }
             },
             "next": "end_scene"
@@ -691,9 +734,11 @@
             "speaker": "ship_ai_maya",
             "text": "Docking clamps engage with a ship that both is and isn’t there. For a heartbeat, everyone remembers dying. Then the memory slips.",
             "effects": {
-                "ending": "paradox_entry",
-                "timeline_fracture": true,
-                "loop_awareness": true,
+                "set": {
+                    "ending": "paradox_entry",
+                    "timeline_fracture": true,
+                    "loop_awareness": true
+                },
                 "effect_chance": {
                     "probability": 0.4,
                     "effect": "phantom_attention"
