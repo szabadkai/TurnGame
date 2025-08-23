@@ -44,44 +44,74 @@ if (mouse_distance <= interaction_radius) {
         // Play click sound effect (placeholder)
         // audio_play_sound(snd_confirm_click, 1, false);
         
-        // Mark as visited if this is the first time
-        if (!is_visited) {
-            is_visited = true;
-            update_visual_state();
-            
-            // Save this change to the star map state
-            var starmap_manager = instance_find(obj_StarMapManager, 0);
-            if (starmap_manager != noone) {
-                starmap_manager.mark_system_visited(system_id);
-            }
-        }
-        
-        // Update current location
-        var starmap_manager = instance_find(obj_StarMapManager, 0);
-        if (starmap_manager != noone) {
-            starmap_manager.set_current_system(system_id);
-        }
-        
-        // Hide tooltip before transition
+        // Hide tooltip before showing confirmation
         var tooltip_manager = instance_find(obj_TooltipManager, 0);
         if (tooltip_manager != noone) {
             tooltip_manager.hide_tooltip();
         }
         
-        // Start scene transition to dialog and load target scene directly
-        show_debug_message("Starting transition to scene: " + target_scene);
+        // Try to use travel confirmation dialog
+        var use_confirmation_dialog = false;
+        var confirmation_dialog = noone;
         
-        // Set dialog exit room back to star map
-        if (script_exists(set_dialog_exit_room)) {
-            set_dialog_exit_room(Room_StarMap);
+        // Check if confirmation dialog object exists and can be created
+        if (object_exists(obj_TravelConfirmationDialog)) {
+            confirmation_dialog = instance_find(obj_TravelConfirmationDialog, 0);
+            if (confirmation_dialog == noone) {
+                confirmation_dialog = instance_create_layer(0, 0, "Instances", obj_TravelConfirmationDialog);
+            }
+            use_confirmation_dialog = (confirmation_dialog != noone);
         }
         
-        // Set up the dialog scene to start after room transition
-        // The StarMapManager will handle starting the scene
-        global.pending_scene_id = target_scene;
-        
-        // Transition to dialog room
-        room_goto(Room_Dialog);
+        if (use_confirmation_dialog) {
+            // Prepare system info for confirmation dialog
+            var system_data = {
+                name: system_name,
+                type: system_type,
+                faction: get_faction_name(faction_control),
+                threat: threat_level,
+                scene_id: target_scene
+            };
+            
+            // Show confirmation dialog with travel callback data
+            confirmation_dialog.system_info = system_data;
+            confirmation_dialog.pending_system_id = system_id;
+            confirmation_dialog.pending_target_scene = target_scene;
+            confirmation_dialog.show_travel_confirmation(system_data, Room_Dialog);
+        } else {
+            // Fallback to direct travel (original behavior)
+            show_debug_message("Using direct travel - confirmation dialog not available");
+            
+            // Mark as visited if this is the first time
+            if (!is_visited) {
+                is_visited = true;
+                update_visual_state();
+                
+                // Save this change to the star map state
+                var starmap_manager = instance_find(obj_StarMapManager, 0);
+                if (starmap_manager != noone) {
+                    starmap_manager.mark_system_visited(system_id);
+                }
+            }
+            
+            // Update current location
+            var starmap_manager = instance_find(obj_StarMapManager, 0);
+            if (starmap_manager != noone) {
+                starmap_manager.set_current_system(system_id);
+            }
+            
+            // Set dialog exit room back to star map
+            if (script_exists(set_dialog_exit_room)) {
+                set_dialog_exit_room(Room_StarMap);
+            }
+            
+            // Set up the dialog scene to start after room transition
+            global.pending_scene_id = target_scene;
+            show_debug_message("Starting direct transition to scene: " + target_scene);
+            
+            // Transition to dialog room
+            room_goto(Room_Dialog);
+        }
     }
     
     // Check for click on locked system - show engaging locked feedback

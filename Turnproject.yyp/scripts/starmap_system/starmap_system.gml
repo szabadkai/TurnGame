@@ -260,6 +260,19 @@ function get_faction_standing(faction_name) {
     return 0;
 }
 
+// Get faction name from faction ID
+function get_faction_name(faction_id) {
+    switch(faction_id) {
+        case 0: return "Neutral";
+        case 1: return "Human Coalition";
+        case 2: return "Keth'mori";
+        case 3: return "Swarm Collective";
+        case 4: return "Free Colonies";
+        case 5: return "Watchers";
+        default: return "Unknown";
+    }
+}
+
 // Connect systems with progression lines
 function connect_star_systems(system_a, system_b) {
     // This function would handle visual connection lines

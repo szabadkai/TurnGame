@@ -30,6 +30,8 @@ function create_star_map_ui() {
     } else {
         tooltip_manager = instance_find(obj_TooltipManager, 0);
     }
+    
+    // Travel confirmation dialog will be created on demand by StarSystem objects
 }
 
 // Load star map data and create system instances
