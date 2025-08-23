@@ -45,12 +45,6 @@ function handle_graphics_settings_input(input_select, input_back) {
                     window_set_fullscreen(global.game_settings.fullscreen);
                 }
                 break;
-            case GRAPHICS_OPTION.ZOOM_LEVEL:
-                if (input_left || input_right) {
-                    var change = input_right ? 1 : -1;
-                    global.game_settings.zoom_level = clamp(global.game_settings.zoom_level + change, 1, 8);
-                }
-                break;
             case GRAPHICS_OPTION.BACK:
                 if (input_select) {
                     change_menu_state(MENUSTATE.SETTINGS);
@@ -132,12 +126,59 @@ function handle_gameplay_settings_input(input_select, input_back) {
 function handle_save_load_input(input_select, input_back) {
     if (input_select) {
         if (selected_option < 3) {
-            if (save_slot_exists(selected_option)) {
-                load_game_from_slot(selected_option);
+            var slot_index = selected_option + 1; // Convert 0-2 to slots 1-3
+            if (save_slot_exists(slot_index)) {
+                show_debug_message("Loading game from slot " + string(slot_index));
+                // Set this as the active save slot for this playthrough
+                set_active_save_slot(slot_index);
+                // Use the proper save loading function from save_system.gml
+                load_game_from_slot_data(slot_index);
+            } else {
+                show_debug_message("Save slot " + string(slot_index) + " is empty");
+                play_menu_error_sound();
             }
         } else {
             // Back option
             change_menu_state(MENUSTATE.MAIN);
+        }
+    }
+    
+    // Delete key (X or Delete) to delete save slots - double press for confirmation
+    if ((keyboard_check_pressed(ord("X")) || keyboard_check_pressed(vk_delete)) && selected_option < 3) {
+        var slot_index = selected_option + 1; // Convert 0-2 to slots 1-3
+        if (save_slot_exists(slot_index)) {
+            // Simple double-press confirmation
+            if (!variable_global_exists("delete_confirm_slot") || global.delete_confirm_slot != slot_index) {
+                // First press - set confirmation
+                global.delete_confirm_slot = slot_index;
+                global.delete_confirm_time = get_timer();
+                show_debug_message("Press X again to confirm deletion of slot " + string(slot_index));
+                play_menu_navigate_sound();
+            } else {
+                // Second press within 3 seconds - confirm delete
+                var time_diff = (get_timer() - global.delete_confirm_time) / 1000000;
+                if (time_diff < 3.0) {
+                    show_debug_message("Confirmed: Deleting save slot " + string(slot_index));
+                    delete_save_slot(slot_index);
+                    play_menu_select_sound();
+                    global.delete_confirm_slot = -1; // Reset confirmation
+                } else {
+                    // Too long, restart confirmation
+                    global.delete_confirm_slot = slot_index;
+                    global.delete_confirm_time = get_timer();
+                    show_debug_message("Press X again to confirm deletion of slot " + string(slot_index));
+                    play_menu_navigate_sound();
+                }
+            }
+        } else {
+            play_menu_error_sound();
+        }
+    }
+    
+    // Reset delete confirmation if selecting different option
+    if (keyboard_check_pressed(vk_up) || keyboard_check_pressed(vk_down)) {
+        if (variable_global_exists("delete_confirm_slot")) {
+            global.delete_confirm_slot = -1;
         }
     }
     
@@ -157,7 +198,6 @@ function save_settings() {
     ini_write_real("audio", "music_volume", global.game_settings.music_volume);
     
     ini_write_real("graphics", "fullscreen", global.game_settings.fullscreen);
-    ini_write_real("graphics", "zoom_level", global.game_settings.zoom_level);
     
     ini_write_real("gameplay", "combat_speed", global.game_settings.combat_speed);
     ini_write_real("gameplay", "auto_save", global.game_settings.auto_save);
@@ -185,7 +225,6 @@ function load_settings() {
         global.game_settings.music_volume = ini_read_real("audio", "music_volume", 1.0);
         
         global.game_settings.fullscreen = ini_read_real("graphics", "fullscreen", false);
-        global.game_settings.zoom_level = ini_read_real("graphics", "zoom_level", 4);
         
         global.game_settings.combat_speed = ini_read_real("gameplay", "combat_speed", 1.0);
         global.game_settings.auto_save = ini_read_real("gameplay", "auto_save", true);
@@ -207,15 +246,7 @@ function load_settings() {
 }
 
 // Load game from save slot
-function load_game_from_slot(slot_index) {
-    var save_file = "save_slot_" + string(slot_index) + ".sav";
-    if (file_exists(save_file)) {
-        show_debug_message("Loading game from slot " + string(slot_index));
-        // For now, just start the game
-        // In a full implementation, you'd load the save data
-        room_goto(global.gameplay_room);
-    }
-}
+// Removed stub function - now using proper load_game_from_slot_data from save_system.gml
 
 // Additional drawing functions for settings menus
 

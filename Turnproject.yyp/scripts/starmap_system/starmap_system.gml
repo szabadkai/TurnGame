@@ -53,6 +53,11 @@ function unlock_star_system(system_id) {
         starmap_manager.unlock_system(system_id);
     }
     
+    // Notify GameManager of system unlock for progress tracking
+    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
+        global.game_manager.on_system_unlocked(system_id);
+    }
+    
     return true;
 }
 

@@ -732,6 +732,11 @@ function end_dialog_scene() {
     if (scene_id != "") {
         handle_dialog_scene_completion(scene_id, scene_effects);
     }
+    
+    // Notify GameManager of dialog completion for auto-save
+    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
+        global.game_manager.on_dialog_completed(scene_id, scene_effects);
+    }
 
     // Check if we should transition to combat (for end_scene nodes)
     if (variable_global_exists("transition_to_combat_after_dialog") && global.transition_to_combat_after_dialog) {
@@ -1123,6 +1128,23 @@ function handle_dialog_scene_completion(scene_id, scene_effects) {
             global.dialog_flags.swarm_intelligence_located = true;
             // Update faction control
             set_system_faction_control("system_029", 3);
+            break;
+            
+        default:
+            // FALLBACK: Always unlock the next sequential system after completing any dialog
+            var current_system_num = 1; // Default to first system
+            
+            // Try to extract system number from current system
+            var current_system = get_current_star_system();
+            if (string_pos("system_", current_system) > 0) {
+                var num_part = string_delete(current_system, 1, 7); // Remove "system_"
+                current_system_num = real(num_part);
+            }
+            
+            // Unlock the next system  
+            var next_system_num = current_system_num + 1;
+            var next_system_id = "system_" + (next_system_num < 10 ? "00" + string(next_system_num) : (next_system_num < 100 ? "0" + string(next_system_num) : string(next_system_num)));
+            unlock_star_system(next_system_id);
             break;
     }
     

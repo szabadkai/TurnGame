@@ -130,6 +130,7 @@
     {"id":{"name":"obj_CombatResultsUI","path":"objects/obj_CombatResultsUI/obj_CombatResultsUI.yy",},},
     {"id":{"name":"obj_DialogManager","path":"objects/obj_DialogManager/obj_DialogManager.yy",},},
     {"id":{"name":"obj_Enemy","path":"objects/obj_Enemy/obj_Enemy.yy",},},
+    {"id":{"name":"obj_GameManager","path":"objects/obj_GameManager/obj_GameManager.yy",},},
     {"id":{"name":"obj_InGameMenu","path":"objects/obj_InGameMenu/obj_InGameMenu.yy",},},
     {"id":{"name":"obj_LevelUpOverlay","path":"objects/obj_LevelUpOverlay/obj_LevelUpOverlay.yy",},},
     {"id":{"name":"obj_MainMenu","path":"objects/obj_MainMenu/obj_MainMenu.yy",},},

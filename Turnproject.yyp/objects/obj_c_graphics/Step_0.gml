@@ -31,13 +31,6 @@ if (keyboard_check_pressed(vk_f10)) {
 // camera follow player (center view on first player)
 if (variable_instance_exists(id, "cam")) {
   
-  // zoom controls
-  if (keyboard_check_pressed(vk_add) || keyboard_check_pressed(ord("E"))) {
-    zoom = clamp(zoom + 1, zoom_min, zoom_max);
-  }
-  if (keyboard_check_pressed(vk_subtract) || keyboard_check_pressed(ord("Q"))) {
-    zoom = clamp(zoom - 1, zoom_min, zoom_max);
-  }
 
   // apply zoom by resizing camera view (keep port same size) 
     last_zoom = -1;

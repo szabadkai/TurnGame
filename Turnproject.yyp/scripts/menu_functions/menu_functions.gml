@@ -83,7 +83,7 @@ function is_option_disabled(option_index) {
             break;
         case MENUSTATE.SAVE_LOAD:
             if (option_index < 3) {
-                return !save_slot_exists(option_index);
+                return !save_slot_exists(option_index + 1); // Convert 0-2 to slots 1-3
             }
             break;
     }
@@ -110,8 +110,6 @@ function get_option_display_text(option_index) {
             switch (option_index) {
                 case GRAPHICS_OPTION.FULLSCREEN:
                     return base_text + ": " + (global.game_settings.fullscreen ? "ON" : "OFF");
-                case GRAPHICS_OPTION.ZOOM_LEVEL:
-                    return base_text + ": " + string(global.game_settings.zoom_level) + "x";
             }
             break;
             
@@ -133,9 +131,21 @@ function get_option_display_text(option_index) {
             
         case MENUSTATE.SAVE_LOAD:
             if (option_index < 3) {
-                if (save_slot_exists(option_index)) {
-                    var save_info = get_save_slot_info(option_index);
-                    return base_text + " - " + save_info;
+                var slot_index = option_index + 1; // Convert 0-2 to slots 1-3
+                if (save_slot_exists(slot_index)) {
+                    var save_info = get_save_slot_info(slot_index);
+                    var delete_hint = "";
+                    
+                    if (option_index == selected_option) {
+                        // Check if this slot is awaiting delete confirmation
+                        if (variable_global_exists("delete_confirm_slot") && global.delete_confirm_slot == slot_index) {
+                            delete_hint = " [Press X again to DELETE!]";
+                        } else {
+                            delete_hint = " [X to delete]";
+                        }
+                    }
+                    
+                    return base_text + " - " + save_info + delete_hint;
                 } else {
                     return base_text + " - Empty";
                 }
@@ -153,6 +163,8 @@ function get_instruction_text() {
     switch (menu_state) {
         case MENUSTATE.MAIN:
             return base_instructions;
+        case MENUSTATE.SAVE_LOAD:
+            return base_instructions + " • X Delete • Esc Back";
         case MENUSTATE.SETTINGS_AUDIO:
         case MENUSTATE.SETTINGS_GRAPHICS:
         case MENUSTATE.SETTINGS_GAMEPLAY:
@@ -177,19 +189,10 @@ function handle_main_menu_selection_original() {
                 play_menu_error_sound();
             }
             break;
-        case MAINMENU_OPTION.STAR_MAP:
+        case MAINMENU_OPTION.NEW_FIGHT:
             play_menu_select_sound();
-            // Initialize star map system if not already done
-            if (!variable_global_exists("star_map_state")) {
-                if (script_exists(init_star_map)) {
-                    init_star_map();
-                } else {
-                    show_debug_message("Star map system not available");
-                    play_menu_error_sound();
-                    break;
-                }
-            }
-            room_goto(Room_StarMap);
+            show_debug_message("Starting new fight for debugging...");
+            room_goto(Room1);
             break;
         case MAINMENU_OPTION.SETTINGS:
             play_menu_select_sound();
@@ -231,18 +234,122 @@ function handle_settings_selection() {
 
 // Start new game
 function start_new_game() {
-    show_debug_message("Starting new game...");
-    room_goto(global.gameplay_room);
+    show_debug_message("Starting completely fresh new game...");
+    
+    // Find the next available save slot (1-3)
+    var new_slot = get_next_available_save_slot();
+    
+    // Set this as the active save slot for this playthrough
+    set_active_save_slot(new_slot);
+    
+    // If overwriting existing slot, delete it first
+    if (save_slot_exists(new_slot)) {
+        var save_file = "save_slot_" + string(new_slot) + ".sav";
+        file_delete(save_file);
+        show_debug_message("Overwriting existing save slot " + string(new_slot));
+    }
+    
+    // Completely reset all global game state variables
+    reset_all_global_state();
+    
+    // Initialize fresh star map system
+    if (script_exists(init_star_map)) {
+        init_star_map();
+        show_debug_message("Initialized fresh star map system");
+    }
+    
+    // Create initial save in the new slot
+    if (script_exists(save_game_to_slot)) {
+        save_game_to_slot(new_slot);
+        show_debug_message("Created initial save in slot " + string(new_slot));
+    }
+    
+    // Go to star map for fresh start
+    room_goto(Room_StarMap);
 }
 
-// Check if save files exist
+// Completely reset all global game state for fresh start
+function reset_all_global_state() {
+    show_debug_message("Resetting all global game state...");
+    
+    // Reset dialog system state
+    if (variable_global_exists("dialog_flags")) {
+        global.dialog_flags = {};
+        show_debug_message("Reset dialog flags");
+    }
+    
+    if (variable_global_exists("dialog_reputation")) {
+        global.dialog_reputation = {};
+        show_debug_message("Reset dialog reputation");
+    }
+    
+    // Reset loop counter
+    if (variable_global_exists("loop_count")) {
+        global.loop_count = 0;
+        show_debug_message("Reset loop count");
+    }
+    
+    // Reset game progress tracking
+    if (variable_global_exists("game_progress")) {
+        global.game_progress = {
+            sessions_played: 0,
+            total_playtime: 0,
+            systems_unlocked: 1,
+            dialogs_completed: 0,
+            combats_won: 0,
+            last_checkpoint: "system_001"
+        };
+        show_debug_message("Reset game progress");
+    }
+    
+    // Clear star map state - will be reinitialized fresh
+    if (variable_global_exists("star_map_state")) {
+        global.star_map_state = undefined;
+        show_debug_message("Cleared star map state for fresh initialization");
+    }
+    
+    // Reset any loading flags
+    if (variable_global_exists("loading_save")) {
+        global.loading_save = false;
+    }
+    
+    if (variable_global_exists("pending_save_data")) {
+        global.pending_save_data = undefined;
+    }
+    
+    if (variable_global_exists("should_load_star_map_state")) {
+        global.should_load_star_map_state = false;
+    }
+    
+    show_debug_message("Global state reset complete");
+}
+
+// Check if save files exist (only check user slots 1-3, not auto-save slot 0)
 function has_save_files() {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 1; i <= 3; i++) {
         if (save_slot_exists(i)) {
             return true;
         }
     }
     return false;
+}
+
+// Find the next available save slot (1-3)
+function get_next_available_save_slot() {
+    for (var i = 1; i <= 3; i++) {
+        if (!save_slot_exists(i)) {
+            show_debug_message("Found available save slot: " + string(i));
+            return i;
+        }
+    }
+    show_debug_message("All save slots full, using slot 1");
+    return 1; // If all slots full, overwrite slot 1
+}
+
+// Set the active save slot for this playthrough
+function set_active_save_slot(slot_index) {
+    global.active_save_slot = slot_index;
+    show_debug_message("Set active save slot to: " + string(slot_index));
 }
 
 // Check if specific save slot exists
@@ -253,13 +360,8 @@ function save_slot_exists(slot_index) {
 
 // Get save slot info string
 function get_save_slot_info(slot_index) {
-    var save_file = "save_slot_" + string(slot_index) + ".sav";
-    if (file_exists(save_file)) {
-        // For now, just return a placeholder
-        // In a full implementation, you'd load the save file and extract info
-        return "Level X - Location Y";
-    }
-    return "Empty";
+    // Use the proper detailed save slot info function
+    return get_save_slot_info_detailed(slot_index);
 }
 
 // Check all save slots

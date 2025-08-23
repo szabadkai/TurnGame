@@ -40,6 +40,11 @@ function handle_combat_victory() {
         }
     }
     
+    // Notify GameManager of combat completion
+    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
+        global.game_manager.on_combat_completed(true, xp_award);
+    }
+    
     // Create or show combat results UI
     var results_ui = instance_find(obj_CombatResultsUI, 0);
     if (results_ui == noone) {
@@ -57,6 +62,11 @@ function handle_combat_defeat() {
     
     if (variable_global_exists("combat_log")) {
         global.combat_log("DEFEAT! All party members have fallen.");
+    }
+    
+    // Notify GameManager of combat defeat
+    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
+        global.game_manager.on_combat_completed(false, 0);
     }
     
     // Create or show combat results UI

@@ -7,6 +7,7 @@
   "inheritLayers":false,
   "instanceCreationOrder":[
     {"name":"inst_640C5C96","path":"rooms/Room1/Room1.yy",},
+    {"name":"inst_GameManager","path":"rooms/Room1/Room1.yy",},
     {"name":"inst_17F9F9E2","path":"rooms/Room1/Room1.yy",},
     {"name":"inst_CombatLog","path":"rooms/Room1/Room1.yy",},
     {"name":"inst_PlayerDetails","path":"rooms/Room1/Room1.yy",},
@@ -26,6 +27,7 @@
   "layers":[
     {"$GMRInstanceLayer":"","%Name":"Instances","depth":0,"effectEnabled":true,"effectType":null,"gridX":16,"gridY":16,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"$GMRInstance":"v2","%Name":"inst_640C5C96","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_640C5C96","objectId":{"name":"obj_TurnManager","path":"objects/obj_TurnManager/obj_TurnManager.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":0.0,},
+        {"$GMRInstance":"v2","%Name":"inst_GameManager","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_GameManager","objectId":{"name":"obj_GameManager","path":"objects/obj_GameManager/obj_GameManager.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":192.0,"y":0.0,},
         {"$GMRInstance":"v2","%Name":"inst_PlayerDetails","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_PlayerDetails","objectId":{"name":"obj_PlayerDetails","path":"objects/obj_PlayerDetails/obj_PlayerDetails.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":64.0,"y":0.0,},
         {"$GMRInstance":"v2","%Name":"inst_LevelUpOverlay","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_LevelUpOverlay","objectId":{"name":"obj_LevelUpOverlay","path":"objects/obj_LevelUpOverlay/obj_LevelUpOverlay.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":96.0,"y":0.0,},
         {"$GMRInstance":"v2","%Name":"inst_UIManager","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_UIManager","objectId":{"name":"obj_UIManager","path":"objects/obj_UIManager/obj_UIManager.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":128.0,"y":0.0,},

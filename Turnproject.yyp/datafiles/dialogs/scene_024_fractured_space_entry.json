@@ -123,11 +123,12 @@
       "speaker": "first_officer_torres",
       "text": "Now you're talking! Let's give them a show.",
       "skill_check": {
-        "type": "contested_check",
-        "skill": "piloting+shields",
+        "type": "piloting",
         "difficulty": 18,
-        "vs": "fracture_turbulence",
-        "vs_difficulty": 17
+        "contested": {
+          "npc": "fracture_turbulence",
+          "value": 17
+        }
       },
       "next": "fracture_direct_outcome"
     },

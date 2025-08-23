@@ -58,3 +58,14 @@ if (keyboard_check_pressed(ord("C"))) {
     show_debug_message("C key pressed - manually checking combat state");
     alarm[3] = 1; // Trigger combat state check
 }
+
+// AUTOMATIC COMBAT END CHECK - Check every 60 frames (1 second)
+if (get_timer() mod 1000000 < 16667) { // Check roughly once per second
+    var enemy_count = instance_number(obj_Enemy);
+    var player_count = instance_number(obj_Player);
+    
+    // Only check if there are players but no enemies (victory) or no players (defeat)
+    if ((enemy_count == 0 && player_count > 0) || player_count == 0) {
+        alarm[3] = 1; // Trigger combat state check immediately
+    }
+}

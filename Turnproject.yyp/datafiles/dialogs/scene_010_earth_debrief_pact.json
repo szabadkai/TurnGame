@@ -80,11 +80,12 @@
             "speaker": "earth_commander_holt",
             "text": "...What did you just say? Repeat that, Captain. On whose authority are you making such claims?",
             "skill_check": {
-                "type": "contested_check",
-                "skill": "willpower",
+                "type": "willpower",
                 "difficulty": 19,
-                "vs": "holt_interrogation",
-                "vs_difficulty": 17
+                "contested": {
+                    "npc": "holt_interrogation",
+                    "value": 17
+                }
             },
             "next": "holt_meta_outcome"
         },

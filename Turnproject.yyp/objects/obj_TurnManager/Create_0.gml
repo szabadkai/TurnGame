@@ -24,8 +24,13 @@ init_dialog_system();
 init_dialog_state();
 
 // === STAR MAP SYSTEM INITIALIZATION ===
-// Initialize star map system early in game startup
-init_star_map();
+// Initialize star map system early in game startup - but only if not already initialized
+if (!variable_global_exists("star_map_state")) {
+    show_debug_message("TurnManager: Initializing star map for first time");
+    init_star_map();
+} else {
+    show_debug_message("TurnManager: Star map already initialized, preserving state");
+}
 
 // === UI SYSTEM FAILSAFE ===
 // Force create UI objects if they don't exist - TurnManager runs early so this ensures UI is available

@@ -164,11 +164,12 @@
       "speaker": "engineer_chen",
       "text": "Rerouting now. Comms and sensors going dark... mark. May God have mercy on our souls. Follow the light of my torch.",
       "skill_check": {
-        "type": "contested_check",
-        "skill": "engineering",
+        "type": "engineering",
         "difficulty": 15,
-        "vs": "collapse_rate",
-        "vs_difficulty": 16
+        "contested": {
+          "npc": "collapse_rate",
+          "value": 16
+        }
       },
       "next": "escape_chen_power_reroute_outcome_016"
     },

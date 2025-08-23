@@ -16,7 +16,7 @@ enum MENUSTATE {
 enum MAINMENU_OPTION {
     NEW_GAME,
     CONTINUE,
-    STAR_MAP,
+    NEW_FIGHT,
     SETTINGS,
     SCENE_GALLERY,
     QUIT,
@@ -42,7 +42,6 @@ enum AUDIO_OPTION {
 
 enum GRAPHICS_OPTION {
     FULLSCREEN,
-    ZOOM_LEVEL,
     BACK,
     COUNT
 }

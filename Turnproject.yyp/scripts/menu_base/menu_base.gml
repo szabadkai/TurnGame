@@ -41,7 +41,6 @@ function init_base_menu(context, options_array) {
     
     graphics_options = [
         "Fullscreen",
-        "Zoom Level",
         "Back"
     ];
     

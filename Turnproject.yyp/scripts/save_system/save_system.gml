@@ -11,20 +11,20 @@ function save_game_to_slot(slot_index) {
         save_data.player = {
             x: player.x,
             y: player.y,
-            level: player.level,
-            xp: player.xp,
+            level: variable_instance_exists(player, "level") ? player.level : 1,
+            xp: variable_instance_exists(player, "xp") ? player.xp : 0,
             ability_scores: {
-                strength: player.strength,
-                dexterity: player.dexterity,
-                constitution: player.constitution,
-                intelligence: player.intelligence,
-                wisdom: player.wisdom,
-                charisma: player.charisma
+                strength: variable_instance_exists(player, "strength") ? player.strength : 10,
+                dexterity: variable_instance_exists(player, "dexterity") ? player.dexterity : 10,
+                constitution: variable_instance_exists(player, "constitution") ? player.constitution : 10,
+                intelligence: variable_instance_exists(player, "intelligence") ? player.intelligence : 10,
+                wisdom: variable_instance_exists(player, "wisdom") ? player.wisdom : 10,
+                charisma: variable_instance_exists(player, "charisma") ? player.charisma : 10
             },
-            hp: player.hp,
-            max_hp: player.max_hp,
-            current_weapon: player.current_weapon,
-            character_index: player.character_index
+            hp: variable_instance_exists(player, "hp") ? player.hp : 100,
+            max_hp: variable_instance_exists(player, "max_hp") ? player.max_hp : 100,
+            current_weapon: variable_instance_exists(player, "current_weapon") ? player.current_weapon : 0,
+            character_index: variable_instance_exists(player, "character_index") ? player.character_index : 1
         };
     }
     

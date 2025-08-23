@@ -14,13 +14,13 @@ tooltip_manager = noone;
 // Create essential UI components
 create_star_map_ui();
 
-// Load star map configuration and create systems
-load_and_create_systems();
+// Load saved progress BEFORE creating systems
+load_saved_star_map_progress();
 
-// Apply saved state
-apply_star_map_state();
+// Wait a frame to ensure global state is fully loaded before creating systems
+alarm[0] = 1; // Create systems after 1 frame delay
 
-show_debug_message("StarMapManager initialized with " + string(array_length(star_systems)) + " systems");
+show_debug_message("StarMapManager initialization deferred to Alarm[0]");
 
 // Create essential UI components
 function create_star_map_ui() {
@@ -70,7 +70,18 @@ function load_and_create_systems() {
         system.system_name = data.name;
         system.system_type = data.type;
         system.target_scene = data.scene;
-        system.is_unlocked = data.unlocked;
+        
+        // Check if we have saved state for this system
+        var saved_unlocked = data.unlocked; // Default from data
+        
+        if (variable_global_exists("star_map_state") && variable_struct_exists(global.star_map_state, "systems")) {
+            if (variable_struct_exists(global.star_map_state.systems, data.id)) {
+                saved_unlocked = global.star_map_state.systems[$ data.id].unlocked;
+                show_debug_message("System " + data.id + " using saved unlock state: " + string(saved_unlocked));
+            }
+        }
+        
+        system.is_unlocked = saved_unlocked;
         system.faction_control = 0; // Will be set by save data
         system.threat_level = 1 + (i % 5); // Varied threat levels
         
@@ -204,4 +215,66 @@ function unlock_system(system_id) {
         return true;
     }
     return false;
+}
+
+// Load saved star map progress from active save slot
+function load_saved_star_map_progress() {
+    show_debug_message("StarMapManager: Checking for saved progress...");
+    
+    // Use active save slot instead of hardcoded slot 0
+    var slot_to_use = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
+    var save_file = "save_slot_" + string(slot_to_use) + ".sav";
+    
+    // Always try to load if save exists, regardless of flag
+    if (file_exists(save_file)) {
+        show_debug_message("Found auto-save file, loading star map progress...");
+        
+        try {
+            var file = file_text_open_read(save_file);
+            var json_string = "";
+            while (!file_text_eof(file)) {
+                json_string += file_text_readln(file);
+            }
+            file_text_close(file);
+            
+            if (json_string != "") {
+                var save_data = json_parse(json_string);
+                
+                // Apply star map state if it exists
+                if (variable_struct_exists(save_data, "star_map_state")) {
+                    global.star_map_state = save_data.star_map_state;
+                    show_debug_message("Star map progress loaded successfully");
+                    
+                    // Debug: show unlocked systems
+                    if (variable_struct_exists(global.star_map_state, "systems")) {
+                        var systems = global.star_map_state.systems;
+                        var system_ids = variable_struct_get_names(systems);
+                        show_debug_message("Loaded systems state:");
+                        for (var i = 0; i < array_length(system_ids); i++) {
+                            var sys_id = system_ids[i];
+                            var unlocked = systems[$ sys_id].unlocked;
+                            show_debug_message("  - " + sys_id + ": unlocked=" + string(unlocked));
+                        }
+                    }
+                } else {
+                    show_debug_message("No star map state found in save file");
+                }
+                
+                // Apply dialog flags for progression logic
+                if (variable_struct_exists(save_data, "story_flags")) {
+                    global.dialog_flags = save_data.story_flags;
+                    show_debug_message("Dialog flags loaded for progression");
+                }
+            }
+        } catch (e) {
+            show_debug_message("Failed to load saved progress: " + string(e));
+        }
+    } else {
+        show_debug_message("No auto-save file found - starting fresh");
+    }
+    
+    // Reset the flag if it exists
+    if (variable_global_exists("should_load_star_map_state")) {
+        global.should_load_star_map_state = false;
+    }
 }

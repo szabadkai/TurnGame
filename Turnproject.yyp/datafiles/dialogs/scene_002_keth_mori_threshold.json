@@ -91,11 +91,12 @@
             "speaker": "shal_thyss",
             "text": "[The crystalline entity remains silent for 11 seconds, its internal light pulsing rapidly.] How? How could you know our name? The cycle... you are like them. The first crew. The ones who fractured time. You must be contained.",
             "skill_check": {
-                "type": "contested_check",
-                "skill": "willpower",
+                "type": "willpower",
                 "difficulty": 18,
-                "vs": "archive_containment_field",
-                "vs_difficulty": 16
+                "contested": {
+                    "npc": "archive_containment_field",
+                    "value": 16
+                }
             },
             "next": "shal_containment_outcome"
         },

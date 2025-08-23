@@ -13,9 +13,9 @@ ui_alpha = 0;
 target_alpha = 0;
 fade_speed = 0.05;
 
-// UI layout
-ui_x = room_width / 2;
-ui_y = room_height / 2;
+// UI layout - use GUI coordinates for proper centering
+ui_x = display_get_gui_width() / 2;
+ui_y = display_get_gui_height() / 2;
 ui_width = 400;
 ui_height = 300;
 
@@ -72,6 +72,12 @@ function handle_return_button() {
     target_alpha = 0;
     ui_visible = false;
     
+    // Force save current progress before returning to star map
+    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
+        show_debug_message("Forcing save before returning to star map...");
+        global.game_manager.force_save();
+    }
+    
     // Initialize star map system if needed
     if (!variable_global_exists("star_map_state")) {
         if (script_exists(init_star_map)) {
@@ -79,7 +85,14 @@ function handle_return_button() {
         }
     }
     
+    // Set flag to load star map state when we get there
+    global.should_load_star_map_state = true;
+    
+    // Mark that we want to return to star map after current room operations
+    global.return_to_star_map_after_combat = false; // Reset this flag
+    
     // Return to star map
+    show_debug_message("Transitioning to star map with preserved progress");
     room_goto(Room_StarMap);
 }
 

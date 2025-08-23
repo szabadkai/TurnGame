@@ -82,11 +82,12 @@
             "speaker": "science_officer_kim",
             "text": "I have the logs in a secure partition. But the virus is fighting back. It's trying to corrupt the data as I decrypt it. I need to work fast.",
             "skill_check": {
-                "type": "contested_check",
-                "skill": "computer_science",
+                "type": "engineering",
                 "difficulty": 17,
-                "vs": "data_corruption",
-                "vs_difficulty": 15
+                "contested": {
+                    "npc": "data_corruption",
+                    "value": 15
+                }
             },
             "next": "logs_decryption_outcome"
         },

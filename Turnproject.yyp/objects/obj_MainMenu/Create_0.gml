@@ -7,7 +7,7 @@ menu_enums();
 var main_menu_option_array = [
     "New Game",
     "Continue", 
-    "Star Map",
+    "New Fight",
     "Settings",
     "Scene Gallery",
     "Quit"
@@ -22,7 +22,6 @@ if (!variable_global_exists("game_settings")) {
         sfx_volume: 1.0,
         music_volume: 1.0,
         fullscreen: false,
-        zoom_level: 4,
         combat_speed: 1.0,
         auto_save: true,
         difficulty: 1,
