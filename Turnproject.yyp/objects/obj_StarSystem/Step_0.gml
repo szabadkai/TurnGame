@@ -50,15 +50,14 @@ if (mouse_distance <= interaction_radius) {
             tooltip_manager.hide_tooltip();
         }
         
-        // Try to use travel confirmation dialog
+        // Try to use travel confirmation dialog (asset-checked by name)
         var use_confirmation_dialog = false;
         var confirmation_dialog = noone;
-        
-        // Check if confirmation dialog object exists and can be created
-        if (object_exists(obj_TravelConfirmationDialog)) {
-            confirmation_dialog = instance_find(obj_TravelConfirmationDialog, 0);
+        var dialog_asset = asset_get_index("obj_TravelConfirmationDialog");
+        if (dialog_asset != -1) {
+            confirmation_dialog = instance_find(dialog_asset, 0);
             if (confirmation_dialog == noone) {
-                confirmation_dialog = instance_create_layer(0, 0, "Instances", obj_TravelConfirmationDialog);
+                confirmation_dialog = instance_create_layer(0, 0, "Instances", dialog_asset);
             }
             use_confirmation_dialog = (confirmation_dialog != noone);
         }

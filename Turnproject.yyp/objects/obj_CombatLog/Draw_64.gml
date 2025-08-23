@@ -53,7 +53,7 @@ function draw_full_log() {
             var text_width = log_width - collapse_button_size - 10;
             var clipped_message = string_copy(message, 1, floor(text_width / 8));  // Rough character estimate
             
-            draw_text_transformed(log_x, y_pos, clipped_message, 0.8, 0.8, 0);
+            draw_text_transformed(log_x, y_pos, clipped_message, 1.0, 1.0, 0);
         }
         
         // Draw scroll indicator if needed
@@ -96,7 +96,7 @@ function draw_oneline_log() {
         var text_width = log_width - collapse_button_size - 10;
         var clipped_message = string_copy(display_message, 1, floor(text_width / 8));
         
-        draw_text_transformed(log_x, log_y, clipped_message, 0.8, 0.8, 0);
+        draw_text_transformed(log_x, log_y, clipped_message, 1.0, 1.0, 0);
     }
 }
 
@@ -114,7 +114,7 @@ function draw_nub_log() {
     draw_set_color(c_white);
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
-    draw_text_transformed(log_x + nub_size/2, log_y + nub_size/2, "LOG", 0.6, 0.6, 0);
+    draw_text_transformed(log_x + nub_size/2, log_y + nub_size/2, "LOG", 0.8, 0.8, 0);
 }
 
 // Helper function to get message color

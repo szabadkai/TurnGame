@@ -12,17 +12,26 @@ if (damage_flash > 0) {
     damage_flash--;
 }
 
-// Draw turn indicator under character if active
+// Draw thick white outline around character if active
 if (state == TURNSTATE.active) {
-    // Draw a filled, semi-transparent ellipse to look chunkier at zoom scale
-    draw_set_color(c_white);
-    var x1 = floor(x - 7);
-    var y1 = floor(y + 4);
-    var x2 = floor(x + 7);
-    var y2 = floor(y + 9);
-    draw_set_alpha(0.4);
-    draw_ellipse(x1, y1, x2, y2, false); // filled
-    draw_set_alpha(1);
+    // Force blend mode to ensure white color shows properly
+    gpu_set_blendmode(bm_normal);
+    
+    var outline_thickness = 2;
+    
+    // Draw outline in 8 directions - use additive blending for bright white
+    gpu_set_blendmode(bm_add);
+    for (var ox = -outline_thickness; ox <= outline_thickness; ox++) {
+        for (var oy = -outline_thickness; oy <= outline_thickness; oy++) {
+            if (ox != 0 || oy != 0) { // Skip center position
+                draw_sprite_ext(sprite_index, image_index, x + ox, y + oy, 
+                               image_xscale, image_yscale, image_angle, c_white, 1);
+            }
+        }
+    }
+    
+    // Reset blend mode for normal drawing
+    gpu_set_blendmode(bm_normal);
 }
 
 // Draw the sprite (normal color, red flash, or custom color)
