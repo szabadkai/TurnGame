@@ -105,8 +105,12 @@ function confirm_travel() {
         global.pending_scene_id = pending_target_scene;
         show_debug_message("Starting transition to scene: " + pending_target_scene);
         
-        // Transition to dialog room
-        room_goto(pending_travel_room);
+        // Transition via navigation service (map room → state)
+        var _state = GameState.OVERWORLD;
+        if (pending_travel_room == Room_Dialog)      _state = GameState.DIALOG;
+        else if (pending_travel_room == Room_StarMap) _state = GameState.STARMAP;
+        else if (pending_travel_room == Room_MainMenu) _state = GameState.MAIN_MENU;
+        scr_nav_go(_state, { scene_id: pending_target_scene });
     }
 }
 

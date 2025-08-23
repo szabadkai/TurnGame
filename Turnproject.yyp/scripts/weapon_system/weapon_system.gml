@@ -91,20 +91,20 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
     switch(special) {
         case "crit_18":
             if (attack_roll >= 18) {
-                if (variable_global_exists("combat_log")) global.combat_log("CRITICAL HIT with " + weapon_name + "!");
+                scr_log("CRITICAL HIT with " + weapon_name + "!");
                 return damage_roll * 3;
             }
             break;
             
         case "instant_kill":
             if (attack_roll == 20) {
-                if (variable_global_exists("combat_log")) global.combat_log("ASSASSINATION! " + weapon_name + " delivers a killing blow!");
+                scr_log("ASSASSINATION! " + weapon_name + " delivers a killing blow!");
                 return 999;
             }
             break;
             
         case "chain_lightning":
-            if (variable_global_exists("combat_log")) global.combat_log("CHAIN LIGHTNING! Striking adjacent enemies!");
+            scr_log("CHAIN LIGHTNING! Striking adjacent enemies!");
             var enemies = find_adjacent_enemies(attacker);
             for (var i = 0; i < array_length(enemies); i++) {
                 if (enemies[i] != target) {
@@ -116,12 +116,12 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
         case "freeze":
             if (irandom(1) == 0) {
                 target.frozen_turns = 1;
-                if (variable_global_exists("combat_log")) global.combat_log("Target FROZEN! Will skip next turn!");
+                scr_log("Target FROZEN! Will skip next turn!");
             }
             break;
             
         case "area_attack":
-            if (variable_global_exists("combat_log")) global.combat_log("AREA ATTACK! " + weapon_name + " strikes multiple foes!");
+            scr_log("AREA ATTACK! " + weapon_name + " strikes multiple foes!");
             var enemies = find_adjacent_enemies(attacker);
             for (var i = 0; i < array_length(enemies); i++) {
                 if (enemies[i] != target) {
@@ -133,20 +133,17 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
         case "burn":
             if (irandom(3) == 0) {
                 target.burn_turns = 3;
-                if (variable_global_exists("combat_log")) global.combat_log("Target BURNING! Will take 1 damage per turn for 3 turns!");
+                scr_log("Target BURNING! Will take 1 damage per turn for 3 turns!");
             }
             break;
             
         case "self_harm":
             attacker.hp -= 1;
-            if (variable_global_exists("combat_log")) {
-                var attacker_name = global.entity_name(attacker);
-                global.combat_log("BERSERKER RAGE! " + attacker_name + " takes 1 damage from fury! (HP: " + string(attacker.hp) + "/" + string(attacker.max_hp) + ")");
-                
-                // Warning if attacker is getting low on health
-                if (attacker.hp <= 3 && object_get_name(attacker.object_index) == "obj_Player") {
-                    global.combat_log("WARNING: " + attacker_name + " is critically injured from berserker rage!");
-                }
+            var attacker_name = global.entity_name(attacker);
+            scr_log("BERSERKER RAGE! " + attacker_name + " takes 1 damage from fury! (HP: " + string(attacker.hp) + "/" + string(attacker.max_hp) + ")");
+            // Warning if attacker is getting low on health
+            if (attacker.hp <= 3 && object_get_name(attacker.object_index) == "obj_Player") {
+                scr_log("WARNING: " + attacker_name + " is critically injured from berserker rage!");
             }
             break;
     }
@@ -179,18 +176,18 @@ function find_adjacent_enemies(attacker) {
 function chain_attack(attacker, target) {
     if (roll_attack_simple(attacker.attack_bonus, target.defense_score, "Chain")) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
-        if (variable_global_exists("combat_log")) global.combat_log("Chain " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
+        scr_log("Chain " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(target) + " takes " + string(damage) + " chain damage!");
+        scr_log(global.entity_name(target) + " takes " + string(damage) + " chain damage!");
     }
 }
 
 function area_attack(attacker, target) {
     if (roll_attack_simple(attacker.attack_bonus, target.defense_score, "Area")) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
-        if (variable_global_exists("combat_log")) global.combat_log("Area " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
+        scr_log("Area " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(target) + " takes " + string(damage) + " area damage!");
+        scr_log(global.entity_name(target) + " takes " + string(damage) + " area damage!");
     }
 }
 
@@ -199,7 +196,7 @@ function roll_attack_simple(attack_bonus, target_defense, prefix) {
     var total = roll + attack_bonus;
     var hit = (total >= target_defense);
     
-    if (variable_global_exists("combat_log")) global.combat_log(prefix + " attack: d20+" + string(attack_bonus) + " = [" + string(roll) + "] + " + string(attack_bonus) + " = " + string(total) + " vs Defense " + string(target_defense) + (hit ? " - HIT!" : " - MISS!"));
+    scr_log(prefix + " attack: d20+" + string(attack_bonus) + " = [" + string(roll) + "] + " + string(attack_bonus) + " = " + string(total) + " vs Defense " + string(target_defense) + (hit ? " - HIT!" : " - MISS!"));
     
     return hit;
 }
@@ -208,7 +205,7 @@ function roll_damage_simple(damage_modifier, prefix) {
     var roll = roll_d20();
     var damage = max(1, roll + damage_modifier);
     
-    if (variable_global_exists("combat_log")) global.combat_log(prefix + " damage: d20+" + string(damage_modifier) + " = [" + string(roll) + "] + " + string(damage_modifier) + " = " + string(damage) + " damage");
+    scr_log(prefix + " damage: d20+" + string(damage_modifier) + " = [" + string(roll) + "] + " + string(damage_modifier) + " = " + string(damage) + " damage");
     
     return damage;
 }
@@ -219,10 +216,10 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
     switch(defender.weapon_special_type) {
         case "defense_boost":
             if (attack_missed) {
-                if (variable_global_exists("combat_log")) global.combat_log("COUNTER-ATTACK! " + defender.weapon_name + " strikes back!");
+                scr_log("COUNTER-ATTACK! " + defender.weapon_name + " strikes back!");
                 var counter_damage = roll_damage_simple(1, "Counter");
                 attacker.hp -= counter_damage;
-                if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(attacker) + " takes " + string(counter_damage) + " counter damage!");
+                    scr_log(global.entity_name(attacker) + " takes " + string(counter_damage) + " counter damage!");
             }
             break;
             
@@ -230,9 +227,9 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
             if (incoming_damage > 0) {
                 var reflected = floor(incoming_damage * 0.5);
                 if (reflected > 0) {
-                    if (variable_global_exists("combat_log")) global.combat_log("PARRY! " + defender.weapon_name + " reflects " + string(reflected) + " damage back!");
+                    scr_log("PARRY! " + defender.weapon_name + " reflects " + string(reflected) + " damage back!");
                     attacker.hp -= reflected;
-                    if (variable_global_exists("combat_log")) global.combat_log(global.entity_name(attacker) + " takes " + string(reflected) + " reflected damage!");
+                    scr_log(global.entity_name(attacker) + " takes " + string(reflected) + " reflected damage!");
                 }
             }
             break;
@@ -270,7 +267,7 @@ function find_enemies_in_line(attacker, direction, max_range) {
         current_y += dy;
         
         // Check for tile collision
-        var tile_layer = layer_tilemap_get_id("Tiles_Col");
+        var tile_layer = layer_tilemap_get_id(LAYER_COLLISION);
         if (tile_layer != -1) {
             var tile_data = tilemap_get_at_pixel(tile_layer, current_x, current_y);
             if (tile_data > 0 && tile_data != -2147483648) {
@@ -296,7 +293,7 @@ function is_enemy_in_pistol_range(player, enemy) {
     }
     
     // Check for tile collision along the line
-    var tile_layer = layer_tilemap_get_id("Tiles_Col");
+    var tile_layer = layer_tilemap_get_id(LAYER_COLLISION);
     if (tile_layer != -1) {
         // Sample the line at regular intervals to check for tile collision
         var steps = ceil(distance / 8); // Check every 8 pixels for good coverage

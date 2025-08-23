@@ -36,8 +36,8 @@ if (global.dialog_scene_selection) {
         transition_alpha = 0;
         // No other UI is present; immediately transition to Room1 from the dialog room
         if (room == Room_Dialog) {
-            show_debug_message("ESC closed selector; transitioning to Room1");
-            room_goto(Room1);
+            show_debug_message("ESC closed selector; transitioning to overworld");
+            scr_nav_go(GameState.OVERWORLD, undefined);
             return;
         }
     }
@@ -127,10 +127,10 @@ if (!global.dialog_scene_selection && global.dialog_state != 0) {
     }
 } else if (!global.dialog_scene_selection && global.dialog_state == 0) {
     // No UI visible (no selection, dialog inactive). If we are in the dialog room,
-    // pressing ESC should always transition to Room1.
+    // pressing ESC should always transition to overworld.
     if (keyboard_check_pressed(vk_escape) && room == Room_Dialog) {
-        show_debug_message("ESC pressed with no UI; transitioning to Room1");
-        room_goto(Room1);
+        show_debug_message("ESC pressed with no UI; transitioning to overworld");
+        scr_nav_go(GameState.OVERWORLD, undefined);
     }
 }
 
@@ -146,4 +146,3 @@ if (dialog_debug) {
         end_dialog_scene();
     }
 }
-

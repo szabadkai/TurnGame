@@ -69,3 +69,20 @@ Below are targeted, low-risk refactors to improve clarity, consistency, and main
 - Phase 5: Input map + UI root + camera service; prune object Step code.
 
 Short pitch: This structure mirrors common GMS2 large-project practices—persistent controller, state-driven rooms, system scripts, and data-first content. It reduces coupling, makes saves durable via versioned subsaves, and lets designers extend content without touching logic.
+
+## Implemented So Far (Incremental)
+- Direction system: `Dir` enum and `move(direction)` switch are in place; fixed equality bug patterns and standardized movement constants.
+- Layer constants: added `LAYER_COLLISION` macro and replaced hardcoded "Tiles_Col" in `weapon_system.gml` and `character_base`.
+- Logging utility: added `scr_log(msg)` used in combat helpers; removes duplicate `global.combat_log` checks.
+- Dice hygiene: corrected `damage_text_to_value` to use `==` and support more dice.
+- Save versioning: writes `save_version: 1` and checks on load with a migration hook; slot info shows version.
+- Stability fix: `obj_StarSystem` now resolves `obj_TravelConfirmationDialog` via `asset_get_index` and falls back gracefully.
+- Event wiring: centralized `scr_log` now emits via `event_bus`; autosave requests are emitted on level-up and combat victory and handled in `obj_GameController`.
+
+## Next Steps (Phase 1 scaffolding)
+- Navigation service: added `nav_service` with `scr_nav_go/scr_nav_back` and `scr_nav_room_for_state`; scaffolded `obj_GameController` (persistent) to own state.
+- Event bus: added `event_bus` with `scr_event_emit/scr_event_subscribe` for decoupled notifications.
+- Shared IO: added `file_io` helpers to unify text read/write for Save and Dialog.
+- Registries: added `registry_weapons` scaffold for ID-keyed weapons; integration will be incremental.
+
+Notes: The new resources are scaffolded and safe—no room edits yet. To activate `obj_GameController`, drop one instance in your bootstrap room (e.g., `Room_MainMenu`) via the IDE so it persists across rooms.

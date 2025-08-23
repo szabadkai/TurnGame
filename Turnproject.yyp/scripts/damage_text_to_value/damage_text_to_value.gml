@@ -63,16 +63,48 @@ function roll_weapon_damage_with_display(damage_dice, damage_modifier, weapon_na
     var total_damage = dice_roll + damage_modifier;
     
     // Display the roll with proper D&D notation
-    if (variable_global_exists("combat_log")) global.combat_log(weapon_name + " damage: " + damage_dice + "+" + string(damage_modifier) + " = [" + string(dice_roll) + "] + " + string(damage_modifier) + " = " + string(total_damage) + " damage");
+    scr_log(weapon_name + " damage: " + damage_dice + "+" + string(damage_modifier) + " = [" + string(dice_roll) + "] + " + string(damage_modifier) + " = " + string(total_damage) + " damage");
     
     return total_damage;
 }
 
 function damage_text_to_value(damage_text){
-if (damage_text = "d6") {
-return irandom_range(1, 6)
+    if (damage_text == "d6") {
+        return irandom_range(1, 6);
+    }
+    if (damage_text == "d4") {
+        return irandom_range(1, 4);
+    }
+    if (damage_text == "d8") {
+        return irandom_range(1, 8);
+    }
+    if (damage_text == "d10") {
+        return irandom_range(1, 10);
+    }
+    if (damage_text == "d12") {
+        return irandom_range(1, 12);
+    }
+    // default to d6 if unknown
+    return irandom_range(1, 6);
 }
-if (damage_text = "d4") {
-return irandom_range(1, 4)
-}
+
+/// Simple logging helper used across systems
+function scr_log(_msg, _channel) {
+    // Route through event bus if available; fallback to direct
+    if (!is_undefined(_channel)) {
+        // no-op, channel reserved for future routing
+    }
+    // Emit through event bus; falls back below if something goes wrong
+    var _data = { message: string(_msg), channel: is_undefined(_channel) ? "default" : _channel };
+    try {
+        scr_event_emit("log", _data);
+        return;
+    } catch (e) {
+        // fall back to direct logging
+    }
+    if (variable_global_exists("combat_log")) {
+        global.combat_log(string(_msg));
+    } else {
+        show_debug_message(string(_msg));
+    }
 }

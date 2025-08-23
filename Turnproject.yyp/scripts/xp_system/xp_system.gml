@@ -56,33 +56,28 @@ function gain_xp(character, xp_amount) {
             character.update_combat_stats();
         }
         
-        // Log level up
-        if (variable_global_exists("combat_log")) {
-            global.combat_log("*** " + character.character_name + " LEVEL UP! Now level " + string(character.level) + " ***");
-            global.combat_log("HP +" + string(hp_gain) + " (total: " + string(character.max_hp) + ")");
-            
-            if (character.proficiency_bonus > old_proficiency) {
-                global.combat_log("Proficiency bonus increased to +" + string(character.proficiency_bonus));
-            }
-            
-            if (is_asi_level) {
-                global.combat_log("Ability Score Improvement available! Press 'I' to allocate points.");
-                
-                // Mark character as needing ASI but don't auto-trigger overlay
-                // This prevents multiple overlays from spawning simultaneously
-                if (object_get_name(character.object_index) == "obj_Player") {
-                    character.needs_asi = true;
-                    global.combat_log(character.character_name + " needs ASI allocation - press 'I' when ready.");
-                }
+        // Log level up via event bus
+        scr_log("*** " + character.character_name + " LEVEL UP! Now level " + string(character.level) + " ***");
+        scr_log("HP +" + string(hp_gain) + " (total: " + string(character.max_hp) + ")");
+        if (character.proficiency_bonus > old_proficiency) {
+            scr_log("Proficiency bonus increased to +" + string(character.proficiency_bonus));
+        }
+        if (is_asi_level) {
+            scr_log("Ability Score Improvement available! Press 'I' to allocate points.");
+            // Mark character as needing ASI but don't auto-trigger overlay
+            if (object_get_name(character.object_index) == "obj_Player") {
+                character.needs_asi = true;
+                scr_log(character.character_name + " needs ASI allocation - press 'I' when ready.");
             }
         }
         
-        // Auto-save after level up if it's a player character
+        // Auto-save after level up if it's a player character (emit event)
         if (object_get_name(character.object_index) == "obj_Player") {
+            // emit autosave; fallback if event bus fails
             try {
-                auto_save_game();
+                scr_event_emit("autosave", { reason: "level_up", character: character.id });
             } catch (e) {
-                show_debug_message("Auto-save after level up failed: " + string(e));
+                try { auto_save_game(); } catch (e2) { show_debug_message("Auto-save after level up failed: " + string(e2)); }
             }
         }
     }
@@ -92,9 +87,7 @@ function gain_xp(character, xp_amount) {
 function distribute_party_xp(xp_amount) {
     var player_count = instance_number(obj_Player);
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("Party gains " + string(xp_amount) + " XP (" + string(xp_amount) + " ÷ " + string(player_count) + " each)");
-    }
+    scr_log("Party gains " + string(xp_amount) + " XP (" + string(xp_amount) + " ÷ " + string(player_count) + " each)");
     
     var players_leveled = [];
     var players_need_asi = [];
@@ -106,9 +99,7 @@ function distribute_party_xp(xp_amount) {
             var old_level = player_instance.level;
             gain_xp(player_instance, xp_amount);
             
-            if (variable_global_exists("combat_log")) {
-                global.combat_log(player_instance.character_name + " gains " + string(xp_amount) + " XP!");
-            }
+            scr_log(player_instance.character_name + " gains " + string(xp_amount) + " XP!");
             
             // Track if this player leveled up and needs ASI
             if (player_instance.level > old_level) {
@@ -126,13 +117,13 @@ function distribute_party_xp(xp_amount) {
         // Show ASI overlay for the first player who needs it
         var ui_manager = instance_find(obj_UIManager, 0);
         if (ui_manager != noone) {
-            global.combat_log("Auto-triggering ASI overlay for " + players_need_asi[0].character_name);
+            scr_log("Auto-triggering ASI overlay for " + players_need_asi[0].character_name);
             ui_manager.show_level_up_overlay(players_need_asi[0]);
         }
         
         // Log message about other players needing ASI
         if (array_length(players_need_asi) > 1) {
-            global.combat_log("Other party members also need ASI - use 'I' key to cycle through them.");
+            scr_log("Other party members also need ASI - use 'I' key to cycle through them.");
         }
     }
 }

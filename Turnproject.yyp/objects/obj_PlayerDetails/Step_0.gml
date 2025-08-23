@@ -72,7 +72,5 @@ function cycle_weapon(player, direction) {
     }
     
     // Log weapon change
-    if (variable_global_exists("combat_log")) {
-        global.combat_log(player.character_name + " equipped: " + player.weapon_name);
-    }
+    scr_log(player.character_name + " equipped: " + player.weapon_name);
 }

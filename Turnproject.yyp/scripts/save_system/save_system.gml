@@ -30,6 +30,7 @@ function save_game_to_slot(slot_index) {
     
     // Collect game state
     save_data.game_state = {
+        save_version: 1,
         current_room: room,
         save_time: date_current_datetime(),
         play_time: get_timer() / 1000000, // Convert to seconds
@@ -111,6 +112,16 @@ function load_game_from_slot_data(slot_index) {
     } catch (e) {
         show_debug_message("Failed to parse save file: " + string(e));
         return false;
+    }
+    
+    // Version check/migration hook
+    var _version = 0;
+    if (variable_struct_exists(save_data, "game_state") && variable_struct_exists(save_data.game_state, "save_version")) {
+        _version = save_data.game_state.save_version;
+    }
+    if (_version < 1) {
+        show_debug_message("Migrating save data to v1 schema");
+        // no-op for now
     }
     
     // Go to the saved room first
@@ -258,6 +269,11 @@ function get_save_slot_info_detailed(slot_index) {
         variable_struct_exists(save_data.game_state, "save_time")) {
         var save_time = save_data.game_state.save_time;
         info += " - " + date_datetime_string(save_time);
+    }
+    
+    if (variable_struct_exists(save_data, "game_state") &&
+        variable_struct_exists(save_data.game_state, "save_version")) {
+        info += " (v" + string(save_data.game_state.save_version) + ")";
     }
     
     return info != "" ? info : "Unknown";

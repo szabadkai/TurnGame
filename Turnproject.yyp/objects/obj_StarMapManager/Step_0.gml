@@ -6,5 +6,5 @@
 
 // ESC key to return to main menu
 if (keyboard_check_pressed(vk_escape)) {
-    room_goto(Room_MainMenu);
+    scr_nav_go(GameState.MAIN_MENU, undefined);
 }

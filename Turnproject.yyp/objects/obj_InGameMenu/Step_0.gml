@@ -58,7 +58,7 @@ switch (menu_state) {
         if (inputs.select) {
             if (selected_option == 0) {
                 // Yes - Return to main menu
-                room_goto(Room_MainMenu);
+                scr_nav_go(GameState.MAIN_MENU, undefined);
             } else {
                 // No - Back to in-game menu
                 change_menu_state(MENUSTATE.MAIN);

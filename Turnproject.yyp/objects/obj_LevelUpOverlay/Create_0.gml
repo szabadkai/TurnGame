@@ -117,9 +117,7 @@ function apply_asi_improvements() {
         increase_ability_score(player_instance, "charisma", asi_selections.charisma);
     }
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log(player_instance.character_name + " completed ability score improvements!");
-    }
+    scr_log(player_instance.character_name + " completed ability score improvements!");
     
     // Clear the needs_asi flag
     player_instance.needs_asi = false;
@@ -130,9 +128,7 @@ function apply_asi_improvements() {
         var other_player = instance_find(obj_Player, i);
         if (instance_exists(other_player) && other_player != player_instance && other_player.needs_asi) {
             // Switch to the next player who needs ASI
-            if (variable_global_exists("combat_log")) {
-                global.combat_log("Switching ASI overlay to " + other_player.character_name);
-            }
+            scr_log("Switching ASI overlay to " + other_player.character_name);
             show_asi_overlay(other_player);
             return; // Don't hide the overlay, just switch players
         }

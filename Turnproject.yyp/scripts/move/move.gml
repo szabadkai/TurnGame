@@ -1,26 +1,39 @@
-function move(_up_down_left_right){
-if (_up_down_left_right = 0) {
-		is_animating = true;
-		vspeed = -obj_c_turn.spd;
-		image_index = 0
-		alarm[0] = obj_c_turn.turn_lenght;
+function move(direction) {
+	// Validate direction parameter
+	if (!is_real(direction) || direction < Dir.UP || direction > Dir.RIGHT) {
+		show_debug_message("ERROR: Invalid direction passed to move(): " + string(direction));
+		return false;
 	}
-if (_up_down_left_right = 1) {
-		is_animating = true;
-		vspeed = obj_c_turn.spd;
-		image_index = 1
-		alarm[0] = obj_c_turn.turn_lenght;
+	
+	// Set common animation properties
+	is_animating = true;
+	image_index = direction;  // Set sprite frame based on direction
+	alarm[0] = MOVEMENT_DURATION;  // Use constant for movement duration
+	
+	// Apply movement based on direction using switch statement
+	switch (direction) {
+		case Dir.UP:
+			vspeed = -MOVEMENT_SPEED;
+			break;
+			
+		case Dir.DOWN:
+			vspeed = MOVEMENT_SPEED;
+			break;
+			
+		case Dir.LEFT:
+			hspeed = -MOVEMENT_SPEED;
+			break;
+			
+		case Dir.RIGHT:
+			hspeed = MOVEMENT_SPEED;
+			break;
+			
+		default:
+			// This should never happen due to validation above, but safe fallback
+			show_debug_message("ERROR: Unhandled direction in move() switch: " + string(direction));
+			is_animating = false;
+			return false;
 	}
-if (_up_down_left_right = 2) {
-		is_animating = true;
-		hspeed = -obj_c_turn.spd;
-		image_index = 2
-		alarm[0] = obj_c_turn.turn_lenght;
-	}
-if (_up_down_left_right = 3) {
-		is_animating = true;
-		hspeed = obj_c_turn.spd;
-		image_index = 3
-		alarm[0] = obj_c_turn.turn_lenght;
-	}
+	
+	return true;  // Movement initiated successfully
 }

@@ -108,8 +108,8 @@ if (mouse_distance <= interaction_radius) {
             global.pending_scene_id = target_scene;
             show_debug_message("Starting direct transition to scene: " + target_scene);
             
-            // Transition to dialog room
-            room_goto(Room_Dialog);
+            // Transition to dialog room via nav service
+            scr_nav_go(GameState.DIALOG, { scene_id: target_scene });
         }
     }
     

@@ -73,7 +73,7 @@ function can_move_to(check_x, check_y) {
     }
     
     // Check tile collision on Tiles_Col layer
-    var tile_layer = layer_tilemap_get_id("Tiles_Col");
+    var tile_layer = layer_tilemap_get_id(LAYER_COLLISION);
     if (tile_layer != -1) {
         var tile_data = tilemap_get_at_pixel(tile_layer, check_x, check_y);
         show_debug_message("TILE CHECK at (" + string(check_x) + "," + string(check_y) + "): tile_data = " + string(tile_data));
@@ -88,4 +88,3 @@ function can_move_to(check_x, check_y) {
     show_debug_message("CLEAR: Position (" + string(check_x) + "," + string(check_y) + ") is free");
     return true;  // Position is clear for movement
 }
-

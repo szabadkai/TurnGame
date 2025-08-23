@@ -1,7 +1,7 @@
 // === STATUS EFFECTS ===
 if (frozen_turns > 0) {
     if (state == TURNSTATE.active) {
-        if (variable_global_exists("combat_log")) global.combat_log(character_name + " is FROZEN! Skipping turn...");
+        scr_log(character_name + " is FROZEN! Skipping turn...");
         frozen_turns--;
         alarm[0] = 1;
         exit;
@@ -11,9 +11,9 @@ if (frozen_turns > 0) {
 if (burn_turns > 0 && state == TURNSTATE.active) {
     hp -= 1;
     burn_turns--;
-    if (variable_global_exists("combat_log")) global.combat_log(character_name + " takes 1 BURN damage! (" + string(burn_turns) + " turns remaining)");
+    scr_log(character_name + " takes 1 BURN damage! (" + string(burn_turns) + " turns remaining)");
     if (hp <= 0) {
-        if (variable_global_exists("combat_log")) global.combat_log(character_name + " burned to death!");
+        scr_log(character_name + " burned to death!");
     }
 }
 
@@ -21,9 +21,7 @@ if (burn_turns > 0 && state == TURNSTATE.active) {
 if (hp <= 0) {
     if (!dying) {
         // Log enemy death
-        if (variable_global_exists("combat_log")) {
-            global.combat_log("*** " + character_name + " HAS DIED! ***");
-        }
+        scr_log("*** " + character_name + " HAS DIED! ***");
 
         // If this enemy was taking its turn, we need to pass the turn
         var was_active = (state == TURNSTATE.active);
@@ -369,10 +367,8 @@ if (state == TURNSTATE.active && !is_anim) {
                     image_speed = 1.0;
                     is_anim = true;
                     
-                    if (variable_global_exists("combat_log")) {
-                        var target_name = (ai_decision.target != noone) ? ai_decision.target.character_name : "target";
-                        global.combat_log(character_name + " moves toward " + target_name + "!");
-                    }
+                    var target_name = (ai_decision.target != noone) ? ai_decision.target.character_name : "target";
+                    scr_log(character_name + " moves toward " + target_name + "!");
                 } else {
                     // Movement blocked at execution time - end turn
                     show_debug_message(character_name + " could not execute move - ending turn");
@@ -383,9 +379,7 @@ if (state == TURNSTATE.active && !is_anim) {
                 
             case "wait":
             default:
-                if (variable_global_exists("combat_log")) {
-                    global.combat_log(character_name + " waits...");
-                }
+                scr_log(character_name + " waits...");
                 // Don't change direction when waiting - keep current facing
                 moves = 0;
                 alarm[0] = 1;
@@ -438,15 +432,12 @@ if (anim_state == State.ATTACK && is_anim && image_index >= sprite_get_number(sp
             target_player.hp -= final_damage;
             
             // Combat log reporting
-            if (variable_global_exists("combat_log")) {
-                var player_name = target_player.character_name;
-                global.combat_log(player_name + " takes " + string(final_damage) + " damage from " + weapon_name + "! (HP: " + string(target_player.hp) + "/" + string(target_player.max_hp) + ")");
-                
-                if (target_player.hp <= 0) {
-                    global.combat_log("*** " + player_name + " has been defeated by " + character_name + "! ***");
-                } else if (target_player.hp <= 3) {
-                    global.combat_log("WARNING: " + player_name + " is critically injured!");
-                }
+            var player_name = target_player.character_name;
+            scr_log(player_name + " takes " + string(final_damage) + " damage from " + weapon_name + "! (HP: " + string(target_player.hp) + "/" + string(target_player.max_hp) + ")");
+            if (target_player.hp <= 0) {
+                scr_log("*** " + player_name + " has been defeated by " + character_name + "! ***");
+            } else if (target_player.hp <= 3) {
+                scr_log("WARNING: " + player_name + " is critically injured!");
             }
             
             // Handle weapon special effects

@@ -1,7 +1,7 @@
 // === STATUS EFFECTS ===
 if (frozen_turns > 0) {
     if (state == TURNSTATE.active) {
-        if (variable_global_exists("combat_log")) global.combat_log("Player is FROZEN! Skipping turn...");
+        scr_log("Player is FROZEN! Skipping turn...");
         frozen_turns--;
         alarm[0] = 1;
         exit;
@@ -11,9 +11,9 @@ if (frozen_turns > 0) {
 if (burn_turns > 0 && state == TURNSTATE.active) {
     hp -= 1;
     burn_turns--;
-    if (variable_global_exists("combat_log")) global.combat_log("Player takes 1 BURN damage! (" + string(burn_turns) + " turns remaining)");
+    scr_log("Player takes 1 BURN damage! (" + string(burn_turns) + " turns remaining)");
     if (hp <= 0) {
-        if (variable_global_exists("combat_log")) global.combat_log("Player burned to death!");
+        scr_log("Player burned to death!");
     }
 }
 
@@ -24,9 +24,9 @@ if (state == TURNSTATE.active) {
             if (i < array_length(global.weapons)) {
                 equipped_weapon_id = i;
                 update_combat_stats();
-                if (variable_global_exists("combat_log")) global.combat_log("Equipped: " + weapon_name);
-                if (variable_global_exists("combat_log")) global.combat_log("Attack: +" + string(weapon_attack_bonus) + " | Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier));
-                if (variable_global_exists("combat_log")) global.combat_log("Special: " + global.weapons[i].description);
+                scr_log("Equipped: " + weapon_name);
+                scr_log("Attack: +" + string(weapon_attack_bonus) + " | Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier));
+                scr_log("Special: " + global.weapons[i].description);
             }
         }
     }
@@ -37,9 +37,9 @@ if (state == TURNSTATE.active) {
         if (weapon_id < array_length(global.weapons)) {
             equipped_weapon_id = weapon_id;
             update_combat_stats();
-            if (variable_global_exists("combat_log")) global.combat_log("Equipped: " + weapon_name);
-            if (variable_global_exists("combat_log")) global.combat_log("Attack: +" + string(weapon_attack_bonus) + " | Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier));
-            if (variable_global_exists("combat_log")) global.combat_log("Special: " + global.weapons[weapon_id].description);
+            scr_log("Equipped: " + weapon_name);
+            scr_log("Attack: +" + string(weapon_attack_bonus) + " | Damage: " + weapon_damage_dice + "+" + string(weapon_damage_modifier));
+            scr_log("Special: " + global.weapons[weapon_id].description);
         }
     }
 }
@@ -74,7 +74,7 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim && mouse_check_button_pre
                 is_anim = true;
                 depth = -100;
             } else {
-                if (variable_global_exists("combat_log")) global.combat_log("Target out of range! (Max 4 tiles)");
+                scr_log("Target out of range! (Max 4 tiles)");
             }
         }
     }
@@ -203,16 +203,14 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
 if (anim_state == State.ATTACK && is_anim) {
     if (image_index == 3) {
         // Weapon-Based D20 Combat System
-        if (variable_global_exists("combat_log")) {
-            if (variable_global_exists("combat_log")) global.combat_log("=== " + character_name + " Turn ===");
-        }
+        scr_log("=== " + character_name + " Turn ===");
         
         var attack_roll = roll_d20();
         var attack_total = attack_roll + attack_bonus;
 
         // Validate target before using it (may have been destroyed/moved)
         if (!variable_instance_exists(id, "target_enemy") || is_undefined(target_enemy) || target_enemy == noone || !instance_exists(target_enemy)) {
-            if (variable_global_exists("combat_log")) global.combat_log("Attack cancelled: target unavailable.");
+            scr_log("Attack cancelled: target unavailable.");
             // Cleanly end the attack animation/state
             anim_state = State.IDLE;
             sprite_index = spr_matrix[dir][anim_state];
@@ -226,17 +224,17 @@ if (anim_state == State.ATTACK && is_anim) {
 
         var hit = (attack_total >= target_enemy.defense_score);
         
-        if (variable_global_exists("combat_log")) global.combat_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
+        scr_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
         
         if (hit) {
             var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_name);
             var final_damage = handle_special_attack(self, target_enemy, attack_roll, base_damage);
             
             target_enemy.hp -= final_damage;
-            if (variable_global_exists("combat_log")) global.combat_log(target_enemy.character_name + " takes " + string(final_damage) + " damage (" + string(target_enemy.hp + final_damage) + " HP → " + string(target_enemy.hp) + " HP)");
+            scr_log(target_enemy.character_name + " takes " + string(final_damage) + " damage (" + string(target_enemy.hp + final_damage) + " HP → " + string(target_enemy.hp) + " HP)");
             
             if (target_enemy.hp <= 0) {
-                if (variable_global_exists("combat_log")) global.combat_log(target_enemy.character_name + " is defeated!");
+                scr_log(target_enemy.character_name + " is defeated!");
                 
                 // Award XP to entire party using new distribution system
                 var xp_reward = target_enemy.xp_value;
@@ -261,9 +259,7 @@ sprite_index = spr_matrix[dir][anim_state];
 // === DEATH HANDLING (CHECK FIRST) ===
 if (hp <= 0) {
     // Log player death
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("*** " + character_name + " HAS DIED! ***");
-    }
+    scr_log("*** " + character_name + " HAS DIED! ***");
     
     // If this player was taking its turn, we need to pass the turn
     var was_active = (state == TURNSTATE.active);
@@ -313,5 +309,4 @@ if (keyboard_check_pressed(ord("T"))) {
         show_debug_message("Result for " + pos.name + ": " + (result ? "CLEAR" : "BLOCKED"));
     }
 }
-
 

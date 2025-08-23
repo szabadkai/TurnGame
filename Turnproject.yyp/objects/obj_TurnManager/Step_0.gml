@@ -14,7 +14,7 @@ if (keyboard_check_pressed(ord("M"))) {
     }
     
     show_debug_message("M key pressed - navigating to star map");
-    room_goto(Room_StarMap);
+    scr_nav_go(GameState.STARMAP, undefined);
 }
 
 // V key debug shortcut to trigger victory (kill all enemies)
@@ -30,9 +30,7 @@ if (keyboard_check_pressed(ord("V"))) {
         hp = 0; // This will trigger death in next step
     }
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("DEBUG: All enemies eliminated for testing!");
-    }
+    scr_log("DEBUG: All enemies eliminated for testing!");
 }
 
 // B key debug shortcut to trigger defeat (kill all players)
@@ -48,9 +46,7 @@ if (keyboard_check_pressed(ord("B"))) {
         hp = 0; // This will trigger death in next step
     }
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("DEBUG: All players defeated for testing!");
-    }
+    scr_log("DEBUG: All players defeated for testing!");
 }
 
 // C key to manually check combat state (for debugging)

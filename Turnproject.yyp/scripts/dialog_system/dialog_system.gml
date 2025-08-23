@@ -740,10 +740,10 @@ function end_dialog_scene() {
 
     // Check if we should transition to combat (for end_scene nodes)
     if (variable_global_exists("transition_to_combat_after_dialog") && global.transition_to_combat_after_dialog) {
-        show_debug_message("End scene node completed - transitioning to combat (Room1)");
+        show_debug_message("End scene node completed - transitioning to combat");
         global.transition_to_combat_after_dialog = false; // Reset flag
         global.return_to_star_map_after_combat = true; // Return to star map after combat
-        room_goto(Room1);
+        scr_nav_go(GameState.COMBAT, undefined);
         return;
     }
 
@@ -751,12 +751,12 @@ function end_dialog_scene() {
     if (global.dialog_exit_room != -1) {
         if (global.dialog_exit_room == Room_StarMap) {
             // When coming from star map, always go to combat first
-            show_debug_message("Dialog completed from star map - transitioning to combat (Room1)");
+            show_debug_message("Dialog completed from star map - transitioning to combat");
             // Set a flag to indicate we should return to star map after combat
             global.return_to_star_map_after_combat = true;
-            room_goto(Room1);
+            scr_nav_go(GameState.COMBAT, undefined);
         } else {
-            room_goto(Room1);
+            scr_nav_go(GameState.OVERWORLD, undefined);
         }
         return;
     }

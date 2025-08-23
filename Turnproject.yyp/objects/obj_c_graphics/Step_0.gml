@@ -25,7 +25,7 @@ if (keyboard_check_pressed(vk_f10)) {
       show_debug_message("Auto-save failed: " + string(e));
     }
   }
-  room_goto(Room_MainMenu);
+  scr_nav_go(GameState.MAIN_MENU, undefined);
 }
 
 // camera follow player (center view on first player)

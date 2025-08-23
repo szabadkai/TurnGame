@@ -294,18 +294,14 @@ function handle_weapon_special_effects(attacker, target) {
         case "freeze":
             if (random(100) < 50) {  // 50% chance
                 target.frozen_turns = 2;
-                if (variable_global_exists("combat_log")) {
-                    global.combat_log(target.character_name + " is FROZEN for 2 turns!");
-                }
+                scr_log(target.character_name + " is FROZEN for 2 turns!");
             }
             break;
             
         case "burn":
             if (random(100) < 25) {  // 25% chance
                 target.burn_turns = 3;
-                if (variable_global_exists("combat_log")) {
-                    global.combat_log(target.character_name + " is BURNING for 3 turns!");
-                }
+                scr_log(target.character_name + " is BURNING for 3 turns!");
             }
             break;
             
@@ -327,9 +323,7 @@ function apply_chain_lightning(caster, initial_target) {
     var chained_to = [];
     array_push(chained_to, initial_target.id);
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("Lightning chains from " + initial_target.character_name + "!");
-    }
+    scr_log("Lightning chains from " + initial_target.character_name + "!");
     
     // Find adjacent characters to chain to
     with (character_base) {

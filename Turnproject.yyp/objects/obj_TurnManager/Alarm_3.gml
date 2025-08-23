@@ -34,10 +34,9 @@ function handle_combat_victory() {
     
     if (player_count > 0) {
         distribute_party_xp(xp_award);
-        
-        if (variable_global_exists("combat_log")) {
-            global.combat_log("VICTORY! Combat complete.");
-        }
+        scr_log("VICTORY! Combat complete.");
+        // Emit autosave request on combat end (victory)
+        try { scr_event_emit("autosave", { reason: "combat_end", victory: true }); } catch (e) { /* ignore */ }
     }
     
     // Notify GameManager of combat completion
@@ -60,9 +59,7 @@ function handle_combat_victory() {
 function handle_combat_defeat() {
     show_debug_message("Processing combat defeat...");
     
-    if (variable_global_exists("combat_log")) {
-        global.combat_log("DEFEAT! All party members have fallen.");
-    }
+    scr_log("DEFEAT! All party members have fallen.");
     
     // Notify GameManager of combat defeat
     if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {

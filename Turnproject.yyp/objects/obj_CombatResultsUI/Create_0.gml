@@ -93,7 +93,7 @@ function handle_return_button() {
     
     // Return to star map
     show_debug_message("Transitioning to star map with preserved progress");
-    room_goto(Room_StarMap);
+    scr_nav_go(GameState.STARMAP, undefined);
 }
 
 // Check if mouse is over return button

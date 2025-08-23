@@ -1,6 +1,9 @@
 // === SHARED COMBAT ENTITY RENDERING ===
 // This handles all common visual elements for Player and Enemy objects
 
+// Early fallback if no sprite is assigned
+var _has_sprite = (sprite_index != -1);
+
 // Check for damage to trigger flash
 if (hp < last_hp) {
     damage_flash = 10; // Flash for 10 frames
@@ -13,7 +16,7 @@ if (damage_flash > 0) {
 }
 
 // Draw thick white outline around character if active
-if (state == TURNSTATE.active) {
+if (_has_sprite && state == TURNSTATE.active) {
     // Force blend mode to ensure white color shows properly
     gpu_set_blendmode(bm_normal);
     
@@ -34,11 +37,17 @@ if (state == TURNSTATE.active) {
     gpu_set_blendmode(bm_normal);
 }
 
-// Draw the sprite (normal color, red flash, or custom color)
-if (damage_flash > 0) {
-    draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_red, image_alpha);
+// Draw the sprite (normal color, red flash, or custom color), or a placeholder if missing
+if (_has_sprite) {
+    if (damage_flash > 0) {
+        draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_red, image_alpha);
+    } else {
+        draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, sprite_color, image_alpha);
+    }
 } else {
-    draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, sprite_color, image_alpha);
+    // Fallback placeholder: small rectangle where the character would be
+    draw_set_color(damage_flash > 0 ? c_red : c_ltgray);
+    draw_rectangle(x - 6, y - 6, x + 6, y + 6, false);
 }
 
 // Draw character name and HP above character (small font)

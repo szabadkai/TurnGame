@@ -309,10 +309,8 @@ function execute_ai_action(character, ai_decision) {
                 character.is_anim = true;
                 
                 // Log movement
-                if (variable_global_exists("combat_log")) {
-                    var target_name = (ai_decision.target != noone) ? ai_decision.target.character_name : "target";
-                    global.combat_log(character.character_name + " moves toward " + target_name + "!");
-                }
+                var target_name = (ai_decision.target != noone) ? ai_decision.target.character_name : "target";
+                scr_log(character.character_name + " moves toward " + target_name + "!");
                 return true;
             }
             break;
@@ -320,9 +318,7 @@ function execute_ai_action(character, ai_decision) {
         case "wait":
         default:
             // End turn
-            if (variable_global_exists("combat_log")) {
-                global.combat_log(character.character_name + " waits...");
-            }
+            scr_log(character.character_name + " waits...");
             character.moves = 0;
             character.alarm[0] = 1;
             return true;

@@ -28,6 +28,15 @@ enum DialogState {
 	COMPLETED
 }
 
+// Global high-level game states for navigation
+enum GameState {
+    MAIN_MENU,
+    OVERWORLD,
+    COMBAT,
+    DIALOG,
+    STARMAP
+}
+
 enum SkillCheckResult {
 	NOT_ATTEMPTED,
 	SUCCESS,
@@ -46,4 +55,10 @@ enum EffectType {
 	REPUTATION_CHANGE,
 	SCALING_EFFECT
 }
+
+// Movement constants
+#macro TILE_SIZE 16
+#macro MOVEMENT_SPEED 2
+#macro MOVEMENT_DURATION 30
+#macro LAYER_COLLISION "Tiles_Col"
 }
