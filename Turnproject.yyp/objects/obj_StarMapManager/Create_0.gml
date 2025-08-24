@@ -14,8 +14,12 @@ tooltip_manager = noone;
 // Create essential UI components
 create_star_map_ui();
 
-// Load saved progress BEFORE creating systems
-load_saved_star_map_progress();
+// Load saved progress BEFORE creating systems (only if not already loaded)
+if (!variable_global_exists("star_map_state") || !variable_struct_exists(global.star_map_state, "systems")) {
+    load_saved_star_map_progress();
+} else {
+    show_debug_message("StarMapManager: Star map state already loaded, skipping file load");
+}
 
 // Wait a frame to ensure global state is fully loaded before creating systems
 alarm[0] = 1; // Create systems after 1 frame delay

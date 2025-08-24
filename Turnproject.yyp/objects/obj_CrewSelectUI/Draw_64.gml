@@ -33,7 +33,7 @@ for (var i = 0; i < array_length(available_crew); i++) {
     var member = available_crew[i];
     var member_y = list_y + (i * 20);
     
-    // Check if member is selected (custom implementation instead of array_indexOf)
+    // Check if memberer is selected (custom implementation instead of array_indexOf)
     var is_selected = false;
     for (var j = 0; j < array_length(landing_party); j++) {
         if (landing_party[j] == i) {

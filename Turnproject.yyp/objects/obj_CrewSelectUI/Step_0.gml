@@ -69,11 +69,6 @@ if (ui_visible && ui_alpha > 0.5) {
     var button_width = 120;
     var launch_button_x = x + ui_width/2 - button_width/2;
     
-    // Debug launch button bounds on click
-    if (mouse_check_button_pressed(mb_left)) {
-        show_debug_message("Launch button bounds: X[" + string(launch_button_x) + "-" + string(launch_button_x + button_width) + "] Y[" + string(button_y) + "-" + string(button_y + 35) + "]");
-    }
-    
     if (mouse_check_button_pressed(mb_left) && gui_mouse_x >= launch_button_x && gui_mouse_x <= launch_button_x + button_width && gui_mouse_y >= button_y && gui_mouse_y <= button_y + 35) {
         show_debug_message("Launch button clicked!");
         launch_mission();

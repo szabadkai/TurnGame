@@ -9,7 +9,8 @@
       "Bash(echo:*)",
       "Bash(done)",
       "WebSearch",
-      "WebFetch(domain:medium.com)"
+      "WebFetch(domain:medium.com)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []

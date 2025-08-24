@@ -1,6 +1,12 @@
 // obj_TurnManager Step Event
 // Handle global game state and input
 
+// Check if placement is complete and combat hasn't started yet
+if (variable_instance_exists(id, "placement_complete") && placement_complete && !combat_started) {
+    show_debug_message("TurnManager: Placement completed, building turn list and starting combat");
+    build_turn_list();
+}
+
 // M key shortcut to access star map
 if (keyboard_check_pressed(ord("M"))) {
     // Initialize star map system if not already done
@@ -51,7 +57,8 @@ if (keyboard_check_pressed(ord("C"))) {
 }
 
 // AUTOMATIC COMBAT END CHECK - Check every 60 frames (1 second)
-if (get_timer() mod 1000000 < 16667) { // Check roughly once per second
+// Only run during active combat, not during placement phase
+if (variable_instance_exists(id, "combat_started") && combat_started && get_timer() mod 1000000 < 16667) { // Check roughly once per second
     var enemy_count = instance_number(obj_Enemy);
     var player_count = instance_number(obj_Player);
     

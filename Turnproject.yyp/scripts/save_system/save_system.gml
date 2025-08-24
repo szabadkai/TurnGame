@@ -129,15 +129,13 @@ function load_game_from_slot_data(slot_index) {
         // no-op for now
     }
     
-    // Go to the saved room first
-    if (variable_struct_exists(save_data, "game_state") && 
-        variable_struct_exists(save_data.game_state, "current_room")) {
-        room_goto(save_data.game_state.current_room);
-        
-        // Set up a callback to restore state after room loads
-        global.pending_save_data = save_data;
-        global.loading_save = true;
-    }
+    // Use navigation system to go to the game
+    // Set up a callback to restore state after room loads
+    global.pending_save_data = save_data;
+    global.loading_save = true;
+    
+    // Navigate to overworld/combat room using the proper navigation system
+    scr_nav_go(GameState.OVERWORLD, undefined);
     
     show_debug_message("Game loaded from slot " + string(slot_index));
     return true;

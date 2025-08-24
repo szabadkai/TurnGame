@@ -57,11 +57,10 @@ weapon_damage_modifier = 0;
 weapon_defense_bonus = 0;
 weapon_special_type = "none";
 
-// Ensure core variables exist (should be inherited, but adding for safety)
-if (!variable_instance_exists(id, "state")) state = TURNSTATE.inactive;
-if (!variable_instance_exists(id, "frozen_turns")) frozen_turns = 0;
-if (!variable_instance_exists(id, "burn_turns")) burn_turns = 0;
-if (!variable_instance_exists(id, "damage_flash")) damage_flash = 0;
+state = TURNSTATE.inactive;
+frozen_turns = 0;
+burn_turns = 0;
+damage_flash = 0;
 
 // Initialize weapons and update stats
 init_weapons();

@@ -3,7 +3,8 @@
 function scr_enums(){
 enum TURNSTATE {
 	active,
-	inactive
+	inactive,
+	placement
 }
 
 enum Dir {

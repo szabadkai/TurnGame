@@ -11,8 +11,8 @@ function init_crew_system() {
                 full_name: "First Officer Torres",
                 role: "First Officer / Tactical",
                 character_index: 1,
-                max_hp: 110,
-                hp: 110,
+                max_hp: 10,
+                hp: 10,
                 status: "Healthy",
                 
                 // D&D-style stats (tactical specialist)
@@ -37,8 +37,8 @@ function init_crew_system() {
                 full_name: "Science Officer Kim", 
                 role: "Science Officer / Engineer",
                 character_index: 2,
-                max_hp: 85,
-                hp: 85,
+                max_hp: 9,
+                hp: 9,
                 status: "Healthy",
                 
                 // Science specialist
@@ -61,8 +61,8 @@ function init_crew_system() {
                 full_name: "Navigator Chen",
                 role: "Navigator / Pilot", 
                 character_index: 3,
-                max_hp: 90,
-                hp: 90,
+                max_hp: 10,
+                hp: 10,
                 status: "Healthy",
                 
                 // Pilot/navigator
@@ -85,8 +85,8 @@ function init_crew_system() {
                 full_name: "Dr. Vasquez",
                 role: "Chief Medical Officer",
                 character_index: 4,
-                max_hp: 80,
-                hp: 80,
+                max_hp: 9,
+                hp: 9,
                 status: "Healthy",
                 
                 // Medical specialist
@@ -109,8 +109,8 @@ function init_crew_system() {
                 full_name: "Security Chief Cole",
                 role: "Security Chief",
                 character_index: 5,
-                max_hp: 120,
-                hp: 120,
+                max_hp: 11,
+                hp: 11,
                 status: "Healthy",
                 
                 // Security specialist  

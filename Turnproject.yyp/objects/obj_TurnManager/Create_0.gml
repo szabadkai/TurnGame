@@ -1,25 +1,72 @@
 randomize();
 
+// Initialize core systems before anything else
+init_weapons(); // Ensure weapons are available before any character objects try to access them
+
 //create turn list
 turn_list = ds_list_create();
 
-// === SPAWN LANDING PARTY ===
-// Create player instances based on selected landing party
-spawn_landing_party();
+// === PLACEMENT PHASE ===
+// Initialize placement phase instead of immediately spawning
+placement_complete = false;
+combat_started = false;
 
-//creating a list -objects- adding all instance numbers of character_base
-var objects = ds_list_create();
-for (var i = 0; i < instance_number(character_base); i++) {
-	ds_list_add(objects, instance_find(character_base, i))
+// Remove any pre-existing Player instances from the room
+with (obj_Player) {
+    show_debug_message("TurnManager: Removing pre-placed Player instance");
+    instance_destroy();
 }
 
-while (ds_list_size(objects) > 0) {
-	ds_list_shuffle(objects);
-	ds_list_add(turn_list, objects[| 0]);
-	ds_list_delete(objects, 0)
+// Test if obj_PlacementUI exists
+show_debug_message("TurnManager: Testing if obj_PlacementUI exists...");
+if (object_exists(obj_PlacementUI)) {
+    show_debug_message("TurnManager: obj_PlacementUI exists, attempting to create");
+    var placement_ui = instance_create_layer(0, 0, "Instances", obj_PlacementUI);
+    if (placement_ui != noone) {
+        show_debug_message("TurnManager: PlacementUI created successfully, ID: " + string(placement_ui));
+    } else {
+        show_debug_message("TurnManager: ERROR - Failed to create PlacementUI");
+    }
+} else {
+    show_debug_message("TurnManager: ERROR - obj_PlacementUI does not exist! Falling back to old system");
+    // Fall back to old spawn system temporarily
+    spawn_landing_party();
 }
+show_debug_message("TurnManager: Starting placement phase");
 
-ds_list_destroy(objects);
+// Function to build turn list after placement is complete
+function build_turn_list() {
+    show_debug_message("TurnManager: Building turn list after placement");
+    
+    // Clear existing turn list
+    ds_list_clear(turn_list);
+    
+    // Create list of all character_base instances (Players + Enemies)
+    var objects = ds_list_create();
+    for (var i = 0; i < instance_number(character_base); i++) {
+        ds_list_add(objects, instance_find(character_base, i));
+    }
+    
+    // Shuffle and add to turn list
+    while (ds_list_size(objects) > 0) {
+        ds_list_shuffle(objects);
+        ds_list_add(turn_list, objects[| 0]);
+        ds_list_delete(objects, 0);
+    }
+    
+    ds_list_destroy(objects);
+    
+    // Start combat with first character
+    if (ds_list_size(turn_list) > 0) {
+        var first_character = turn_list[| 0];
+        if (instance_exists(first_character)) {
+            first_character.state = TURNSTATE.active;
+            show_debug_message("TurnManager: Combat started, first turn: " + string(first_character.character_name));
+        }
+    }
+    
+    combat_started = true;
+}
 
 // === DIALOG SYSTEM INITIALIZATION ===
 // Initialize enums and dialog system early in game startup

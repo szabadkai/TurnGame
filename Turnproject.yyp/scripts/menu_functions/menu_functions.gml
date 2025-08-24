@@ -262,7 +262,7 @@ function handle_main_menu_selection_original() {
         case MAINMENU_OPTION.CONTINUE:
             if (has_save_files()) {
                 play_menu_select_sound();
-                change_menu_.state(MENUSTATE.SAVE_LOAD);
+                change_menu_state(MENUSTATE.SAVE_LOAD);
             } else {
                 play_menu_error_sound();
             }

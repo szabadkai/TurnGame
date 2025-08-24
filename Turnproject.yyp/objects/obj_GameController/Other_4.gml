@@ -1,7 +1,16 @@
-// obj_GameManager Room Start Event
-// Handle room transitions and state loading
+// obj_GameController Room Start Event
+// Handle room transitions through event bus
 
-show_debug_message("GameManager: Room started - " + room_get_name(room));
+show_debug_message("GameController: Room started - " + room_get_name(room));
+
+// Update navigation state
+switch(room) {
+    case Room_MainMenu: global.nav.state = GameState.MAIN_MENU; break;
+    case Room_StarMap:  global.nav.state = GameState.STARMAP; break;
+    case Room_Dialog:   global.nav.state = GameState.DIALOG; break;
+    case Room1:         global.nav.state = GameState.OVERWORLD; break;
+    default:            global.nav.state = GameState.OVERWORLD; break;
+}
 
 // Handle specific room initialization
 switch(room) {
@@ -16,21 +25,14 @@ switch(room) {
     case Room_Dialog:
         handle_dialog_room_entry();
         break;
-        
-    case Room_MainMenu:
-        // Main menu doesn't need special handling
-        break;
 }
 
-// Auto-save when entering significant rooms (but not main menu)
-if (room != Room_MainMenu && progress_dirty) {
-    // Delay auto-save by 1 second to let room fully initialize
-    alarm[0] = game_get_speed(gamespeed_fps) * 1; // 1 second delay
-}
+// Emit room initialized event for auto-save
+scr_event_emit("room_initialized", {room: room});
 
-// Handle star map room entry
+// Room-specific handlers
 function handle_star_map_entry() {
-    show_debug_message("GameManager: Entering star map - loading saved progress");
+    show_debug_message("GameController: Entering star map - loading saved progress");
     
     // Ensure star map state exists
     if (!variable_global_exists("star_map_state")) {
@@ -39,7 +41,6 @@ function handle_star_map_entry() {
     
     // If we have a saved game, apply it
     if (file_exists("save_slot_0.sav")) {
-        // Set flag for star map manager to load state
         global.should_load_star_map_state = true;
     }
     
@@ -51,22 +52,20 @@ function handle_star_map_entry() {
     mark_progress_dirty();
 }
 
-// Handle combat room entry
 function handle_combat_room_entry() {
-    show_debug_message("GameManager: Entering combat room");
+    show_debug_message("GameController: Entering combat room");
     
-    // Apply any pending save data
+    // Apply any pending save data via event bus
     if (variable_global_exists("pending_save_data") && variable_global_exists("loading_save")) {
         if (global.loading_save) {
-            // Delay applying save data to let room initialize
+            // Emit save data loaded event with slight delay
             alarm[1] = game_get_speed(gamespeed_fps) * 0.5; // 0.5 second delay
         }
     }
 }
 
-// Handle dialog room entry
 function handle_dialog_room_entry() {
-    show_debug_message("GameManager: Entering dialog room");
+    show_debug_message("GameController: Entering dialog room");
     
     // Ensure dialog system is initialized
     if (!variable_global_exists("dialog_flags")) {

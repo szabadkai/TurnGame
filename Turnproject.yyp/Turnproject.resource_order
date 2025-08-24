@@ -4,7 +4,6 @@
     {"name":"character_base","order":1,"path":"objects/character_base/character_base.yy",},
     {"name":"obj_c_graphics","order":5,"path":"objects/obj_c_graphics/obj_c_graphics.yy",},
     {"name":"obj_Enemy","order":3,"path":"objects/obj_Enemy/obj_Enemy.yy",},
-    {"name":"obj_GameManager","order":13,"path":"objects/obj_GameManager/obj_GameManager.yy",},
     {"name":"obj_LevelUpOverlay","order":7,"path":"objects/obj_LevelUpOverlay/obj_LevelUpOverlay.yy",},
     {"name":"obj_PlayerDetails","order":6,"path":"objects/obj_PlayerDetails/obj_PlayerDetails.yy",},
     {"name":"obj_StarMapManager","order":10,"path":"objects/obj_StarMapManager/obj_StarMapManager.yy",},
