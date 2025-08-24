@@ -3,9 +3,15 @@
 // Initialize crew system
 init_crew_system();
 
+// Landing party selection
+landing_party = array_create(0); // Initialize empty array
+max_landing_party_size = 5;
+ui_width = 450; // Increased width for better text fitting
+ui_height = 400; // Increased height to accommodate 10 crew members
+
 // Position the UI in the center of the screen
-x = display_get_gui_width() / 2 - 200;  // Center horizontally (400px wide UI)
-y = display_get_gui_height() / 2 - 130; // Center vertically (260px tall UI)
+x = display_get_gui_width() / 2 - ui_width/2;  // Center horizontally
+y = display_get_gui_height() / 2 - ui_height/2; // Center vertically
 
 // UI state
 ui_visible = true;
@@ -17,12 +23,6 @@ system_info = {};
 pending_travel_room = -1;
 pending_system_id = "";
 pending_target_scene = "";
-
-// Landing party selection
-landing_party = array_create(0); // Initialize empty array
-max_landing_party_size = 5;
-ui_width = 400;
-ui_height = 260;
 
 // Animation settings
 fade_speed = 0.2;
@@ -40,9 +40,11 @@ function hide_ui() {
 }
 
 function launch_mission() {
+    show_debug_message("launch_mission() called - pending_travel_room: " + string(pending_travel_room) + ", pending_system_id: " + string(pending_system_id));
     hide_ui();
     
     if (pending_travel_room != -1 && pending_system_id != "") {
+        show_debug_message("Launch conditions met - proceeding with mission launch...");
         // Convert selected indices to crew IDs
         var available_crew = get_available_crew();
         var selected_crew_ids = array_create(0);

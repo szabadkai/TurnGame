@@ -2,6 +2,7 @@ randomize();
 
 // Initialize core systems before anything else
 init_weapons(); // Ensure weapons are available before any character objects try to access them
+init_input_system(); // Initialize unified input system
 
 //create turn list
 turn_list = ds_list_create();

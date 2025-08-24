@@ -1,6 +1,14 @@
 // obj_DialogManager Step Event
 // Handle input and state management
 
+// Initialize input system if not already done
+if (!variable_global_exists("input_bindings")) {
+    init_input_system();
+}
+
+// Update input system
+update_input_system();
+
 // Only process if dialog is active
 if (global.dialog_state == 0) { // DialogState.INACTIVE
     return;
@@ -17,19 +25,22 @@ if (dialog_debug && keyboard_check_pressed(vk_f1)) {
 // Handle ALL input in Step event for better organization
 // Scene selection input
 if (global.dialog_scene_selection) {
-    if (keyboard_check_pressed(vk_up)) {
+    var nav = input_get_navigation();
+    
+    // Keyboard navigation
+    if (nav.up) {
         navigate_scene_selection(-1);
     }
-    if (keyboard_check_pressed(vk_down)) {
+    if (nav.down) {
         navigate_scene_selection(1);
     }
-    if (keyboard_check_pressed(vk_enter)) {
+    if (nav.select) {
         select_current_scene();
     }
     if (keyboard_check_pressed(ord("I"))) {
         select_current_scene();
     }
-    if (keyboard_check_pressed(vk_escape)) {
+    if (nav.cancel) {
         show_debug_message("Exiting scene selection...");
         global.dialog_scene_selection = false;
         global.dialog_state = 0; // DialogState.INACTIVE
@@ -41,6 +52,37 @@ if (global.dialog_scene_selection) {
             return;
         }
     }
+    
+    // Mouse support for scene selection
+    if (global.input_mouse.clicked) {
+        var center_x = display_get_gui_width() / 2;
+        var center_y = display_get_gui_height() / 2;
+        var box_width = 600;
+        var box_height = 400;
+        var box_x = center_x - box_width / 2;
+        var box_y = center_y - box_height / 2;
+        var list_start_y = box_y + 60;
+        var item_height = 25;
+        
+        var scene_list = get_scene_list();
+        var visible_items = min(12, array_length(scene_list));
+        var scroll_offset = max(0, global.selected_scene_index - visible_items + 1);
+        
+        // Check if clicked on a scene item
+        for (var i = 0; i < visible_items; i++) {
+            var scene_index = scroll_offset + i;
+            if (scene_index >= array_length(scene_list)) break;
+            
+            var item_y = list_start_y + (i * item_height);
+            
+            if (input_mouse_clicked_in_area(box_x, item_y, box_x + box_width, item_y + item_height)) {
+                global.selected_scene_index = scene_index;
+                select_current_scene();
+                return;
+            }
+        }
+    }
+    
     // Avoid processing dialog logic while in scene selection
     return;
 }
@@ -60,19 +102,43 @@ if (global.dialog_state == 2) { // DialogState.CHOICE_SELECTION
     choice_count = array_length(choices);
     
     if (choice_count > 0) {
+        var nav = input_get_navigation();
+        
         // Navigate choices with arrow keys
-        if (keyboard_check_pressed(vk_up)) {
+        if (nav.up) {
             selected_choice_index = (selected_choice_index - 1 + choice_count) % choice_count;
             show_debug_message("Selected choice: " + string(selected_choice_index));
         }
-        if (keyboard_check_pressed(vk_down)) {
+        if (nav.down) {
             selected_choice_index = (selected_choice_index + 1) % choice_count;
             show_debug_message("Selected choice: " + string(selected_choice_index));
         }
         
         // Select choice with Enter or Space
-        if (keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space)) {
+        if (nav.select) {
             select_dialog_choice(choices[selected_choice_index]);
+        }
+        
+        // Mouse support for choice selection
+        if (global.input_mouse.clicked) {
+            var dialog_margin = 40;
+            var dialog_height = 200;
+            var dialog_y = display_get_gui_height() - dialog_height - dialog_margin;
+            var text_margin = 20;
+            var text_x = dialog_margin + text_margin;
+            var choice_start_y = dialog_y + text_margin + 80;
+            var choice_spacing = 25;
+            
+            // Check if clicked on a choice
+            for (var i = 0; i < choice_count; i++) {
+                var choice_y = choice_start_y + (i * choice_spacing);
+                
+                if (input_mouse_clicked_in_area(text_x - 20, choice_y - 5, display_get_gui_width() - dialog_margin, choice_y + 20)) {
+                    selected_choice_index = i;
+                    select_dialog_choice(choices[i]);
+                    return;
+                }
+            }
         }
     }
 }
@@ -97,8 +163,9 @@ if (global.dialog_state == 1) { // DialogState.ACTIVE
                 }
             }
         } else {
-            // No choices - advance with Space or Enter
-            if (keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space)) {
+            // No choices - advance with Space, Enter, or mouse click
+            var nav = input_get_navigation();
+            if (nav.select || global.input_mouse.clicked) {
                 if (variable_struct_exists(current_node, "next")) {
                     goto_dialog_node(current_node.next);
                 } else {

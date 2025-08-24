@@ -21,6 +21,9 @@ if (!variable_global_exists("star_map_state") || !variable_struct_exists(global.
     show_debug_message("StarMapManager: Star map state already loaded, skipping file load");
 }
 
+// Flag to indicate systems are not yet created
+systems_initialized = false;
+
 // Wait a frame to ensure global state is fully loaded before creating systems
 alarm[0] = 1; // Create systems after 1 frame delay
 

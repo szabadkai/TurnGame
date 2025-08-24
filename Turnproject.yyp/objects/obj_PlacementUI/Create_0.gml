@@ -232,7 +232,7 @@ function update_hover_preview(crew_member) {
         with (hover_character_preview) {
             character_name = crew_member.full_name;
             character_index = crew_member.character_index;
-            init_character_sprite_matrix(character_index);
+            spr_matrix = init_character_sprite_matrix(character_index);
             sprite_index = spr_matrix[0][0]; // idle down
         }
     }

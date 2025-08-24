@@ -45,7 +45,9 @@ current_y += line_height + section_spacing;
 
 draw_set_color(c_ltgray);
 draw_text(text_x, current_y, "Distribute 2 points among your abilities. You may increase one ability by +2 or two abilities by +1 each.");
-current_y += line_height * 2 + section_spacing;
+current_y += line_height + section_spacing;
+draw_text(text_x, current_y, "Arrow Keys: Navigate • Left/Right or Space: Adjust • Enter: Confirm");
+current_y += line_height + section_spacing;
 
 // === ABILITY SCORES ===
 draw_set_color(c_lime);
@@ -61,6 +63,19 @@ for (var i = 0; i < array_length(abilities); i++) {
     var current_score = variable_instance_get(player, ability);
     var planned_increase = variable_struct_get(asi_selections, ability);
     var new_score = current_score + planned_increase;
+    
+    // Check if this ability is selected in keyboard mode
+    var is_keyboard_selected = (variable_instance_exists(id, "keyboard_mode") && 
+                               variable_instance_exists(id, "selected_ability") &&
+                               keyboard_mode && selected_ability == i);
+    
+    // Draw keyboard selection highlight
+    if (is_keyboard_selected) {
+        draw_set_alpha(0.3);
+        draw_set_color(c_yellow);
+        draw_rectangle(text_x - 10, current_y - 3, text_x + 380, current_y + line_height + 2, false);
+        draw_set_alpha(1);
+    }
     
     draw_set_color(c_white);
     var display_text = ability_display + ": " + string(current_score);
@@ -125,9 +140,22 @@ for (var i = 0; i < array_length(buttons); i++) {
         var btn_color = (asi_points_remaining == 0) ? c_green : c_dkgray;
         var btn_text_color = (asi_points_remaining == 0) ? c_white : c_gray;
         
+        // Check if confirm button is selected in keyboard mode
+        var is_confirm_selected = (variable_instance_exists(id, "keyboard_mode") && 
+                                  variable_instance_exists(id, "selected_ability") &&
+                                  keyboard_mode && selected_ability == 6);
+        
+        // Draw keyboard selection highlight for confirm button
+        if (is_confirm_selected) {
+            draw_set_alpha(0.3);
+            draw_set_color(c_yellow);
+            draw_rectangle(btn.x - 5, btn.y - 3, btn.x + btn.w + 5, btn.y + btn.h + 3, false);
+            draw_set_alpha(1);
+        }
+        
         draw_set_color(btn_color);
         draw_rectangle(btn.x, btn.y, btn.x + btn.w, btn.y + btn.h, false);
-        draw_set_color(c_white);
+        draw_set_color(is_confirm_selected ? c_yellow : c_white);
         draw_rectangle(btn.x, btn.y, btn.x + btn.w, btn.y + btn.h, true);
         
         draw_set_color(btn_text_color);
@@ -144,8 +172,8 @@ for (var i = 0; i < array_length(buttons); i++) {
 draw_set_color(c_yellow);
 draw_text(text_x, viewport_h - 60, "CONTROLS:");
 draw_set_color(c_white);
-draw_text(text_x, viewport_h - 40, "Click + and - buttons to allocate points");
-draw_text(text_x, viewport_h - 25, "ESC - Cancel (forfeit improvements)  |  Click CONFIRM when done");
+draw_text(text_x, viewport_h - 40, "Mouse: Click +/- buttons • Keyboard: Arrows to navigate, Left/Right or Space to adjust");
+draw_text(text_x, viewport_h - 25, "ESC: Cancel (forfeit improvements) • Enter/Click CONFIRM: Apply changes");
 
 // Reset drawing settings
 draw_set_halign(fa_left);

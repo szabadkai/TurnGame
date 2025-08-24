@@ -60,6 +60,11 @@ function save_game_to_slot(slot_index) {
         save_data.crew = global.crew;
     }
     
+    // Collect crew roster data (persistent character progression)
+    if (variable_global_exists("crew_roster")) {
+        save_data.crew_roster = global.crew_roster;
+    }
+    
     // Save enemy states (for persistent encounters)
     save_data.enemies = [];
     var enemy_count = instance_number(obj_Enemy);
@@ -207,6 +212,11 @@ function apply_loaded_save_data() {
     // Restore crew data
     if (variable_struct_exists(save_data, "crew")) {
         global.crew = save_data.crew;
+    }
+    
+    // Restore crew roster data (persistent character progression)
+    if (variable_struct_exists(save_data, "crew_roster")) {
+        global.crew_roster = save_data.crew_roster;
     }
     
     // Restore enemies (remove current enemies and create saved ones)

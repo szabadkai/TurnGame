@@ -44,27 +44,91 @@ if (state == TURNSTATE.active) {
     }
 }
 
-//Mouse Click Attack (for Ranged Weapons)
-// === MOUSE ATTACK INPUT ===
-if (state == TURNSTATE.active && moves > 0 && !is_anim && mouse_check_button_pressed(mb_left)) {
-    // Only use mouse attacks for ranged weapons
-    if (weapon_special_type == "ranged") {
+// Initialize input system if not already done
+if (!variable_global_exists("input_bindings")) {
+    init_input_system();
+}
+
+// Update input system
+update_input_system();
+
+//Mouse Click Attack (for Ranged Weapons) or Movement
+// === MOUSE CLICK INPUT ===
+if (state == TURNSTATE.active && moves > 0 && !is_anim && global.input_mouse.clicked) {
+    // Check if clicked on an enemy first (priority for ranged weapons)
+    var clicked_enemy = instance_position(mouse_x, mouse_y, obj_Enemy);
+    
+    if (clicked_enemy != noone && weapon_special_type == "ranged") {
+        // Ranged weapon attack on enemy
+        if (is_enemy_in_pistol_range(self, clicked_enemy)) {
+            self.target_enemy = clicked_enemy;
+            
+            // Calculate direction to face the target
+            var dx = clicked_enemy.x - x;
+            var dy = clicked_enemy.y - y;
+            
+            if (abs(dx) > abs(dy)) {
+                dir = (dx > 0) ? Dir.RIGHT : Dir.LEFT;
+            } else {
+                dir = (dy > 0) ? Dir.DOWN : Dir.UP;
+            }
+            
+            anim_state = State.ATTACK;
+            sprite_index = spr_matrix[dir][anim_state];
+            image_index = 0;
+            image_speed = 1.0;
+            is_anim = true;
+            depth = -100;
+        } else {
+            scr_log("Target out of range! (Max 4 tiles)");
+        }
+    } else {
+        // Click-to-move: Calculate target position on grid
+        var target_x = floor(mouse_x / 16) * 16 + 8;
+        var target_y = floor(mouse_y / 16) * 16 + 8;
         
-        // Check if clicked on an enemy
-        var clicked_enemy = instance_position(mouse_x, mouse_y, obj_Enemy);
-        if (clicked_enemy != noone) {
-            // Check if enemy is in range
-            if (is_enemy_in_pistol_range(self, clicked_enemy)) {
-                target_enemy = clicked_enemy;
+        // Check if target position is adjacent to player (only one tile movement)
+        var dx = target_x - x;
+        var dy = target_y - y;
+        
+        // Only allow movement to directly adjacent tiles
+        if ((abs(dx) == 16 && dy == 0) || (dx == 0 && abs(dy) == 16)) {
+            if (can_move_to(target_x, target_y)) {
+                // Determine direction and start movement animation
+                if (dx > 0) {
+                    dir = Dir.RIGHT;
+                } else if (dx < 0) {
+                    dir = Dir.LEFT;
+                } else if (dy > 0) {
+                    dir = Dir.DOWN;
+                } else if (dy < 0) {
+                    dir = Dir.UP;
+                }
                 
-                // Calculate direction to face the target
-                var dx = clicked_enemy.x - x;
-                var dy = clicked_enemy.y - y;
+                anim_state = State.RUN;
+                sprite_index = spr_matrix[dir][anim_state];
+                image_index = 0;
+                image_speed = 1.0;
+                is_anim = true;
+            } else {
+                scr_log("Cannot move there - blocked!");
+            }
+        } else if (abs(dx) == 16 && abs(dy) == 16) {
+            // Check for melee attack on adjacent enemy
+            var enemy_at_position = instance_position(target_x, target_y, obj_Enemy);
+            if (enemy_at_position != noone) {
+                // Melee attack
+                self.target_enemy = enemy_at_position;
                 
-                if (abs(dx) > abs(dy)) {
-                    dir = (dx > 0) ? Dir.RIGHT : Dir.LEFT;
-                } else {
-                    dir = (dy > 0) ? Dir.DOWN : Dir.UP;
+                // Determine attack direction
+                if (dx > 0 && dy > 0) {
+                    dir = Dir.RIGHT; // Prioritize horizontal
+                } else if (dx < 0 && dy > 0) {
+                    dir = Dir.LEFT;
+                } else if (dx > 0 && dy < 0) {
+                    dir = Dir.RIGHT;
+                } else if (dx < 0 && dy < 0) {
+                    dir = Dir.LEFT;
                 }
                 
                 anim_state = State.ATTACK;
@@ -73,19 +137,17 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim && mouse_check_button_pre
                 image_speed = 1.0;
                 is_anim = true;
                 depth = -100;
-            } else {
-                scr_log("Target out of range! (Max 4 tiles)");
             }
         }
     }
 }
 
-//Move
-// === INPUT AND STATE TRANSITION ===
+// === KEYBOARD MOVEMENT ===
 if (state == TURNSTATE.active && moves > 0 && !is_anim) {
-
+    var nav = input_get_navigation();
+    
     // Right
-    if (keyboard_check_pressed(ord("D")) && can_move_to(x + 16, y)) {
+    if (nav.right && can_move_to(x + 16, y)) {
         dir = Dir.RIGHT;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -93,9 +155,8 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         image_speed = 1.0;
         is_anim = true;
     }
-
     // Left
-    else if (keyboard_check_pressed(ord("A")) && can_move_to(x - 16, y)) {
+    else if (nav.left && can_move_to(x - 16, y)) {
         dir = Dir.LEFT;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -103,9 +164,8 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         image_speed = 1.0;
         is_anim = true;
     }
-
     // Up
-    else if (keyboard_check_pressed(ord("W")) && can_move_to(x, y - 16)) {
+    else if (nav.up && can_move_to(x, y - 16)) {
         dir = Dir.UP;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -113,9 +173,8 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         image_speed = 1.0;
         is_anim = true;
     }
-
     // Down
-    else if (keyboard_check_pressed(ord("S")) && can_move_to(x, y + 16)) {
+    else if (nav.down && can_move_to(x, y + 16)) {
         dir = Dir.DOWN;
         anim_state = State.RUN;
         sprite_index = spr_matrix[dir][anim_state];
@@ -146,13 +205,13 @@ if (anim_state == State.RUN && is_anim) {
     }
 }
 
-//Attack
-// === INPUT AND STATE TRANSITION ===
+// === KEYBOARD ATTACK ===
 if (state == TURNSTATE.active && moves > 0 && !is_anim) {
-
+    var nav = input_get_navigation();
+    
     // Right
-    if (keyboard_check_pressed(ord("D")) && instance_place(x + 16, y, obj_Enemy)) {
-        target_enemy = instance_place(x + 16, y, obj_Enemy);
+    if (nav.right && instance_place(x + 16, y, obj_Enemy)) {
+        self.target_enemy = instance_place(x + 16, y, obj_Enemy);
 		dir = Dir.RIGHT;
         anim_state = State.ATTACK;
         sprite_index = spr_matrix[dir][anim_state];
@@ -161,10 +220,9 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         is_anim = true;
         depth = -100;
     }
-
     // Left
-    else if (keyboard_check_pressed(ord("A")) && instance_place(x - 16, y, obj_Enemy)) {
-        target_enemy = instance_place(x - 16, y, obj_Enemy);
+    else if (nav.left && instance_place(x - 16, y, obj_Enemy)) {
+        self.target_enemy = instance_place(x - 16, y, obj_Enemy);
 		dir = Dir.LEFT;
         anim_state = State.ATTACK;
         sprite_index = spr_matrix[dir][anim_state];
@@ -173,10 +231,9 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         is_anim = true;
         depth = -100;
     }
-
     // Up
-    else if (keyboard_check_pressed(ord("W")) && instance_place(x, y - 16, obj_Enemy)) {
-        target_enemy = instance_place(x, y - 16, obj_Enemy);
+    else if (nav.up && instance_place(x, y - 16, obj_Enemy)) {
+        self.target_enemy = instance_place(x, y - 16, obj_Enemy);
 		dir = Dir.UP;
         anim_state = State.ATTACK;
         sprite_index = spr_matrix[dir][anim_state];
@@ -185,10 +242,9 @@ if (state == TURNSTATE.active && moves > 0 && !is_anim) {
         is_anim = true;
         depth = -100;
     }
-
     // Down
-    else if (keyboard_check_pressed(ord("S")) && instance_place(x, y + 16, obj_Enemy)) {
-        target_enemy = instance_place(x, y + 16, obj_Enemy);
+    else if (nav.down && instance_place(x, y + 16, obj_Enemy)) {
+        self.target_enemy = instance_place(x, y + 16, obj_Enemy);
 		dir = Dir.DOWN;
         anim_state = State.ATTACK;
         sprite_index = spr_matrix[dir][anim_state];
@@ -209,7 +265,11 @@ if (anim_state == State.ATTACK && is_anim) {
         var attack_total = attack_roll + attack_bonus;
 
         // Validate target before using it (may have been destroyed/moved)
-        if (!variable_instance_exists(id, "target_enemy") || is_undefined(target_enemy) || target_enemy == noone || !instance_exists(target_enemy)) {
+        if (!variable_instance_exists(id, "target_enemy")) {
+            self.target_enemy = noone;
+        }
+        
+        if (self.target_enemy == noone || self.target_enemy == 0 || !instance_exists(self.target_enemy)) {
             scr_log("Attack cancelled: target unavailable.");
             // Cleanly end the attack animation/state
             anim_state = State.IDLE;
@@ -222,22 +282,22 @@ if (anim_state == State.ATTACK && is_anim) {
             exit;
         }
 
-        var hit = (attack_total >= target_enemy.defense_score);
+        var hit = (attack_total >= self.target_enemy.defense_score);
         
-        scr_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
+        scr_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(self.target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
         
         if (hit) {
             var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_name);
-            var final_damage = handle_special_attack(self, target_enemy, attack_roll, base_damage);
+            var final_damage = handle_special_attack(self, self.target_enemy, attack_roll, base_damage);
             
-            target_enemy.hp -= final_damage;
-            scr_log(target_enemy.character_name + " takes " + string(final_damage) + " damage (" + string(target_enemy.hp + final_damage) + " HP → " + string(target_enemy.hp) + " HP)");
+            self.target_enemy.hp -= final_damage;
+            scr_log(self.target_enemy.character_name + " takes " + string(final_damage) + " damage (" + string(self.target_enemy.hp + final_damage) + " HP → " + string(self.target_enemy.hp) + " HP)");
             
-            if (target_enemy.hp <= 0) {
-                scr_log(target_enemy.character_name + " is defeated!");
+            if (self.target_enemy.hp <= 0) {
+                scr_log(self.target_enemy.character_name + " is defeated!");
                 
                 // Award XP to entire party using new distribution system
-                var xp_reward = target_enemy.xp_value;
+                var xp_reward = self.target_enemy.xp_value;
                 distribute_party_xp(xp_reward);
             }
         }

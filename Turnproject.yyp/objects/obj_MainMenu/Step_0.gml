@@ -39,29 +39,29 @@ switch (menu_state) {
     case MENUSTATE.SETTINGS:
         if (inputs.select) {
             handle_settings_selection();
-        } else if (inputs.back) {
+        } else if (inputs.cancel) {
             change_menu_state(MENUSTATE.MAIN);
         }
         break;
         
     case MENUSTATE.SETTINGS_AUDIO:
-        handle_audio_settings_input(inputs.select, inputs.back);
+        handle_audio_settings_input(inputs.select, inputs.cancel);
         break;
         
     case MENUSTATE.SETTINGS_GRAPHICS:
-        handle_graphics_settings_input(inputs.select, inputs.back);
+        handle_graphics_settings_input(inputs.select, inputs.cancel);
         break;
         
     case MENUSTATE.SETTINGS_CONTROLS:
-        handle_controls_settings_input(inputs.select, inputs.back);
+        handle_controls_settings_input(inputs.select, inputs.cancel);
         break;
         
     case MENUSTATE.SETTINGS_GAMEPLAY:
-        handle_gameplay_settings_input(inputs.select, inputs.back);
+        handle_gameplay_settings_input(inputs.select, inputs.cancel);
         break;
         
     case MENUSTATE.SAVE_LOAD:
-        handle_save_load_input(inputs.select, inputs.back);
+        handle_save_load_input(inputs.select, inputs.cancel);
         break;
         
     case MENUSTATE.QUIT_CONFIRM:
@@ -71,7 +71,7 @@ switch (menu_state) {
             } else {
                 change_menu_state(MENUSTATE.MAIN);
             }
-        } else if (inputs.back) {
+        } else if (inputs.cancel) {
             change_menu_state(MENUSTATE.MAIN);
         }
         break;

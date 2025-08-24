@@ -37,8 +37,36 @@ if (!is_unlocked) {
     alpha = 1.0;
 }
 
-// Hover state modifications
-if (hover_state) {
+// Keyboard selection state modifications
+if (keyboard_selected) {
+    if (is_unlocked) {
+        // Keyboard selected - bright yellow outline with pulse
+        current_scale = base_scale + 0.15;
+        alpha = min(alpha + 0.3, 1.0);
+        
+        // Draw yellow selection ring
+        var pulse_alpha = 0.6 + 0.4 * sin(glow_timer * 6);
+        draw_set_color(c_yellow);
+        draw_set_alpha(pulse_alpha);
+        draw_circle(x, y, (12 * current_scale) + 8, true);
+        draw_circle(x, y, (12 * current_scale) + 10, true);
+        draw_set_alpha(alpha); // Reset for main drawing
+    } else {
+        // Keyboard selected locked system - red outline with pulse
+        current_scale = base_scale + 0.1;
+        alpha = min(alpha + 0.2, 0.8);
+        
+        // Draw red warning ring for locked systems
+        var pulse_alpha = 0.5 + 0.3 * sin(glow_timer * 6);
+        draw_set_color(c_red);
+        draw_set_alpha(pulse_alpha);
+        draw_circle(x, y, (12 * current_scale) + 6, true);
+        draw_circle(x, y, (12 * current_scale) + 8, true);
+        draw_set_alpha(alpha); // Reset for main drawing
+    }
+}
+// Mouse hover state modifications
+else if (hover_state) {
     if (is_unlocked) {
         // Unlocked hover - bright and enlarged
         current_scale = lerp(current_scale, base_scale + 0.2, 0.1);

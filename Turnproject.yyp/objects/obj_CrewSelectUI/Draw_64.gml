@@ -20,10 +20,10 @@ draw_set_color(c_yellow);
 draw_set_halign(fa_center);
 draw_text(x + ui_width/2, y + 15, "Select Landing Party");
 
-// Draw instructions
+// Draw instructions - shortened to fit modal
 draw_set_color(c_ltgray);
 draw_set_halign(fa_center);
-draw_text(x + ui_width/2, y + 35, "Click checkboxes to select crew members");
+draw_text(x + ui_width/2, y + 35, "WASD: Navigate • Space: Select • Enter: Launch");
 
 // Draw crew list
 draw_set_color(c_white);
@@ -33,7 +33,7 @@ for (var i = 0; i < array_length(available_crew); i++) {
     var member = available_crew[i];
     var member_y = list_y + (i * 20);
     
-    // Check if memberer is selected (custom implementation instead of array_indexOf)
+    // Check if member is selected (custom implementation instead of array_indexOf)
     var is_selected = false;
     for (var j = 0; j < array_length(landing_party); j++) {
         if (landing_party[j] == i) {
@@ -41,26 +41,73 @@ for (var i = 0; i < array_length(available_crew); i++) {
             break;
         }
     }
-
-    // Draw checkbox
-    var check_x = x + 10;
-    draw_rectangle(check_x, member_y, check_x + 12, member_y + 12, true);
-    if (is_selected) {
-        draw_line(check_x, member_y, check_x + 12, member_y + 12);
-        draw_line(check_x, member_y + 12, check_x + 12, member_y);
-    }
-
-    // Draw member name and status with proper text clipping
-    var text_x = check_x + 20;
-    var max_text_width = ui_width - 40; // Leave margin
-    var member_text = member.full_name + " (" + member.status + ", " + string(member.hp) + " HP)";
     
-    // Clip text if too long
-    while (string_width(member_text) > max_text_width && string_length(member_text) > 10) {
-        member_text = string_delete(member_text, string_length(member_text), 1);
+    // Check if this is the keyboard-selected item
+    var is_keyboard_selected = (variable_instance_exists(id, "selected_crew_index") && 
+                               variable_instance_exists(id, "selected_button") &&
+                               selected_button == 0 && selected_crew_index == i);
+    
+    // Draw keyboard selection highlight
+    if (is_keyboard_selected) {
+        draw_set_alpha(0.3 * ui_alpha);
+        draw_set_color(c_yellow);
+        draw_rectangle(x + 5, member_y , x + ui_width - 5, member_y + 16, false);
+        draw_set_alpha(ui_alpha);
     }
-    if (string_width(member_text + "...") <= max_text_width && string_length(member_text) < string_length(member.full_name + " (" + member.status + ", " + string(member.hp) + " HP)")) {
-        member_text += "...";
+
+    // Draw selection indicator (asterisk instead of checkbox)
+    var indicator_x = x + 10;
+    if (is_selected) {
+        draw_set_color(c_yellow);
+        draw_text(indicator_x, member_y, "*");
+        draw_set_color(c_white);
+    } else {
+        draw_set_color(c_gray);
+        draw_text(indicator_x, member_y, " ");
+        draw_set_color(c_white);
+    }
+
+    // Draw member name and status with improved text clipping
+    var text_x = indicator_x + 15;
+    var max_text_width = ui_width - 50; // Leave sufficient margin
+    var full_text = member.full_name + " (" + member.status + ", " + string(member.hp) + " HP)";
+    var member_text = full_text;
+    
+    // Smart text clipping - preserve important information
+    if (string_width(full_text) > max_text_width) {
+        // Try shorter status first
+        var short_status = member.status;
+        if (member.status == "Healthy") short_status = "OK";
+        if (member.status == "Lightly Injured") short_status = "Light";
+        if (member.status == "Wounded") short_status = "Hurt";
+        if (member.status == "Badly Wounded") short_status = "Bad";
+        if (member.status == "Critically Injured") short_status = "Critical";
+        
+        member_text = member.full_name + " (" + short_status + ", " + string(member.hp) + "HP)";
+        
+        // If still too long, truncate name but keep status and HP
+        if (string_width(member_text) > max_text_width) {
+            var name_part = member.full_name;
+            var status_part = " (" + short_status + ", " + string(member.hp) + "HP)";
+            var status_width = string_width(status_part);
+            var available_name_width = max_text_width - status_width - string_width("...");
+            
+            if (available_name_width > 0) {
+                while (string_width(name_part) > available_name_width && string_length(name_part) > 1) {
+                    name_part = string_delete(name_part, string_length(name_part), 1);
+                }
+                member_text = name_part + "..." + status_part;
+            } else {
+                // Last resort - just fit what we can
+                member_text = full_text;
+                while (string_width(member_text + "...") > max_text_width && string_length(member_text) > 5) {
+                    member_text = string_delete(member_text, string_length(member_text), 1);
+                }
+                if (string_length(member_text) < string_length(full_text)) {
+                    member_text += "...";
+                }
+            }
+        }
     }
     
     draw_text(text_x, member_y, member_text);
@@ -70,13 +117,25 @@ for (var i = 0; i < array_length(available_crew); i++) {
 var button_y = y + ui_height - 50;
 var button_width = 120;
 var launch_button_x = x + ui_width/2 - button_width/2;
+
+// Check if launch button is keyboard-selected
+var is_button_selected = (variable_instance_exists(id, "selected_button") && selected_button == 1);
+
+// Draw keyboard selection highlight for button
+if (is_button_selected) {
+    draw_set_alpha(0.3 * ui_alpha);
+    draw_set_color(c_yellow);
+    draw_rectangle(launch_button_x - 5, button_y - 3, launch_button_x + button_width + 5, button_y + 38, false);
+    draw_set_alpha(ui_alpha);
+}
+
 draw_set_color(c_green);
 draw_rectangle(launch_button_x, button_y, launch_button_x + button_width, button_y + 35, false);
-draw_set_color(c_white);
+draw_set_color(is_button_selected ? c_yellow : c_white);
 draw_rectangle(launch_button_x, button_y, launch_button_x + button_width, button_y + 35, true);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-draw_text(launch_button_x + button_width/2, button_y + 17, "Launch Mission");
+draw_text(launch_button_x + button_width/2, button_y + 17, "Launch");
 
 // Draw selected count
 draw_set_color(c_yellow);

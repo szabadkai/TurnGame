@@ -1,6 +1,11 @@
 // obj_StarSystem Step Event
 // Handle mouse interaction using distance-based detection
 
+// Initialize keyboard selection state
+if (!variable_instance_exists(id, "keyboard_selected")) {
+    keyboard_selected = false;
+}
+
 // Define interaction radius
 var interaction_radius = 20;
 
@@ -113,6 +118,48 @@ if (mouse_distance <= interaction_radius) {
         var tooltip_manager = instance_find(obj_TooltipManager, 0);
         if (tooltip_manager != noone) {
             tooltip_manager.hide_tooltip();
+        }
+    }
+}
+
+// Function to trigger system selection via keyboard
+function trigger_keyboard_selection() {
+    if (is_unlocked) {
+        show_debug_message("Keyboard selected system: " + system_name);
+        
+        // Hide tooltip before showing confirmation
+        var tooltip_manager = instance_find(obj_TooltipManager, 0);
+        if (tooltip_manager != noone) {
+            tooltip_manager.hide_tooltip();
+        }
+        
+        // Create and show landing party UI (same as mouse click)
+        if (object_exists(obj_CrewSelectUI)) {
+            var landing_party_ui = instance_create_layer(x, y, "Instances", obj_CrewSelectUI);
+            landing_party_ui.pending_system_id = system_id;
+            landing_party_ui.pending_target_scene = target_scene;
+            landing_party_ui.pending_travel_room = Room_Dialog;
+            landing_party_ui.show_ui(hover_info, Room_Dialog);
+        }
+    } else {
+        show_debug_message("System " + system_name + " is locked - showing access denied feedback");
+        
+        // Create dramatic locked system feedback
+        locked_click_timer = 60; // 1 second of feedback animation
+        
+        // Show enhanced tooltip with unlock requirements
+        var tooltip_manager = instance_find(obj_TooltipManager, 0);
+        if (tooltip_manager != noone) {
+            var locked_feedback = {
+                name: system_name + " - ACCESS DENIED",
+                type: system_type,
+                faction: get_faction_name(faction_control),
+                status: "LOCKED SYSTEM",
+                threat: threat_level,
+                scene_id: get_unlock_hint(),
+                locked_hint: "Complete prerequisite missions to unlock"
+            };
+            tooltip_manager.show_tooltip(x, y, locked_feedback);
         }
     }
 }

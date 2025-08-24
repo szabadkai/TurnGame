@@ -3,6 +3,14 @@
 
 if (!placement_active || array_length(crew_to_place) == 0) return;
 
+// Initialize input system if not already done
+if (!variable_global_exists("input_bindings")) {
+    init_input_system();
+}
+
+// Update input system
+update_input_system();
+
 // Update grid hover position for enhanced visual feedback (arena-based)
 var mouse_in_arena = (mouse_x >= arena_left && mouse_x <= arena_right &&
                      mouse_y >= arena_top && mouse_y <= arena_bottom);
@@ -49,22 +57,23 @@ if (selected_character_alpha <= 0.3) {
     alpha_direction = -0.02;
 }
 
+// Get navigation input
+var nav = input_get_navigation();
+
 // Tab key to cycle through characters
-if (keyboard_check_pressed(vk_tab) && !key_tab_pressed) {
-    key_tab_pressed = true;
+if (nav.next_tab) {
     current_character_index = (current_character_index + 1) % array_length(crew_to_place);
     show_debug_message("Switched to character: " + crew_to_place[current_character_index].crew_member.full_name);
-}
-
-if (!keyboard_check(vk_tab)) {
-    key_tab_pressed = false;
+} else if (nav.prev_tab) {
+    current_character_index = (current_character_index - 1 + array_length(crew_to_place)) % array_length(crew_to_place);
+    show_debug_message("Switched to character: " + crew_to_place[current_character_index].crew_member.full_name);
 }
 
 // Get current character being placed
 var current_char = crew_to_place[current_character_index];
 
 // Mouse input for placement
-if (mouse_check_button_pressed(mb_left)) {
+if (global.input_mouse.clicked) {
     var mouse_grid_pos = snap_to_grid(mouse_x, mouse_y);
     
     if (is_valid_placement_position(mouse_grid_pos.x, mouse_grid_pos.y, current_character_index)) {
@@ -109,15 +118,15 @@ if (current_char.placed) {
     var move_x = 0;
     var move_y = 0;
     
-    if (keyboard_check_pressed(vk_left) || keyboard_check_pressed(ord("A"))) {
+    if (nav.left) {
         move_x = -grid_size;
-    } else if (keyboard_check_pressed(vk_right) || keyboard_check_pressed(ord("D"))) {
+    } else if (nav.right) {
         move_x = grid_size;
     }
     
-    if (keyboard_check_pressed(vk_up) || keyboard_check_pressed(ord("W"))) {
+    if (nav.up) {
         move_y = -grid_size;
-    } else if (keyboard_check_pressed(vk_down) || keyboard_check_pressed(ord("S"))) {
+    } else if (nav.down) {
         move_y = grid_size;
     }
     
@@ -151,7 +160,7 @@ if (current_char.placed) {
 }
 
 // Enter key to confirm placement and start combat
-if (keyboard_check_pressed(vk_enter) && placement_completed) {
+if (nav.select && placement_completed) {
     finalize_placement();
 }
 
@@ -191,8 +200,17 @@ function create_visual_instance(char_data, pos_x, pos_y) {
                 wisdom = crew_member.wisdom;
                 charisma = crew_member.charisma;
                 
+                // Set XP and level progression data
+                level = crew_member.level;
+                xp = crew_member.xp;
+                xp_to_next_level = crew_member.xp_to_next_level;
+                asis_available = crew_member.asis_available;
+                
+                // Set equipment
+                equipped_weapon_id = crew_member.equipped_weapon_id;
+                
                 // Initialize appearance and set inactive state
-                init_character_sprite_matrix(character_index);
+                spr_matrix = init_character_sprite_matrix(character_index);
                 sprite_index = spr_matrix[0][0]; // idle down
                 state = TURNSTATE.inactive;
                 image_alpha = 0.9; // Slightly transparent to indicate placement phase
@@ -238,9 +256,18 @@ function finalize_placement() {
                 wisdom = crew_member.wisdom;
                 charisma = crew_member.charisma;
                 
+                // Set XP and level progression data
+                level = crew_member.level;
+                xp = crew_member.xp;
+                xp_to_next_level = crew_member.xp_to_next_level;
+                asis_available = crew_member.asis_available;
+                
+                // Set equipment
+                equipped_weapon_id = crew_member.equipped_weapon_id;
+                
                 // Update combat stats and finalize for battle
                 update_combat_stats();
-                init_character_sprite_matrix(character_index);
+                spr_matrix = init_character_sprite_matrix(character_index);
                 sprite_index = spr_matrix[0][0]; // idle down
                 state = TURNSTATE.inactive; // Will be set to active by TurnManager
                 image_alpha = 1.0; // Full opacity for combat

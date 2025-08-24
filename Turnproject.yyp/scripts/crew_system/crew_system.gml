@@ -23,6 +23,15 @@ function init_crew_system() {
                 wisdom: 14,
                 charisma: 12,
                 
+                // XP and Level tracking
+                level: 1,
+                xp: 0,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
                 // Status flags
                 available: true,
                 injured: false,
@@ -49,6 +58,15 @@ function init_crew_system() {
                 wisdom: 15,
                 charisma: 11,
                 
+                // XP and Level tracking
+                level: 1,
+                xp: 0,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
                 available: true,
                 injured: false,
                 morale: 100,
@@ -72,6 +90,15 @@ function init_crew_system() {
                 intelligence: 15,
                 wisdom: 16,
                 charisma: 13,
+                
+                // XP and Level tracking
+                level: 1,
+                xp: 0,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
                 
                 available: true,
                 injured: false,
@@ -97,6 +124,15 @@ function init_crew_system() {
                 wisdom: 18,
                 charisma: 15,
                 
+                // XP and Level tracking
+                level: 1,
+                xp: 0,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
                 available: true,
                 injured: false,
                 morale: 100,
@@ -121,11 +157,185 @@ function init_crew_system() {
                 wisdom: 13,
                 charisma: 10,
                 
+                // XP and Level tracking
+                level: 1,
+                xp: 0,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
                 available: true,
                 injured: false,
                 morale: 100,
                 
                 specialties: ["security", "heavy_weapons", "protection"]
+            },
+            {
+                id: "reeves",
+                name: "Reeves",
+                full_name: "Communications Officer Reeves",
+                role: "Communications / Intelligence Officer",
+                character_index: 6,
+                max_hp: 8,
+                hp: 6,
+                status: "Lightly Injured",
+                
+                // Communications specialist
+                strength: 11,
+                dexterity: 13,
+                constitution: 12,
+                intelligence: 16,
+                wisdom: 15,
+                charisma: 17,
+                
+                // XP and Level tracking
+                level: 2,
+                xp: 450,
+                xp_to_next_level: 900,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
+                available: true,
+                injured: true,
+                morale: 85,
+                
+                specialties: ["communications", "intelligence", "diplomacy"]
+            },
+            {
+                id: "murphy",
+                name: "Murphy",
+                full_name: "Chief Engineer Murphy",
+                role: "Chief Engineering Officer",
+                character_index: 7,
+                max_hp: 12,
+                hp: 4,
+                status: "Badly Wounded",
+                
+                // Engineering specialist
+                strength: 15,
+                dexterity: 12,
+                constitution: 16,
+                intelligence: 18,
+                wisdom: 14,
+                charisma: 9,
+                
+                // XP and Level tracking
+                level: 3,
+                xp: 1200,
+                xp_to_next_level: 2700,
+                asis_available: 1,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
+                available: true,
+                injured: true,
+                morale: 70,
+                
+                specialties: ["engineering", "repair", "technical_systems"]
+            },
+            {
+                id: "jackson",
+                name: "Jackson",
+                full_name: "Lieutenant Commander Jackson",
+                role: "Executive Officer / Tactical Specialist",
+                character_index: 1,
+                max_hp: 14,
+                hp: 14,
+                status: "Healthy",
+                
+                // Command specialist
+                strength: 17,
+                dexterity: 16,
+                constitution: 15,
+                intelligence: 15,
+                wisdom: 16,
+                charisma: 18,
+                
+                // XP and Level tracking
+                level: 4,
+                xp: 3000,
+                xp_to_next_level: 6500,
+                asis_available: 1,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
+                available: true,
+                injured: false,
+                morale: 95,
+                
+                specialties: ["command", "tactics", "weapons", "leadership"]
+            },
+            {
+                id: "rodriguez",
+                name: "Rodriguez",
+                full_name: "Ensign Rodriguez",
+                role: "Junior Science Officer / Xenobiology",
+                character_index: 2,
+                max_hp: 7,
+                hp: 2,
+                status: "Critically Injured",
+                
+                // Science specialist (junior)
+                strength: 9,
+                dexterity: 14,
+                constitution: 10,
+                intelligence: 17,
+                wisdom: 13,
+                charisma: 12,
+                
+                // XP and Level tracking
+                level: 1,
+                xp: 100,
+                xp_to_next_level: 300,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
+                available: true, // Include Rodriguez in selection
+                injured: true,
+                morale: 40,
+                
+                specialties: ["xenobiology", "research", "analysis"]
+            },
+            {
+                id: "thompson",
+                name: "Thompson",
+                full_name: "Petty Officer Thompson",
+                role: "Operations Specialist / Logistics",
+                character_index: 3,
+                max_hp: 9,
+                hp: 7,
+                status: "Wounded",
+                
+                // Operations specialist
+                strength: 13,
+                dexterity: 15,
+                constitution: 14,
+                intelligence: 14,
+                wisdom: 16,
+                charisma: 11,
+                
+                // XP and Level tracking
+                level: 2,
+                xp: 600,
+                xp_to_next_level: 900,
+                asis_available: 0,
+                
+                // Equipment persistence
+                equipped_weapon_id: 0,
+                
+                available: true,
+                injured: true,
+                morale: 80,
+                
+                specialties: ["logistics", "operations", "supply_management"]
             }
         ];
         
@@ -155,7 +365,9 @@ function get_available_crew() {
     
     var available = array_create(0);
     for (var i = 0; i < array_length(global.crew_roster); i++) {
-        if (global.crew_roster[i].available && !global.crew_roster[i].injured) {
+        if (global.crew_roster[i].available) {
+            // Include all available crew members regardless of injury status
+            // Player can choose injured crew but should see their condition
             available[array_length(available)] = global.crew_roster[i];
         }
     }
@@ -191,6 +403,7 @@ function sync_combat_to_crew() {
             if (crew_member != undefined) {
                 // Update health and status
                 crew_member.hp = hp;
+                crew_member.max_hp = max_hp;
                 var health_percent = (hp / max_hp) * 100;
                 
                 if (hp <= 0) {
@@ -211,7 +424,46 @@ function sync_combat_to_crew() {
                     crew_member.injured = false;
                 }
                 
-                show_debug_message("Updated " + crew_member.name + " - HP: " + string(hp) + "/" + string(max_hp) + " Status: " + crew_member.status);
+                // Sync XP and level progression
+                if (variable_instance_exists(id, "xp")) {
+                    crew_member.xp = xp;
+                }
+                if (variable_instance_exists(id, "level")) {
+                    crew_member.level = level;
+                }
+                if (variable_instance_exists(id, "xp_to_next_level")) {
+                    crew_member.xp_to_next_level = xp_to_next_level;
+                }
+                if (variable_instance_exists(id, "asis_available")) {
+                    crew_member.asis_available = asis_available;
+                }
+                
+                // Sync ability scores (in case they were improved via ASI)
+                if (variable_instance_exists(id, "strength")) {
+                    crew_member.strength = strength;
+                }
+                if (variable_instance_exists(id, "dexterity")) {
+                    crew_member.dexterity = dexterity;
+                }
+                if (variable_instance_exists(id, "constitution")) {
+                    crew_member.constitution = constitution;
+                }
+                if (variable_instance_exists(id, "intelligence")) {
+                    crew_member.intelligence = intelligence;
+                }
+                if (variable_instance_exists(id, "wisdom")) {
+                    crew_member.wisdom = wisdom;
+                }
+                if (variable_instance_exists(id, "charisma")) {
+                    crew_member.charisma = charisma;
+                }
+                
+                // Sync equipment
+                if (variable_instance_exists(id, "equipped_weapon_id")) {
+                    crew_member.equipped_weapon_id = equipped_weapon_id;
+                }
+                
+                show_debug_message("Updated " + crew_member.name + " - HP: " + string(hp) + "/" + string(max_hp) + " Status: " + crew_member.status + " Level: " + string(crew_member.level) + " XP: " + string(crew_member.xp));
             }
         }
     }

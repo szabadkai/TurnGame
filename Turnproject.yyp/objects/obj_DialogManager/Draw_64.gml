@@ -69,7 +69,7 @@ if (global.dialog_scene_selection) {
     // Draw instructions
     var instruction_y = box_y + box_height - 40;
     draw_set_color(c_gray);
-    draw_text(box_x + 20, instruction_y, "Up/Down: Navigate | Enter/I: Select | ESC: Cancel");
+    draw_text(box_x + 20, instruction_y, "Arrow Keys/Mouse: Navigate | Enter/Click: Select | ESC: Cancel");
     
     // Draw scene count
     var count_text = string(global.selected_scene_index + 1) + " / " + string(array_length(scene_list));
@@ -228,9 +228,9 @@ draw_set_color(c_gray);
 draw_set_font(-1);
 
 if (global.dialog_state == 2) { // DialogState.CHOICE_SELECTION
-    draw_text(dialog_margin, instruction_y, "Use Arrow Keys to navigate, Enter to select, ESC to exit");
+    draw_text(dialog_margin, instruction_y, "Arrow Keys/Mouse: Navigate • Enter/Click: Select • ESC: Exit");
 } else {
-    draw_text(dialog_margin, instruction_y, "Press Space/Enter to continue, ESC to exit");
+    draw_text(dialog_margin, instruction_y, "Space/Enter/Click: Continue • ESC: Exit");
 }
 
 // Debug info

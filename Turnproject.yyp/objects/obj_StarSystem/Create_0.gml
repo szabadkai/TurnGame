@@ -1,11 +1,16 @@
 // obj_StarSystem Create Event
 // Initialize star system properties and visual state
 
-// Core system properties (set via object properties in IDE)
-// system_id, system_name, system_type, target_scene
-// is_unlocked, is_visited, is_current
-// faction_control (0=None, 1=Human, 2=Keth'mori, 3=Swarm)
-// threat_level (1-5)
+// Core system properties - initialize with defaults if not set via IDE
+if (!variable_instance_exists(id, "system_id")) system_id = "unknown_system";
+if (!variable_instance_exists(id, "system_name")) system_name = "Unknown System";
+if (!variable_instance_exists(id, "system_type")) system_type = "Uncharted";
+if (!variable_instance_exists(id, "target_scene")) target_scene = "";
+if (!variable_instance_exists(id, "is_unlocked")) is_unlocked = false;
+if (!variable_instance_exists(id, "is_visited")) is_visited = false;
+if (!variable_instance_exists(id, "is_current")) is_current = false;
+if (!variable_instance_exists(id, "faction_control")) faction_control = 0;
+if (!variable_instance_exists(id, "threat_level")) threat_level = 1;
 
 // Visual state variables
 hover_state = false;

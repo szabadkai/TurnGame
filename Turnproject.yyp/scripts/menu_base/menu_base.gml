@@ -9,6 +9,11 @@ enum MENU_CONTEXT {
 
 // Initialize base menu variables (call in Create event)
 function init_base_menu(context, options_array) {
+    // Initialize input system if not already done
+    if (!variable_global_exists("input_bindings")) {
+        init_input_system();
+    }
+    
     // Store menu context
     menu_context = context;
     
@@ -81,42 +86,130 @@ function init_base_menu(context, options_array) {
     menu_appear_timer = 0;
     menu_appear_duration = 30;
     
+    // Mouse interaction variables
+    hovered_option = -1;
+    menu_buttons = [];
+    update_menu_buttons();
+    
     // Save system variables
     save_slots = [];
     selected_save_slot = 0;
     check_save_slots();
 }
 
-// Common navigation input handling
-function handle_base_menu_navigation() {
-    var input_up = keyboard_check_pressed(vk_up) || keyboard_check_pressed(ord("W"));
-    var input_down = keyboard_check_pressed(vk_down) || keyboard_check_pressed(ord("S"));
-    var input_select = keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space);
-    var input_back = keyboard_check_pressed(vk_escape);
+// Update menu button positions for mouse interaction
+function update_menu_buttons() {
+    menu_buttons = [];
     
-    // Navigation input
-    if (input_up) {
+    if (array_length(current_options) == 0) return;
+    
+    for (var i = 0; i < array_length(current_options); i++) {
+        var option_y = menu_y + (i * option_spacing) - ((array_length(current_options) - 1) * option_spacing / 2);
+        var text_width = string_width(current_options[i]);
+        var text_height = string_height(current_options[i]);
+        
+        var button = create_ui_button(
+            menu_x - text_width/2 - 10,
+            option_y - text_height/2 - 5,
+            menu_x + text_width/2 + 10,
+            option_y + text_height/2 + 5,
+            undefined, // We'll set the callbacks after creating the button
+            undefined
+        );
+        
+        // Store the index and menu object reference in the button
+        button.option_index = i;
+        button.menu_ref = self;
+        
+        // Set the action callback using method() to bind to button context
+        button.action_callback = method(button, function() {
+            var menu_obj = menu_ref;
+            var btn_index = option_index;
+            // Switch to menu object context to call functions properly
+            with (menu_obj) {
+                if (!is_option_disabled(btn_index)) {
+                    selected_option = btn_index;
+                    handle_menu_selection();
+                }
+            }
+        });
+        
+        // Set the hover callback using method() to bind to button context
+        button.hover_callback = method(button, function() {
+            var menu_obj = menu_ref;
+            var btn_index = option_index;
+            // Switch to menu object context to call functions properly
+            with (menu_obj) {
+                if (!is_option_disabled(btn_index)) {
+                    hovered_option = btn_index;
+                    if (hovered_option != selected_option) {
+                        play_menu_navigate_sound();
+                    }
+                    selected_option = btn_index;
+                }
+            }
+        });
+        
+        array_push(menu_buttons, button);
+    }
+}
+
+// Common navigation input handling with dual input support
+function handle_base_menu_navigation() {
+    // Update input system
+    update_input_system();
+    
+    // Get navigation input from unified system
+    var nav = input_get_navigation();
+    
+    // Handle mouse interaction
+    process_ui_buttons(menu_buttons);
+    
+    // Update hover state
+    var old_hovered = hovered_option;
+    hovered_option = -1;
+    
+    for (var i = 0; i < array_length(menu_buttons); i++) {
+        if (menu_buttons[i].is_hovered && !is_option_disabled(i)) {
+            hovered_option = i;
+            break;
+        }
+    }
+    
+    // Use mouse hover for selection if hovering
+    if (hovered_option != -1 && hovered_option != selected_option) {
+        selected_option = hovered_option;
+        if (old_hovered != hovered_option) {
+            play_menu_navigate_sound();
+        }
+    }
+    
+    // Keyboard navigation
+    if (nav.up) {
         selected_option--;
         if (selected_option < 0) {
             selected_option = array_length(current_options) - 1;
         }
+        hovered_option = -1; // Clear mouse hover when using keyboard
         play_menu_navigate_sound();
     }
     
-    if (input_down) {
+    if (nav.down) {
         selected_option++;
         if (selected_option >= array_length(current_options)) {
             selected_option = 0;
         }
+        hovered_option = -1; // Clear mouse hover when using keyboard
         play_menu_navigate_sound();
     }
     
-    return {
-        up: input_up,
-        down: input_down,
-        select: input_select,
-        back: input_back
-    };
+    return nav;
+}
+
+// Handle menu selection (called by both keyboard and mouse)
+function handle_menu_selection() {
+    play_menu_select_sound();
+    handle_main_menu_selection_base();
 }
 
 // Common step logic for menus
@@ -136,6 +229,7 @@ function handle_base_menu_step() {
             transition_direction = 1;
             menu_state = previous_menu_state;
             update_current_options();
+            update_menu_buttons(); // Update buttons when options change
         } else if (transition_direction == 1 && transition_alpha >= 1) {
             // Fade in complete
             transition_alpha = 1;
@@ -218,25 +312,46 @@ function draw_base_menu(show_background_image, background_image_sprite) {
     
     draw_text(menu_x, menu_y + title_y_offset, title_text);
     
-    // Draw menu options
+    // Draw menu options with mouse interaction support
     for (var i = 0; i < array_length(current_options); i++) {
         var option_y = menu_y + (i * option_spacing) - ((array_length(current_options) - 1) * option_spacing / 2);
         
-        // Set color based on selection and availability
+        // Set color based on selection, hover, and availability
         var option_color = normal_color;
         var option_alpha = alpha_mod;
+        var is_hovered = (i < array_length(menu_buttons) && menu_buttons[i].is_hovered);
+        var is_disabled = is_option_disabled(i);
         
-        if (i == selected_option) {
+        // Priority: disabled > selected > hovered > normal
+        if (is_disabled) {
+            option_color = disabled_color;
+            option_alpha *= 0.5;
+        } else if (i == selected_option) {
             option_color = selected_color;
             // Add subtle pulse animation for selected option
             var pulse = sin(current_time * 0.01) * 0.2 + 0.8;
             option_alpha *= pulse;
-        }
-        
-        // Check if option should be disabled
-        if (is_option_disabled(i)) {
-            option_color = disabled_color;
-            option_alpha *= 0.5;
+            
+            // Draw selection background for keyboard selection
+            if (!is_hovered) {
+                draw_set_alpha(0.2 * alpha_mod);
+                draw_set_color(selected_color);
+                var text_w = string_width(current_options[i]);
+                var text_h = string_height(current_options[i]);
+                draw_rectangle(menu_x - text_w/2 - 8, option_y - text_h/2 - 3, 
+                             menu_x + text_w/2 + 8, option_y + text_h/2 + 3, false);
+            }
+        } else if (is_hovered) {
+            option_color = c_white; // Bright white for hover
+            option_alpha *= 1.2; // Slightly brighter
+            
+            // Draw hover background
+            draw_set_alpha(0.15 * alpha_mod);
+            draw_set_color(c_white);
+            var text_w = string_width(current_options[i]);
+            var text_h = string_height(current_options[i]);
+            draw_rectangle(menu_x - text_w/2 - 8, option_y - text_h/2 - 3, 
+                         menu_x + text_w/2 + 8, option_y + text_h/2 + 3, false);
         }
         
         draw_set_color(option_color);

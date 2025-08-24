@@ -86,20 +86,24 @@ function gain_xp(character, xp_amount) {
 // New function to distribute XP to entire party
 function distribute_party_xp(xp_amount) {
     var player_count = instance_number(obj_Player);
+    if (player_count == 0) return;
     
-    scr_log("Party gains " + string(xp_amount) + " XP (" + string(xp_amount) + " ÷ " + string(player_count) + " each)");
+    // Divide XP among party members
+    var xp_per_player = floor(xp_amount / player_count);
+    
+    scr_log("Party gains " + string(xp_amount) + " XP (" + string(xp_per_player) + " each, " + string(xp_amount) + " ÷ " + string(player_count) + ")");
     
     var players_leveled = [];
     var players_need_asi = [];
     
-    // First pass: Give XP to all players and track who levels up
+    // First pass: Give divided XP to all players and track who levels up
     for (var i = 0; i < player_count; i++) {
         var player_instance = instance_find(obj_Player, i);
         if (instance_exists(player_instance)) {
             var old_level = player_instance.level;
-            gain_xp(player_instance, xp_amount);
+            gain_xp(player_instance, xp_per_player);
             
-            scr_log(player_instance.character_name + " gains " + string(xp_amount) + " XP!");
+            scr_log(player_instance.character_name + " gains " + string(xp_per_player) + " XP!");
             
             // Track if this player leveled up and needs ASI
             if (player_instance.level > old_level) {

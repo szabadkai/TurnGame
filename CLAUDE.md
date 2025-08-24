@@ -170,3 +170,31 @@ The game implements a sophisticated turn-based system with the following key com
 2. **In Code**: Set `character_index = X` before calling `init_character_sprite_matrix(character_index)`
 3. **Sprite Requirements**: Ensure sprites follow naming pattern `chr[index]_[action]_[direction]` (e.g., `chr3_idle_down`)
 4. **Fallback System**: Missing sprites automatically fall back to chr1 equivalents
+
+## Property Initialization Best Practices
+
+When encountering GameMaker errors related to undefined or missing object properties:
+
+### **PREFERRED APPROACH: Initialize at Source (Create Events)**
+- **Fix the root cause** by ensuring all required properties are initialized in the object's Create event
+- Use `variable_instance_exists()` checks with sensible default values
+- Example pattern:
+  ```gml
+  if (!variable_instance_exists(id, "property_name")) property_name = default_value;
+  ```
+
+### **AVOID: Defensive Checks Everywhere**
+- Don't add `instance_exists()` and `variable_instance_exists()` checks throughout the codebase
+- These create maintenance overhead and performance impact
+- They treat symptoms rather than the underlying problem
+
+### **Benefits of Source Initialization:**
+- **Single point of truth** - all initialization logic in one place
+- **Guaranteed consistency** - all instances have the same property structure  
+- **Cleaner calling code** - other objects can safely access properties without null checks
+- **Better performance** - no repeated existence checks during operations
+- **Easier debugging** - clear default values make issues more obvious
+
+### **When to Use Each Approach:**
+- **Create Event Initialization**: When you control the object creation (preferred 99% of the time)
+- **Defensive Checks**: Only for external data or when interfacing with unreliable third-party systems

@@ -7,4 +7,7 @@ load_and_create_systems();
 // Apply any remaining saved state
 apply_star_map_state();
 
+// Mark systems as initialized
+systems_initialized = true;
+
 show_debug_message("StarMapManager systems created and state applied");
