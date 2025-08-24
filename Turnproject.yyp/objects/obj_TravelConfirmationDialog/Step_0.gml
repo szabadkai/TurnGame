@@ -23,10 +23,38 @@ if (dialog_visible && dialog_alpha > 0.5) {
     
     // Handle mouse clicks
     if (mouse_check_button_pressed(mb_left)) {
-        if (confirm_button_hover) {
-            confirm_travel();
-        } else if (cancel_button_hover) {
-            cancel_travel();
+        if (dialog_state == "CONFIRMATION") {
+            if (confirm_button_hover) {
+                dialog_state = "LANDING_PARTY";
+            } else if (cancel_button_hover) {
+                cancel_travel();
+            }
+        } else if (dialog_state == "LANDING_PARTY") {
+            // Handle landing party selection clicks
+            var list_y = dialog_y + dialog_padding + 30;
+            for (var i = 0; i < array_length(global.crew); i++) {
+                var member_y = list_y + (i * 20);
+                var check_x = dialog_x + dialog_padding;
+                if (mouse_x >= check_x && mouse_x <= check_x + 12 && mouse_y >= member_y && mouse_y <= member_y + 12) {
+                    var member_index = i;
+                    var selected_index = array_indexOf(landing_party, member_index);
+                    if (selected_index == -1) {
+                        if (array_length(landing_party) < max_landing_party_size) {
+                            array_push(landing_party, member_index);
+                        }
+                    } else {
+                        array_delete(landing_party, selected_index, 1);
+                    }
+                }
+            }
+
+            // Handle launch button click
+            var button_y = dialog_y + dialog_height - 40;
+            var launch_button_x = dialog_x + dialog_width/2 - button_width/2;
+            if (mouse_x >= launch_button_x && mouse_x <= launch_button_x + button_width && mouse_y >= button_y && mouse_y <= button_y + button_height) {
+                global.landing_party = landing_party;
+                confirm_travel();
+            }
         }
         // Click outside dialog cancels
         else if (mouse_x < dialog_x || mouse_x > dialog_x + dialog_width ||

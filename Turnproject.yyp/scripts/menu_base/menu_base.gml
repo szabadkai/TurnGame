@@ -165,7 +165,7 @@ function draw_base_menu(show_background_image, background_image_sprite) {
     }
     
     // Draw background
-    if (show_background_image && background_image_sprite != noone && sprite_exists(background_image_sprite)) {
+    if (show_background_image && background_image_sprite != noone && background_image_sprite != -1) {
         // Draw promo background image (for main menu)
         draw_set_alpha(1.0 * alpha_mod);
         draw_set_color(c_white);

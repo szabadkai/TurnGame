@@ -25,7 +25,7 @@ switch(room) {
 // Auto-save when entering significant rooms (but not main menu)
 if (room != Room_MainMenu && progress_dirty) {
     // Delay auto-save by 1 second to let room fully initialize
-    alarm[0] = room_speed * 1; // 1 second delay
+    alarm[0] = game_get_speed(gamespeed_fps) * 1; // 1 second delay
 }
 
 // Handle star map room entry
@@ -59,7 +59,7 @@ function handle_combat_room_entry() {
     if (variable_global_exists("pending_save_data") && variable_global_exists("loading_save")) {
         if (global.loading_save) {
             // Delay applying save data to let room initialize
-            alarm[1] = room_speed * 0.5; // 0.5 second delay
+            alarm[1] = game_get_speed(gamespeed_fps) * 0.5; // 0.5 second delay
         }
     }
 }

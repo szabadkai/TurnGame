@@ -5,12 +5,7 @@
 if (keyboard_check_pressed(ord("M"))) {
     // Initialize star map system if not already done
     if (!variable_global_exists("star_map_state")) {
-        if (script_exists(init_star_map)) {
-            init_star_map();
-        } else {
-            show_debug_message("Star map system not available");
-            return;
-        }
+        init_star_map();
     }
     
     show_debug_message("M key pressed - navigating to star map");

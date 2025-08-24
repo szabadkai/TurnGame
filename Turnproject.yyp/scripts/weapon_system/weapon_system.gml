@@ -46,7 +46,7 @@ function init_weapons() {
 }
 
 function update_combat_stats() {
-    if (equipped_weapon_id == undefined) return;
+    if (is_undefined(equipped_weapon_id)) return;
     
     var weapon = global.weapons[equipped_weapon_id];
     
@@ -122,10 +122,10 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
             
         case "area_attack":
             scr_log("AREA ATTACK! " + weapon_name + " strikes multiple foes!");
-            var enemies = find_adjacent_enemies(attacker);
-            for (var i = 0; i < array_length(enemies); i++) {
-                if (enemies[i] != target) {
-                    area_attack(attacker, enemies[i]);
+            var area_enemies = find_adjacent_enemies(attacker);
+            for (var i = 0; i < array_length(area_enemies); i++) {
+                if (area_enemies[i] != target) {
+                    area_attack(attacker, area_enemies[i]);
                 }
             }
             break;
@@ -211,7 +211,7 @@ function roll_damage_simple(damage_modifier, prefix) {
 }
 
 function handle_defensive_abilities(defender, attacker, incoming_damage, attack_missed) {
-    if (!instance_exists(defender) || defender.weapon_special_type == undefined) return incoming_damage;
+    if (!instance_exists(defender) || is_undefined(defender.weapon_special_type)) return incoming_damage;
     
     switch(defender.weapon_special_type) {
         case "defense_boost":

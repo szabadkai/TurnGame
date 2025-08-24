@@ -80,9 +80,7 @@ function handle_return_button() {
     
     // Initialize star map system if needed
     if (!variable_global_exists("star_map_state")) {
-        if (script_exists(init_star_map)) {
-            init_star_map();
-        }
+        init_star_map();
     }
     
     // Set flag to load star map state when we get there

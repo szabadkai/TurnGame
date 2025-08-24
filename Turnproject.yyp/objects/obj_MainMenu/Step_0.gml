@@ -12,7 +12,7 @@ if (show_promo_background && background_fade_timer < background_fade_duration) {
         /*
         show_promo_background = false;
         // Clean up background image
-        if (background_image != noone && sprite_exists(background_image)) {
+        if (background_image != noone && background_image != -1) {
             sprite_delete(background_image);
             background_image = noone;
         }

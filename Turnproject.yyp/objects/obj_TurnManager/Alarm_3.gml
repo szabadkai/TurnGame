@@ -28,6 +28,9 @@ else {
 function handle_combat_victory() {
     show_debug_message("Processing combat victory...");
     
+    // Sync combat results back to crew roster BEFORE any other processing
+    sync_combat_to_crew();
+    
     // Award XP to remaining players
     var player_count = instance_number(obj_Player);
     var xp_award = 50; // Base XP award
@@ -58,6 +61,9 @@ function handle_combat_victory() {
 // Handle combat defeat
 function handle_combat_defeat() {
     show_debug_message("Processing combat defeat...");
+    
+    // Sync combat results back to crew roster (they're all critically injured)
+    sync_combat_to_crew();
     
     scr_log("DEFEAT! All party members have fallen.");
     

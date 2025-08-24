@@ -4,6 +4,20 @@
 // Define interaction radius
 var interaction_radius = 20;
 
+// Skip all interactions if crew selection UI is active
+var crew_ui = instance_find(obj_CrewSelectUI, 0);
+if (crew_ui != noone && crew_ui.ui_visible) {
+    // Force hover state off when UI is blocking
+    if (hover_state) {
+        hover_state = false;
+        var tooltip_manager = instance_find(obj_TooltipManager, 0);
+        if (tooltip_manager != noone) {
+            tooltip_manager.hide_tooltip();
+        }
+    }
+    exit; // Skip all interaction logic
+}
+
 // Check if mouse is within interaction range
 var mouse_distance = point_distance(x, y, mouse_x, mouse_y);
 var was_hovering = hover_state;
@@ -39,7 +53,7 @@ if (mouse_distance <= interaction_radius) {
     
     // Check for left click
     if (mouse_check_button_pressed(mb_left) && is_unlocked) {
-        show_debug_message("Clicked on system: " + system_name + " (Unlocked: " + string(is_unlocked) + ")");
+        show_debug_message("Clicked on unlocked system: " + system_name + " at X: " + string(x) + ", Y: " + string(y));
         
         // Play click sound effect (placeholder)
         // audio_play_sound(snd_confirm_click, 1, false);
@@ -50,66 +64,15 @@ if (mouse_distance <= interaction_radius) {
             tooltip_manager.hide_tooltip();
         }
         
-        // Try to use travel confirmation dialog (asset-checked by name)
-        var use_confirmation_dialog = false;
-        var confirmation_dialog = noone;
-        var dialog_asset = asset_get_index("obj_TravelConfirmationDialog");
-        if (dialog_asset != -1) {
-            confirmation_dialog = instance_find(dialog_asset, 0);
-            if (confirmation_dialog == noone) {
-                confirmation_dialog = instance_create_layer(0, 0, "Instances", dialog_asset);
-            }
-            use_confirmation_dialog = (confirmation_dialog != noone);
-        }
-        
-        if (use_confirmation_dialog) {
-            // Prepare system info for confirmation dialog
-            var system_data = {
-                name: system_name,
-                type: system_type,
-                faction: get_faction_name(faction_control),
-                threat: threat_level,
-                scene_id: target_scene
-            };
-            
-            // Show confirmation dialog with travel callback data
-            confirmation_dialog.system_info = system_data;
-            confirmation_dialog.pending_system_id = system_id;
-            confirmation_dialog.pending_target_scene = target_scene;
-            confirmation_dialog.show_travel_confirmation(system_data, Room_Dialog);
-        } else {
-            // Fallback to direct travel (original behavior)
-            show_debug_message("Using direct travel - confirmation dialog not available");
-            
-            // Mark as visited if this is the first time
-            if (!is_visited) {
-                is_visited = true;
-                update_visual_state();
-                
-                // Save this change to the star map state
-                var starmap_manager = instance_find(obj_StarMapManager, 0);
-                if (starmap_manager != noone) {
-                    starmap_manager.mark_system_visited(system_id);
-                }
-            }
-            
-            // Update current location
-            var starmap_manager = instance_find(obj_StarMapManager, 0);
-            if (starmap_manager != noone) {
-                starmap_manager.set_current_system(system_id);
-            }
-            
-            // Set dialog exit room back to star map
-            if (script_exists(set_dialog_exit_room)) {
-                set_dialog_exit_room(Room_StarMap);
-            }
-            
-            // Set up the dialog scene to start after room transition
-            global.pending_scene_id = target_scene;
-            show_debug_message("Starting direct transition to scene: " + target_scene);
-            
-            // Transition to dialog room via nav service
-            scr_nav_go(GameState.DIALOG, { scene_id: target_scene });
+        show_debug_message("is_unlocked: " + string(is_unlocked));
+        // Create and show landing party UI
+        if (object_exists(obj_CrewSelectUI)) {
+            var landing_party_ui = instance_create_layer(x, y, "Instances", obj_CrewSelectUI);
+            show_debug_message("landing_party_ui instance: " + string(landing_party_ui));
+            landing_party_ui.pending_system_id = system_id;
+            landing_party_ui.pending_target_scene = target_scene;
+            landing_party_ui.pending_travel_room = Room_Dialog;
+            landing_party_ui.show_ui(hover_info, Room_Dialog);
         }
     }
     

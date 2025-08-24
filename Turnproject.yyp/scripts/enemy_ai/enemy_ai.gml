@@ -198,7 +198,6 @@ function decide_enemy_action(enemy) {
                     return { action: "wait", target: target, direction: Dir.DOWN };
                 }
             }
-            break;
             
         case "defensive":
             if (in_range && current_distance >= optimal_distance) {
@@ -217,7 +216,6 @@ function decide_enemy_action(enemy) {
                 }
             }
             return { action: "wait", target: target, direction: Dir.DOWN };
-            break;
             
         case "tactical":
             // More complex decision making for tactical enemies
@@ -231,7 +229,6 @@ function decide_enemy_action(enemy) {
                     return { action: "wait", target: target, direction: Dir.DOWN };
                 }
             }
-            break;
     }
     
     return { action: "wait", target: target, direction: Dir.DOWN };

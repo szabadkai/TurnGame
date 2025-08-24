@@ -82,7 +82,7 @@ if (global.dialog_scene_selection) {
         // Check if we need to load a new preview (scene changed)
         if (preview_scene_id != selected_scene_id) {
             // Clean up old preview sprite
-            if (preview_sprite != noone && sprite_exists(preview_sprite)) {
+            if (preview_sprite != noone && preview_sprite != -1) {
                 sprite_delete(preview_sprite);
                 preview_sprite = noone;
             }
@@ -113,7 +113,9 @@ if (global.dialog_scene_selection) {
             var preview_x = box_x + box_width - preview_width - 20;
             var preview_y = box_y + 60;
             
-            draw_sprite_stretched(preview_sprite, 0, preview_x, preview_y, preview_width, preview_height);
+            if (sprite_exists(preview_sprite)) {
+                draw_sprite_stretched(preview_sprite, 0, preview_x, preview_y, preview_width, preview_height);
+            }
         }
     }
     
@@ -141,7 +143,9 @@ if (global.current_scene_image != noone && sprite_exists(global.current_scene_im
     var draw_x = (gui_w - draw_w) / 2;
     var draw_y = (gui_h - draw_h) / 2;
     
-    draw_sprite_stretched(global.current_scene_image, 0, draw_x, draw_y, draw_w, draw_h);
+    if (sprite_exists(global.current_scene_image)) {
+        draw_sprite_stretched(global.current_scene_image, 0, draw_x, draw_y, draw_w, draw_h);
+    }
     
     // Add dark overlay for readability
     draw_set_color(c_black);

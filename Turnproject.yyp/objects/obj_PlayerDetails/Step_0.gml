@@ -25,10 +25,9 @@ if (visible) {
         var mouse_gui_x = device_mouse_x_to_gui(0);
         var mouse_gui_y = device_mouse_y_to_gui(0);
         
-        // Check if buttons exist (they're created in Draw event)
-        if (variable_instance_exists(id, "prev_weapon_button") && variable_instance_exists(id, "next_weapon_button")) {
-            
-            // Previous weapon button
+        // Check weapon navigation buttons
+        
+        // Previous weapon button
             if (mouse_gui_x >= prev_weapon_button.x && mouse_gui_x <= prev_weapon_button.x + prev_weapon_button.w &&
                 mouse_gui_y >= prev_weapon_button.y && mouse_gui_y <= prev_weapon_button.y + prev_weapon_button.h) {
                 cycle_weapon(player_instance, -1);
@@ -39,7 +38,6 @@ if (visible) {
                 mouse_gui_y >= next_weapon_button.y && mouse_gui_y <= next_weapon_button.y + next_weapon_button.h) {
                 cycle_weapon(player_instance, 1);
             }
-        }
     }
     
     // Safety check: if current player is destroyed, close details or switch to valid player

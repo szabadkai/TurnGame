@@ -1,7 +1,6 @@
 // In-Game Menu Manager - Create Event
 
-// Initialize enums and systems
-menu_enums();
+// Menu enums are automatically available from the script resource
 
 // Initialize base menu system with in-game context
 var in_game_menu_options = [

@@ -226,9 +226,9 @@ function perform_skill_check(skill_check_data) {
     if (variable_struct_exists(skill_check_data, "group_modifiers")) {
         var modifiers = skill_check_data.group_modifiers;
         for (var i = 0; i < array_length(modifiers); i++) {
-            var modifier = modifiers[i];
-            if (evaluate_dialog_conditions(modifier.condition)) {
-                difficulty += real(modifier.delta);
+            var modifier_item = modifiers[i];
+            if (evaluate_dialog_conditions(modifier_item.condition)) {
+                difficulty += real(modifier_item.delta);
             }
         }
     }

@@ -262,7 +262,7 @@ function handle_main_menu_selection_original() {
         case MAINMENU_OPTION.CONTINUE:
             if (has_save_files()) {
                 play_menu_select_sound();
-                change_menu_state(MENUSTATE.SAVE_LOAD);
+                change_menu_.state(MENUSTATE.SAVE_LOAD);
             } else {
                 play_menu_error_sound();
             }
@@ -331,16 +331,12 @@ function start_new_game() {
     reset_all_global_state();
     
     // Initialize fresh star map system
-    if (script_exists(init_star_map)) {
-        init_star_map();
-        show_debug_message("Initialized fresh star map system");
-    }
+    init_star_map();
+    show_debug_message("Initialized fresh star map system");
     
     // Create initial save in the new slot
-    if (script_exists(save_game_to_slot)) {
-        save_game_to_slot(new_slot);
-        show_debug_message("Created initial save in slot " + string(new_slot));
-    }
+    save_game_to_slot(new_slot);
+    show_debug_message("Created initial save in slot " + string(new_slot));
     
     // Go to star map for fresh start
     scr_nav_go(GameState.STARMAP, undefined);
@@ -350,6 +346,9 @@ function start_new_game() {
 function reset_all_global_state() {
     show_debug_message("Resetting all global game state...");
     
+    // Initialize the crew
+    initialize_crew();
+    show_debug_message("Initialized crew");
     // Reset dialog system state
     if (variable_global_exists("dialog_flags")) {
         global.dialog_flags = {};
@@ -490,4 +489,17 @@ function load_menu_background_image() {
     show_debug_message("No menu background image could be loaded for: " + promo_filename);
     background_image = noone;
     return false;
+}
+
+function initialize_crew() {
+    global.crew = [];
+    for (var i = 0; i < 8; i++) {
+        array_push(global.crew, {
+            name: "Crew Member " + string(i + 1),
+            hp: 100,
+            max_hp: 100,
+            status: "Normal",
+            role: "Crewman"
+        });
+    }
 }

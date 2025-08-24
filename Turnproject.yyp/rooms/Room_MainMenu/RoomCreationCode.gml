@@ -1,8 +1,7 @@
 // Main Menu Room Creation Code
 // Initialize the main menu system
 
-// CRITICAL: Initialize menu enums FIRST before any objects use them
-menu_enums();
+// Menu enums are automatically available from the script resource
 
 // Initialize dialog system for scene gallery functionality
 if (!variable_global_exists("dialog_flags")) {

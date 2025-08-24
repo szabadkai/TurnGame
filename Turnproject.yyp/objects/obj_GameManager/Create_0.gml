@@ -39,19 +39,13 @@ function initialize_global_systems() {
     show_debug_message("Initializing global game systems...");
     
     // Initialize dialog system
-    if (script_exists(init_dialog_system)) {
-        init_dialog_system();
-    }
+    init_dialog_system();
     
     // Initialize star map system
-    if (script_exists(init_star_map)) {
-        init_star_map();
-    }
+    init_star_map();
     
     // Initialize weapon system
-    if (script_exists(init_weapons)) {
-        init_weapons();
-    }
+    init_weapons();
     
     // Initialize global game settings if they don't exist
     if (!variable_global_exists("game_settings")) {

@@ -1,59 +1,25 @@
 // Inherit shared combat entity properties
 event_inherited();
 
-// Assign unique name based on instance creation order
-var player_names = ["Aria", "Bran", "Cora", "Dex", "Erin", "Finn", "Gia", "Hank", "Ivy", "Jake", "Kira", "Liam", "Mia", "Nora", "Owen", "Piper", "Quinn", "Riley", "Sam", "Tia", "Uma", "Vince", "Wren", "Xander", "Yara", "Zane"];
-var player_count = instance_number(obj_Player);
-var my_index = character_index;
-
-// Find this player's index among all players
-for (var i = 0; i < player_count; i++) {
-    if (instance_find(obj_Player, i) == self) {
-        my_index = i;
-        break;
-    }
+// Character name will be set by TurnManager spawn_landing_party() function
+// Default fallback name in case not set by crew system
+if (!variable_instance_exists(id, "character_name") || character_name == "Unknown") {
+    character_name = "Crew Member";
 }
 
-character_name = player_names[my_index % array_length(player_names)];
+// Crew ID for linking back to crew roster (set by TurnManager)
+if (!variable_instance_exists(id, "crew_id")) {
+    crew_id = "";
+}
 
 // === ABILITY SCORES ===
-// Set diverse starting ability scores for different character archetypes
-var ability_sets = [
-    [14, 13, 12, 10, 11, 9],  // Aria: STR-focused fighter
-    [12, 14, 11, 9, 13, 10],  // Bran: DEX-focused ranger  
-    [13, 12, 14, 11, 10, 9],  // Cora: CON-focused tank
-    [10, 11, 12, 14, 13, 9],  // Dex: INT-focused strategist
-    [11, 10, 13, 12, 14, 9],   // Erin: WIS-focused cleric
-    [12, 11, 13, 10, 14, 9],   // Finn: STR-focused fighter
-    [13, 12, 11, 10, 14, 9],   // Gia: DEX-focused ranger
-    [14, 11, 12, 10, 13, 9],   // Hank: CON-focused tank
-    [10, 13, 12, 11, 14, 9],   // Ivy: INT-focused strategist
-    [11, 12, 13, 10, 14, 9],   // Jake: WIS-focused cleric
-    [12, 13, 11, 10, 14, 9],   // Kira: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Liam: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Mia: CON-focused tank
-    [10, 14, 12, 11, 13, 9],   // Nora: INT-focused strategist
-    [11, 13, 12, 10, 14, 9],   // Owen: WIS-focused cleric
-    [12, 14, 11, 10, 13, 9],   // Piper: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Quinn: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Riley: CON-focused tank
-    [10, 13, 12, 11, 14, 9],   // Sam: INT-focused strategist
-    [11, 12, 13, 10, 14, 9],   // Tia: WIS-focused cleric
-    [12, 13, 11, 10, 14, 9],   // Uma: STR-focused fighter
-    [13, 11, 12, 10, 14, 9],   // Vince: DEX-focused ranger
-    [14, 12, 11, 10, 13, 9],   // Wren: CON-focused tank
-    [10, 14, 12, 11, 13, 9],   // Xander: INT-focused strategist
-    [11, 13, 12, 10, 14, 9],   // Yara: WIS-focused cleric
-    [12, 14, 11, 10, 13, 9],   // Zane: STR-focused fighter
-];
-
-var my_abilities = ability_sets[my_index % array_length(ability_sets)];
-strength = my_abilities[0];
-dexterity = my_abilities[1]; 
-constitution = my_abilities[2];
-intelligence = my_abilities[3];
-wisdom = my_abilities[4];
-charisma = my_abilities[5];
+// Default ability scores (overridden by crew system when spawned via TurnManager)
+strength = 10;
+dexterity = 10;
+constitution = 10;
+intelligence = 10;
+wisdom = 10;
+charisma = 10;
 
 // Update ability modifiers
 update_ability_modifiers(self);

@@ -55,6 +55,11 @@ function save_game_to_slot(slot_index) {
         save_data.star_map_state = get_star_map_save_data();
     }
     
+    // Collect crew data if it exists
+    if (variable_global_exists("crew")) {
+        save_data.crew = global.crew;
+    }
+    
     // Save enemy states (for persistent encounters)
     save_data.enemies = [];
     var enemy_count = instance_number(obj_Enemy);
@@ -146,6 +151,12 @@ function apply_loaded_save_data() {
     
     var save_data = global.pending_save_data;
     
+    // Check if save_data is valid
+    if (save_data == undefined || !is_struct(save_data)) {
+        show_debug_message("Invalid save data structure");
+        return;
+    }
+    
     // Restore player data
     if (variable_struct_exists(save_data, "player")) {
         var player = instance_find(obj_Player, 0);
@@ -171,7 +182,9 @@ function apply_loaded_save_data() {
             
             // Update character sprite
             init_character_sprite_matrix(player.character_index);
-            update_combat_stats(player);
+            with(player) {
+                update_combat_stats();
+            }
         }
     }
     
@@ -191,6 +204,11 @@ function apply_loaded_save_data() {
     // Restore star map state
     if (variable_struct_exists(save_data, "star_map_state")) {
         apply_star_map_save_data(save_data.star_map_state);
+    }
+    
+    // Restore crew data
+    if (variable_struct_exists(save_data, "crew")) {
+        global.crew = save_data.crew;
     }
     
     // Restore enemies (remove current enemies and create saved ones)

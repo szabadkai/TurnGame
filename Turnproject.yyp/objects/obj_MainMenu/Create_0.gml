@@ -1,7 +1,6 @@
 // Main Menu Manager - Create Event
 
-// CRITICAL: Initialize enums FIRST before using them
-menu_enums();
+// Menu enums are automatically available from the script resource
 
 // Initialize base menu system with main menu context
 var main_menu_option_array = [

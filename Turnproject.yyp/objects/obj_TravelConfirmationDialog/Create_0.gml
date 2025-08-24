@@ -5,6 +5,11 @@
 dialog_visible = false;
 dialog_alpha = 0;
 dialog_target_alpha = 0;
+dialog_state = "CONFIRMATION";
+
+// Landing party selection
+landing_party = [];
+max_landing_party_size = 4;
 
 // System information to display
 system_info = {};
@@ -49,6 +54,8 @@ function show_travel_confirmation(system_data, target_room) {
     system_info = system_data;
     pending_travel_room = target_room;
     dialog_target_alpha = 1.0;
+    dialog_state = "CONFIRMATION";
+    landing_party = [];
     
     // Center dialog on GUI screen
     dialog_x = (display_get_gui_width() - dialog_width) / 2;
@@ -97,9 +104,7 @@ function confirm_travel() {
         }
         
         // Set dialog exit room back to star map
-        if (script_exists(set_dialog_exit_room)) {
-            set_dialog_exit_room(Room_StarMap);
-        }
+        set_dialog_exit_room(Room_StarMap);
         
         // Set up the dialog scene to start after room transition
         global.pending_scene_id = pending_target_scene;

@@ -16,7 +16,7 @@ if (show_visible && show_alpha > 0.5) {
         show_debug_message("Simple dialog: CONFIRMED");
         hide_confirmation();
         if (confirm_callback != -1) {
-            script_execute(confirm_callback);
+            confirm_callback();
         }
     }
     
@@ -24,7 +24,7 @@ if (show_visible && show_alpha > 0.5) {
         show_debug_message("Simple dialog: CANCELLED");
         hide_confirmation();
         if (cancel_callback != -1) {
-            script_execute(cancel_callback);
+            cancel_callback();
         }
     }
     
@@ -32,7 +32,7 @@ if (show_visible && show_alpha > 0.5) {
         show_debug_message("Simple dialog: Mouse clicked - cancelling");
         hide_confirmation();
         if (cancel_callback != -1) {
-            script_execute(cancel_callback);
+            cancel_callback();
         }
     }
 }

@@ -46,7 +46,7 @@ if (hp <= 0) {
         dying = true;
         anim_state = State.DIE;
         // Ensure sprite matrix contains death state
-        if (spr_matrix == undefined) spr_matrix = init_character_sprite_matrix(character_index);
+        spr_matrix ??= init_character_sprite_matrix(character_index);
         var die_sprite = spr_matrix[dir][State.DIE];
         if (die_sprite == undefined || !sprite_exists(die_sprite)) {
             // Fallback to generic death sprite
@@ -420,7 +420,8 @@ if (anim_state == State.ATTACK && is_anim && image_index >= sprite_get_number(sp
         var hit = roll_attack(self, target_player);
         
         if (hit) {
-            var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_name);
+            var weapon_display_name = is_undefined(weapon_name) ? "weapon" : weapon_name;
+            var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_display_name);
             
             // Apply weapon special abilities 
             var special_damage = handle_special_attack(self, target_player, hit, base_damage);
@@ -433,7 +434,7 @@ if (anim_state == State.ATTACK && is_anim && image_index >= sprite_get_number(sp
             
             // Combat log reporting
             var player_name = target_player.character_name;
-            scr_log(player_name + " takes " + string(final_damage) + " damage from " + weapon_name + "! (HP: " + string(target_player.hp) + "/" + string(target_player.max_hp) + ")");
+            scr_log(player_name + " takes " + string(final_damage) + " damage from " + weapon_display_name + "! (HP: " + string(target_player.hp) + "/" + string(target_player.max_hp) + ")");
             if (target_player.hp <= 0) {
                 scr_log("*** " + player_name + " has been defeated by " + character_name + "! ***");
             } else if (target_player.hp <= 3) {
@@ -482,7 +483,7 @@ with (obj_Player) {
 if (pistol_active && active_player != noone && mouse_hovering) {
     // Only show color when actually hovering over enemy
     // Use the exact same calculation as is_enemy_in_pistol_range()
-    if (script_exists(is_enemy_in_pistol_range) && is_enemy_in_pistol_range(active_player, self)) {
+    if (is_enemy_in_pistol_range(active_player, self)) {
         sprite_color = c_lime; // Green for in range (including line of sight)
     } else {
         sprite_color = c_dkgray;  // Dark gray for out of range or blocked  

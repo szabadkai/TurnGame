@@ -130,11 +130,7 @@ draw_set_color(c_white);
 var weapon_name_y = current_y;
 draw_text(text_x + 20, weapon_name_y, "Name:");
 
-// Store button positions for click detection
-if (!variable_instance_exists(id, "prev_weapon_button")) {
-    prev_weapon_button = { x: 0, y: 0, w: 0, h: 0 };
-    next_weapon_button = { x: 0, y: 0, w: 0, h: 0 };
-}
+// Button positions are initialized in Create event
 
 // Previous weapon button
 var prev_btn_x = text_x + 80;
@@ -209,7 +205,7 @@ current_y += line_height;
 draw_set_color(c_white);
 
 if (player.frozen_turns > 0) {
-    draw_set_color(c_ltblue);
+    draw_set_color(c_aqua);
     draw_text(text_x + 20, current_y, "FROZEN - " + string(player.frozen_turns) + " turns remaining");
     current_y += line_height;
     draw_set_color(c_white);

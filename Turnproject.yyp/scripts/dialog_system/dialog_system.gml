@@ -721,7 +721,7 @@ function end_dialog_scene() {
     global.current_dialog_node = undefined;
     
     // Clean up scene background image
-    if (global.current_scene_image != noone && sprite_exists(global.current_scene_image)) {
+    if (global.current_scene_image != noone && global.current_scene_image != -1) {
         sprite_delete(global.current_scene_image);
         global.current_scene_image = noone;
     }
@@ -858,7 +858,7 @@ function get_scene_image_path(scene_id) {
 // Load scene image as sprite
 function load_scene_image(scene_id) {
     // Clean up previous image
-    if (global.current_scene_image != noone && sprite_exists(global.current_scene_image)) {
+    if (global.current_scene_image != noone && global.current_scene_image != -1) {
         sprite_delete(global.current_scene_image);
         global.current_scene_image = noone;
     }
@@ -888,7 +888,7 @@ function load_scene_image(scene_id) {
             if (file_exists(image_path)) {
                 try {
                     global.current_scene_image = sprite_add(image_path, 1, false, false, 0, 0);
-                    if (global.current_scene_image != -1 && sprite_exists(global.current_scene_image)) {
+                    if (global.current_scene_image != -1) {
                         show_debug_message("Successfully loaded scene image: " + image_path);
                         return true;
                     } else {
@@ -918,7 +918,7 @@ function load_scene_image(scene_id) {
             if (file_exists(image_path)) {
                 try {
                     global.current_scene_image = sprite_add(image_path, 1, false, false, 0, 0);
-                    if (global.current_scene_image != -1 && sprite_exists(global.current_scene_image)) {
+                    if (global.current_scene_image != -1) {
                         show_debug_message("Loaded default scene image: " + image_path);
                         return true;
                     }
@@ -1135,7 +1135,7 @@ function handle_dialog_scene_completion(scene_id, scene_effects) {
             var current_system_num = 1; // Default to first system
             
             // Try to extract system number from current system
-            var current_system = get_current_star_system();
+            current_system = get_current_star_system();
             if (string_pos("system_", current_system) > 0) {
                 var num_part = string_delete(current_system, 1, 7); // Remove "system_"
                 current_system_num = real(num_part);
