@@ -1,6 +1,7 @@
 {
   "FolderOrderSettings":[
     {"name":"characters","order":131,"path":"folders/Sprites/characters.yy",},
+    {"name":"portraits","order":133,"path":"folders/Sprites/portraits.yy",},
     {"name":"stars","order":132,"path":"folders/Sprites/stars.yy",},
   ],
   "ResourceOrderSettings":[
@@ -16,6 +17,7 @@
     {"name":"obj_UIManager","order":8,"path":"objects/obj_UIManager/obj_UIManager.yy",},
     {"name":"damage_text_to_value","order":2,"path":"scripts/damage_text_to_value/damage_text_to_value.yy",},
     {"name":"move","order":3,"path":"scripts/move/move.yy",},
+    {"name":"portrait_utils","order":6,"path":"scripts/portrait_utils/portrait_utils.yy",},
     {"name":"starmap_system","order":6,"path":"scripts/starmap_system/starmap_system.yy",},
     {"name":"weapon_system","order":4,"path":"scripts/weapon_system/weapon_system.yy",},
     {"name":"xp_system","order":5,"path":"scripts/xp_system/xp_system.yy",},
@@ -124,6 +126,15 @@
     {"name":"chr7_run_sword_right","order":94,"path":"sprites/chr7_run_sword_right/chr7_run_sword_right.yy",},
     {"name":"chr7_run_sword_up","order":95,"path":"sprites/chr7_run_sword_up/chr7_run_sword_up.yy",},
     {"name":"dummy","order":96,"path":"sprites/dummy/dummy.yy",},
+    {"name":"pixellab____Cole__Security_Chief___Base_1756145864158","order":4,"path":"sprites/pixellab____Cole__Security_Chief___Base_1756145864158/pixellab____Cole__Security_Chief___Base_1756145864158.yy",},
+    {"name":"pixellab____Jackson__Executive_Officer__1756145937357","order":7,"path":"sprites/pixellab____Jackson__Executive_Officer__1756145937357/pixellab____Jackson__Executive_Officer__1756145937357.yy",},
+    {"name":"pixellab____Murphy__Chief_Engineer___Ba_1756145913026","order":6,"path":"sprites/pixellab____Murphy__Chief_Engineer___Ba_1756145913026/pixellab____Murphy__Chief_Engineer___Ba_1756145913026.yy",},
+    {"name":"pixellab____Vasquez__Chief_Medical_Offi_1756145835991","order":3,"path":"sprites/pixellab____Vasquez__Chief_Medical_Offi_1756145835991/pixellab____Vasquez__Chief_Medical_Offi_1756145835991.yy",},
+    {"name":"pixellab___Chen__Navigator___Pilot___Ba_1756145813925","order":2,"path":"sprites/pixellab___Chen__Navigator___Pilot___Ba_1756145813925/pixellab___Chen__Navigator___Pilot___Ba_1756145813925.yy",},
+    {"name":"pixellab___Kim__Science_Officer___Engin_1756145786491","order":1,"path":"sprites/pixellab___Kim__Science_Officer___Engin_1756145786491/pixellab___Kim__Science_Officer___Engin_1756145786491.yy",},
+    {"name":"pixellab___Reeves__Comms___Intelligence_1756145885741","order":5,"path":"sprites/pixellab___Reeves__Comms___Intelligence_1756145885741/pixellab___Reeves__Comms___Intelligence_1756145885741.yy",},
+    {"name":"pixellab___Rodriguez__Junior_Science____1756145960157","order":8,"path":"sprites/pixellab___Rodriguez__Junior_Science____1756145960157/pixellab___Rodriguez__Junior_Science____1756145960157.yy",},
+    {"name":"pixellab___Thompson__Operations___Logis_1756145993008","order":9,"path":"sprites/pixellab___Thompson__Operations___Logis_1756145993008/pixellab___Thompson__Operations___Logis_1756145993008.yy",},
     {"name":"spr_active","order":22,"path":"sprites/spr_active/spr_active.yy",},
     {"name":"Sprite102","order":127,"path":"sprites/Sprite102/Sprite102.yy",},
     {"name":"Sprite103","order":128,"path":"sprites/Sprite103/Sprite103.yy",},

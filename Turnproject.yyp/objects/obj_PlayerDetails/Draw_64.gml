@@ -55,6 +55,28 @@ if (can_increase_ability_score(player)) {
 
 current_y += line_height + section_spacing;
 
+// === PORTRAIT (top-right) ===
+var portrait_size = 96;
+var portrait_pad = 10;
+var portrait_x1 = panel_x + panel_w - portrait_pad - portrait_size;
+var portrait_y1 = panel_y + portrait_pad + 10; // below title line
+var portrait_x2 = portrait_x1 + portrait_size;
+var portrait_y2 = portrait_y1 + portrait_size;
+
+// Draw portrait frame
+draw_set_alpha(0.8);
+draw_set_color(make_color_rgb(20,20,20));
+draw_rectangle(portrait_x1, portrait_y1, portrait_x2, portrait_y2, false);
+draw_set_alpha(1);
+draw_set_color(c_white);
+draw_rectangle(portrait_x1, portrait_y1, portrait_x2, portrait_y2, true);
+
+// Resolve and draw portrait sprite if available
+var spr_portrait = portraits_get_sprite_for_entity(player);
+if (spr_portrait != -1) {
+    portraits_draw_fit(spr_portrait, portrait_x1 + 2, portrait_y1 + 2, portrait_x2 - 2, portrait_y2 - 2);
+}
+
 // === BASIC STATS ===
 draw_set_color(c_lime);
 draw_text(text_x, current_y, "BASIC STATS");
@@ -102,7 +124,7 @@ draw_set_color(c_white);
 // Calculate attack ability modifier based on weapon type
 var attack_ability_name = "STR";
 var attack_mod = player.str_mod;
-if (player.weapon_special_type == "finesse" || player.weapon_special_type == "ranged" || player.weapon_name == "Rapier") {
+if (player.weapon_special_type == "finesse" || player.weapon_special_type == "ranged") {
     attack_ability_name = "DEX";
     attack_mod = player.dex_mod;
 }

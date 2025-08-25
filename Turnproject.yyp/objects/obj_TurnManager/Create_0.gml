@@ -4,6 +4,21 @@ randomize();
 init_weapons(); // Ensure weapons are available before any character objects try to access them
 init_input_system(); // Initialize unified input system
 
+// === PORTRAIT MAP (link crew IDs to imported portrait sprites) ===
+// Allows explicit mapping to existing resources (e.g., pixellab___* sprites)
+global.portraits_map = {
+    cole: "pixellab____Cole__Security_Chief___Base_1756145864158",
+    jackson: "pixellab____Jackson__Executive_Officer__1756145937357",
+    murphy: "pixellab____Murphy__Chief_Engineer___Ba_1756145913026",
+    vasquez: "pixellab____Vasquez__Chief_Medical_Offi_1756145835991",
+    chen: "pixellab___Chen__Navigator___Pilot___Ba_1756145813925",
+    kim: "pixellab___Kim__Science_Officer___Engin_1756145786491",
+    reeves: "pixellab___Reeves__Comms___Intelligence_1756145885741",
+    rodriguez: "pixellab___Rodriguez__Junior_Science____1756145960157",
+    thompson: "pixellab___Thompson__Operations___Logis_1756145993008",
+    torres: "pixellab_Torres__First_Officer___Tactic_1756145765994"
+};
+
 //create turn list
 turn_list = ds_list_create();
 
@@ -138,6 +153,9 @@ function spawn_landing_party() {
                 // Set crew member properties from roster
                 player_instance.character_name = crew_member.full_name;
                 player_instance.crew_id = crew_member.id;
+                // Assign portrait sprite if available via map or naming
+                var _sprp = portraits_get_sprite_for_crew(crew_member.id);
+                if (_sprp != -1) player_instance.portrait_sprite = _sprp;
                 player_instance.hp = crew_member.hp;
                 player_instance.max_hp = crew_member.max_hp;
                 player_instance.character_index = crew_member.character_index;

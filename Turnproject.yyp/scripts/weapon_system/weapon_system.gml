@@ -14,35 +14,35 @@ function create_weapon(name, attack_bonus, damage_dice, damage_modifier, special
 function init_weapons() {
     global.weapons = [];
     
-    // 1. Basic & Precision Weapons
+    // 1. Basic & Precision Weapons (Sci‑Fi core, classic unarmed)
     global.weapons[0] = create_weapon("Fists", 1, "1d1", 0, "none", "Your bare hands - always deal 1 damage");
-    global.weapons[1] = create_weapon("Rapier", 2, "1d8", 1, "finesse", "Finesse weapon - Uses DEX for attacks");
-    global.weapons[2] = create_weapon("Assassin's Blade", 1, "1d4", 2, "finesse", "Deadly precision - Uses DEX for attacks");
+    global.weapons[1] = create_weapon("Monoblade", 2, "1d8", 1, "finesse", "Ultra-fine edge; agile strikes use DEX for attacks");
+    global.weapons[2] = create_weapon("Vibroknife", 1, "1d4", 2, "finesse", "High-frequency blade for precise close quarters; uses DEX");
     
-    // 2. Magical Weapons  
-    global.weapons[3] = create_weapon("Lightning Staff", 0, "1d6", 2, "chain_lightning", "Magical focus - Chain lightning to adjacent foes");
-    global.weapons[4] = create_weapon("Frost Wand", 1, "1d4", 1, "freeze", "Ice magic - 50% chance to freeze enemy");
+    // 2. Energy/Tech Weapons  
+    global.weapons[3] = create_weapon("Arc Projector", 0, "1d6", 2, "chain_lightning", "Electro arc emitter — jumps to adjacent targets");
+    global.weapons[4] = create_weapon("Cryo Emitter", 1, "1d4", 1, "freeze", "Supercooled beam — 50% chance to freeze target");
     
-    // 3. Defensive Weapons
-    global.weapons[5] = create_weapon("Shield & Sword", 1, "1d6", 2, "defense_boost", "Balanced weapon - +3 Defense, counter-attacks");
-    global.weapons[6] = create_weapon("Parrying Dagger", 2, "1d4", 0, "reflect", "Defensive blade - Reflects 50% damage");
+    // 3. Defensive Gear
+    global.weapons[5] = create_weapon("Riot Shield & Baton", 1, "1d6", 2, "defense_boost", "+3 Defense; counter-attack on enemy miss");
+    global.weapons[6] = create_weapon("Deflection Gauntlet", 2, "1d4", 0, "reflect", "Reactive field reflects 50% incoming damage");
     
     // 4. Heavy Weapons
-    global.weapons[7] = create_weapon("War Hammer", -1, "2d6", 3, "area_attack", "Massive weapon - Hits all adjacent enemies");
-    global.weapons[8] = create_weapon("Flame Sword", 1, "1d8", 2, "burn", "Enchanted blade - 25% chance to burn");
+    global.weapons[7] = create_weapon("Powered Sledge", -1, "2d6", 3, "area_attack", "Powered strikes impact all adjacent enemies");
+    global.weapons[8] = create_weapon("Plasma Blade", 1, "1d8", 2, "burn", "Superheated edge — 25% chance to ignite");
     
     // 5. Risk/Reward Weapons
-    global.weapons[9] = create_weapon("Berserker Axe", 2, "1d12", 4, "self_harm", "Brutal weapon - High damage but self-harm");
+    global.weapons[9] = create_weapon("Chain Axe (Overclocked)", 2, "1d12", 4, "self_harm", "Unstable drive — heavy damage, inflicts 1 self-damage");
     
     // 6. Ranged Weapons
-    global.weapons[10] = create_weapon("Pistol", 1, "1d8", 2, "ranged", "Ranged firearm - Uses DEX for attacks, Range: 4 tiles");
+    global.weapons[10] = create_weapon("Plasma Pistol", 1, "1d8", 2, "ranged", "Compact energy sidearm — DEX-based, Range: 4 tiles");
     
-    // 7. Enemy Weapons (Always 1 damage)
-    global.weapons[11] = create_weapon("Rusty Dagger", 0, "1d1", 0, "none", "Crude blade - Minimal damage");
-    global.weapons[12] = create_weapon("Crude Club", 0, "1d1", 0, "none", "Simple bludgeon - Basic attack");
-    global.weapons[13] = create_weapon("Bone Claws", 0, "1d1", 0, "none", "Skeletal talons - Scraping damage");
-    global.weapons[14] = create_weapon("Fangs", 0, "1d1", 0, "none", "Natural bite - Quick strikes");
-    global.weapons[15] = create_weapon("Bandit Blade", 0, "1d1", 0, "none", "Worn shortsword - Dulled edge");
+    // 7. Enemy/Grunt Weapons (Always 1 damage)
+    global.weapons[11] = create_weapon("Scrap Shiv", 0, "1d1", 0, "none", "Improvised blade — minimal damage");
+    global.weapons[12] = create_weapon("Pipe Wrench", 0, "1d1", 0, "none", "Heavy tool swung as a weapon");
+    global.weapons[13] = create_weapon("Cyber Claws", 0, "1d1", 0, "none", "Retractable talons — scraping damage");
+    global.weapons[14] = create_weapon("Predator Fangs", 0, "1d1", 0, "none", "Augmented bite — quick strikes");
+    global.weapons[15] = create_weapon("Raider Knife", 0, "1d1", 0, "none", "Standard gang issue — dulled edge");
 }
 
 function update_combat_stats() {
@@ -64,8 +64,8 @@ function update_combat_stats() {
     proficiency_bonus = get_proficiency_bonus(level);
     
     // Calculate final combat stats using new ability score system
-    // For now, use STR for melee weapons, DEX for finesse weapons
-    var ability_mod = (weapon_special_type == "finesse" || weapon_special_type == "ranged" || weapon.name == "Rapier") ? dex_mod : str_mod;
+    // STR for melee, DEX for finesse and ranged (name-agnostic)
+    var ability_mod = (weapon_special_type == "finesse" || weapon_special_type == "ranged") ? dex_mod : str_mod;
     
     attack_bonus = proficiency_bonus + ability_mod + weapon_attack_bonus;
     damage_modifier = ability_mod + weapon_damage_modifier;
@@ -76,6 +76,11 @@ function update_combat_stats() {
     // Special defense bonus for Shield & Sword
     if (weapon_special_type == "defense_boost") {
         defense_score += 3;
+    }
+    
+    // Defending action bonus (+2 AC until next turn)
+    if (variable_instance_exists(id, "is_defending") && is_defending) {
+        defense_score += 2;
     }
     
     // Update sprite matrix for weapon-specific animations

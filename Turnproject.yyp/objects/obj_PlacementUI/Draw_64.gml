@@ -3,6 +3,17 @@
 
 if (!placement_active || array_length(crew_to_place) == 0) return;
 
+// Check if TopBar is handling placement display (resolve object safely)
+var obj_topbar_index = asset_get_index("obj_TopBar");
+if (obj_topbar_index != -1) {
+    var top_bar = instance_find(obj_topbar_index, 0);
+    if (top_bar != noone && variable_instance_exists(top_bar, "current_mode") && top_bar.current_mode == TOPBAR_MODE.PLACEMENT_MODE) {
+        // TopBar is showing placement info, don't draw our own panel
+        return;
+    }
+}
+// If no TopBar found or not in placement mode, draw our compact panel
+
 
 // Enhanced instruction panel with Heroes 3 style
 draw_set_alpha(0.9);

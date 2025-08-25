@@ -12,6 +12,9 @@ if (!variable_instance_exists(id, "crew_id")) {
     crew_id = "";
 }
 
+// Portrait sprite reference (optional; set by TurnManager if available)
+portrait_sprite = -1;
+
 // === ABILITY SCORES ===
 // Default ability scores (overridden by crew system when spawned via TurnManager)
 strength = 10;
