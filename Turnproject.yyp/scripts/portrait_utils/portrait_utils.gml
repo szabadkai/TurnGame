@@ -74,8 +74,7 @@ function portraits_draw_fit(spr, x1, y1, x2, y2) {
     var sh = sprite_get_height(spr);
     if (sw <= 0 || sh <= 0) return false;
     var scale = min(w / sw, h / sh);
-    var cx = x1 + w * 0.5;
-    var cy = y1 + h * 0.5;
-    draw_sprite_ext(spr, 0, cx, cy, scale, scale, 0, c_white, 1);
+    // Draw from top-left corner instead of center
+    draw_sprite_ext(spr, 0, x1, y1, scale, scale, 0, c_white, 1);
     return true;
 }

@@ -259,10 +259,10 @@ function draw_turn_order() {
         if (object_get_name(character.object_index) == "obj_Player") {
             var sprp = portraits_get_sprite_for_entity(character);
             if (sprp != -1) {
-                var px1 = char_x + 4;
-                var py1 = start_y + 4;
-                var px2 = char_x + char_width - 6;
-                var py2 = start_y + char_height - 18;
+                var px1 = char_x + 1;
+                var py1 = start_y + 1;
+                var px2 = char_x + char_width - 3;
+                var py2 = start_y + char_height - 12; // Leave space for name at bottom
                 drew_image = portraits_draw_fit(sprp, px1, py1, px2, py2);
             }
         }
