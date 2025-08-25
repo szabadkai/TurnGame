@@ -7,7 +7,7 @@ if (!variable_instance_exists(id, "keyboard_selected")) {
 }
 
 // Define interaction radius
-var interaction_radius = 20;
+var interaction_radius = 30; // Increased slightly for better user experience
 
 // Skip all interactions if crew selection UI is active
 var crew_ui = instance_find(obj_CrewSelectUI, 0);
@@ -23,8 +23,20 @@ if (crew_ui != noone && crew_ui.ui_visible) {
     exit; // Skip all interaction logic
 }
 
-// Check if mouse is within interaction range
-var mouse_distance = point_distance(x, y, mouse_x, mouse_y);
+// Get sprite asset for calculating center position
+var sprite_asset = asset_get_index(star_sprite);
+if (sprite_asset == -1) {
+    sprite_asset = asset_get_index("star1"); // Fallback
+}
+
+// Calculate sprite center position (accounting for origin at 0,0)
+var sprite_w = sprite_get_width(sprite_asset);
+var sprite_h = sprite_get_height(sprite_asset);
+var center_x = x + sprite_w * 0.5;
+var center_y = y + sprite_h * 0.5;
+
+// Check if mouse is within interaction range (from sprite center)
+var mouse_distance = point_distance(center_x, center_y, mouse_x, mouse_y);
 var was_hovering = hover_state;
 
 if (mouse_distance <= interaction_radius) {
@@ -81,12 +93,9 @@ if (mouse_distance <= interaction_radius) {
         }
     }
     
-    // Check for click on locked system - show engaging locked feedback
+    // Check for click on locked system - simple feedback only
     if (mouse_check_button_pressed(mb_left) && !is_unlocked) {
         show_debug_message("System " + system_name + " is locked - showing access denied feedback");
-        
-        // Create dramatic locked system feedback
-        locked_click_timer = 60; // 1 second of feedback animation
         
         // Show enhanced tooltip with unlock requirements
         var tooltip_manager = instance_find(obj_TooltipManager, 0);
@@ -143,9 +152,6 @@ function trigger_keyboard_selection() {
         }
     } else {
         show_debug_message("System " + system_name + " is locked - showing access denied feedback");
-        
-        // Create dramatic locked system feedback
-        locked_click_timer = 60; // 1 second of feedback animation
         
         // Show enhanced tooltip with unlock requirements
         var tooltip_manager = instance_find(obj_TooltipManager, 0);

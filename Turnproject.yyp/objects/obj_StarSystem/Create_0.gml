@@ -6,6 +6,7 @@ if (!variable_instance_exists(id, "system_id")) system_id = "unknown_system";
 if (!variable_instance_exists(id, "system_name")) system_name = "Unknown System";
 if (!variable_instance_exists(id, "system_type")) system_type = "Uncharted";
 if (!variable_instance_exists(id, "target_scene")) target_scene = "";
+if (!variable_instance_exists(id, "star_sprite")) star_sprite = "star1";
 if (!variable_instance_exists(id, "is_unlocked")) is_unlocked = false;
 if (!variable_instance_exists(id, "is_visited")) is_visited = false;
 if (!variable_instance_exists(id, "is_current")) is_current = false;

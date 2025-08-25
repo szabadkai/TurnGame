@@ -8,12 +8,7 @@
   ],
   "managed":true,
   "name":"obj_StarSystem",
-  "overriddenProperties":[
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"system_id","objectId":{"name":"obj_StarSystem","path":"objects/obj_StarSystem/obj_StarSystem.yy",},"propertyId":null,"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"system_001",},
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"system_name","objectId":{"name":"obj_StarSystem","path":"objects/obj_StarSystem/obj_StarSystem.yy",},"propertyId":null,"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"Unknown System",},
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"system_type","objectId":{"name":"obj_StarSystem","path":"objects/obj_StarSystem/obj_StarSystem.yy",},"propertyId":null,"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"Deep Space",},
-    {"$GMOverriddenProperty":"v1","%Name":"","name":"target_scene","objectId":{"name":"obj_StarSystem","path":"objects/obj_StarSystem/obj_StarSystem.yy",},"propertyId":null,"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"scene_001_prometheus_discovery",},
-  ],
+  "overriddenProperties":[],
   "parent":{
     "name":"Objects",
     "path":"folders/Objects.yy",

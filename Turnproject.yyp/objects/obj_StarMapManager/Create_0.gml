@@ -43,20 +43,19 @@ function create_star_map_ui() {
 
 // Load star map data and create system instances
 function load_and_create_systems() {
-    // For now, create systems with hardcoded positions
-    // This will be replaced with JSON loading later
+    // Use star asset positions from the Stars layer (updated to match current positions)
     var system_data = [
-        // Positioned at exact starmap locations
-        {id: "system_001", name: "Sol Approach", type: "Deep Space", x: 299, y: 188, scene: "scene_001_prometheus_discovery", unlocked: true},
-        {id: "system_002", name: "Keth'mori Threshold", type: "Boundary Space", x: 362, y: 159, scene: "scene_002_keth_mori_threshold", unlocked: false},
-        {id: "system_003", name: "Pirate Sector", type: "Contested Zone", x: 422, y: 226, scene: "scene_003_pirate_ambush", unlocked: false},
-        {id: "system_004", name: "Ancient Ruins", type: "Archaeological Site", x: 506, y: 201, scene: "scene_004_alien_glyphs", unlocked: false},
-        {id: "system_005", name: "Watcher Station", type: "Observation Post", x: 591, y: 147, scene: "scene_005_watchers_blockade", unlocked: false},
-        {id: "system_006", name: "Loop Nexus", type: "Anomaly", x: 682, y: 180, scene: "scene_006_loop_discovery", unlocked: false},
-        {id: "system_007", name: "Crystal Fields", type: "Resource Zone", x: 635, y: 234, scene: "scene_007_crystal_guardian", unlocked: false},
-        {id: "system_008", name: "Earth Command", type: "Military Base", x: 707, y: 273, scene: "scene_008_earth_debrief_victory", unlocked: false},
-        {id: "system_009", name: "Broken Worlds", type: "Devastated System", x: 558, y: 281, scene: "scene_015_derelict_satellite", unlocked: false},
-        {id: "system_010", name: "Final Gateway", type: "Terminus", x: 365, y: 295, scene: "scene_035_retribution_echoes", unlocked: false}
+        // Positioned at star asset locations
+        {id: "system_001", name: "Sol Approach", type: "Deep Space", x: 272.5, y: 150.0, scene: "scene_001_prometheus_discovery", unlocked: true, sprite: "star1"},
+        {id: "system_002", name: "Keth'mori Threshold", type: "Boundary Space", x: 323.0, y: 115.0, scene: "scene_002_keth_mori_threshold", unlocked: false, sprite: "star2"},
+        {id: "system_003", name: "Pirate Sector", type: "Contested Zone", x: 336.0, y: 257.5, scene: "scene_003_pirate_ambush", unlocked: false, sprite: "star3"},
+        {id: "system_004", name: "Ancient Ruins", type: "Archaeological Site", x: 364.0, y: 167.0, scene: "scene_004_alien_glyphs", unlocked: false, sprite: "star4"},
+        {id: "system_005", name: "Watcher Station", type: "Observation Post", x: 446.0, y: 127.5, scene: "scene_005_watchers_blockade", unlocked: false, sprite: "star5"},
+        {id: "system_006", name: "Loop Nexus", type: "Anomaly", x: 531.0, y: 251.5, scene: "scene_006_loop_discovery", unlocked: false, sprite: "star6"},
+        {id: "system_007", name: "Crystal Fields", type: "Resource Zone", x: 546.0, y: 95.0, scene: "scene_007_crystal_guardian", unlocked: false, sprite: "star7"},
+        {id: "system_008", name: "Earth Command", type: "Military Base", x: 656.5, y: 139.0, scene: "scene_008_earth_debrief_victory", unlocked: false, sprite: "star8"},
+        {id: "system_009", name: "Broken Worlds", type: "Devastated System", x: 693.0, y: 257.5, scene: "scene_015_derelict_satellite", unlocked: false, sprite: "star9"},
+        {id: "system_010", name: "Final Gateway", type: "Terminus", x: 597.0, y: 192.0, scene: "scene_035_retribution_echoes", unlocked: false, sprite: "star10"}
     ];
     
     star_systems = [];
@@ -80,6 +79,7 @@ function load_and_create_systems() {
         system.system_name = data.name;
         system.system_type = data.type;
         system.target_scene = data.scene;
+        system.star_sprite = data.sprite;
         
         // Check if we have saved state for this system
         var saved_unlocked = data.unlocked; // Default from data

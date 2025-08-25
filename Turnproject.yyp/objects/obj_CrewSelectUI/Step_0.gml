@@ -8,6 +8,8 @@ if (!variable_global_exists("input_bindings")) {
 // Update input system
 update_input_system();
 
+// Update fade animation
+ui_alpha = lerp(ui_alpha, ui_target_alpha, fade_speed);
 
 // Hide UI when fully faded
 if (ui_target_alpha == 0 && ui_alpha < 0.01) {
@@ -104,35 +106,7 @@ if (ui_visible && ui_alpha > 0.5) {
             // Launch button is selected
             show_debug_message("Enter key pressed on launch button - launching mission...");
             launch_mission();
-        } else {
-            // On crew list - Enter should toggle selection like Space
-            var member_index = selected_crew_index;
-            show_debug_message("Enter key pressed on crew member - toggling selection");
-            
-            // Find if member is already selected
-            var selected_index = -1;
-            for (var k = 0; k < array_length(landing_party); k++) {
-                if (landing_party[k] == member_index) {
-                    selected_index = k;
-                    break;
-                }
-            }
-            
-            if (selected_index == -1) {
-                // Not selected, add to landing party
-                if (array_length(landing_party) < max_landing_party_size) {
-                    landing_party[array_length(landing_party)] = member_index;
-                    show_debug_message("Added crew member " + string(member_index) + " to landing party");
-                }
-            } else {
-                // Already selected, remove from landing party
-                for (var k = selected_index; k < array_length(landing_party) - 1; k++) {
-                    landing_party[k] = landing_party[k + 1];
-                }
-                array_resize(landing_party, array_length(landing_party) - 1);
-                show_debug_message("Removed crew member " + string(member_index) + " from landing party");
-            }
-        }
+        } 
     }
     
     // Use GUI mouse coordinates since UI is drawn in Draw_64
