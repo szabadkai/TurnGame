@@ -254,17 +254,15 @@ function draw_turn_order() {
         var border_color = is_current ? c_white : c_ltgray;
         draw_rectangle_color(char_x, start_y, char_x + char_width - 2, start_y + char_height, border_color, border_color, border_color, border_color, true);
         
-        // Portrait preferred for players; else fallback to sprite or color block
+        // Portrait preferred for both players and enemies; else fallback to sprite or color block
         var drew_image = false;
-        if (object_get_name(character.object_index) == "obj_Player") {
-            var sprp = portraits_get_sprite_for_entity(character);
-            if (sprp != -1) {
-                var px1 = char_x + 1;
-                var py1 = start_y + 1;
-                var px2 = char_x + char_width - 3;
-                var py2 = start_y + char_height - 12; // Leave space for name at bottom
-                drew_image = portraits_draw_fit(sprp, px1, py1, px2, py2);
-            }
+        var sprp = portraits_get_sprite_for_entity(character);
+        if (sprp != -1) {
+            var px1 = char_x + 1;
+            var py1 = start_y + 1;
+            var px2 = char_x + char_width - 3;
+            var py2 = start_y + char_height - 12; // Leave space for name at bottom
+            drew_image = portraits_draw_fit(sprp, px1, py1, px2, py2);
         }
         if (!drew_image && variable_instance_exists(character, "sprite_index") && character.sprite_index != -1) {
             var sprite_scale = 0.8;

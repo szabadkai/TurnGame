@@ -19,6 +19,15 @@ global.portraits_map = {
     torres: "pixellab_Torres__First_Officer___Tactic_1756145765994"
 };
 
+// === ENEMY PORTRAITS MAP (link enemy names to imported portrait sprites) ===
+global.enemy_portraits_map = {
+    "goblin_scout": "goblin_scout",
+    "orc_grunt": "orc_grunt", 
+    "skeleton": "skeleton",
+    "bandit": "bandit",
+    "wolf": "wolf"
+};
+
 //create turn list
 turn_list = ds_list_create();
 

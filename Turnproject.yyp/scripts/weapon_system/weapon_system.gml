@@ -319,5 +319,24 @@ function is_enemy_in_pistol_range(player, enemy) {
     return true; // Clear line of sight
 }
 
+function get_weapon_sprite(weapon_id) {
+    // Map weapon IDs to their sprite names
+    switch(weapon_id) {
+        case 0: return asset_get_index("spr_weapon_fists");
+        case 1: return asset_get_index("spr_weapon_monoblade");
+        case 2: return asset_get_index("spr_weapon_vibroknife");
+        case 3: return asset_get_index("spr_weapon_arc_projector");
+        case 4: return asset_get_index("spr_weapon_cryo_emitter");
+        case 5: return asset_get_index("spr_weapon_riot_shield");
+        case 6: return asset_get_index("spr_weapon_deflection_gauntlet");
+        case 7: return asset_get_index("spr_weapon_powered_sledge");
+        case 8: return asset_get_index("spr_weapon_plasma_blade");
+        case 9: return asset_get_index("spr_weapon_chain_axe");
+        case 10: return asset_get_index("spr_weapon_plasma_pistol");
+        // Enemy weapons don't have sprites yet - return -1
+        default: return -1;
+    }
+}
+
 
 

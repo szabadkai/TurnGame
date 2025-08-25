@@ -117,37 +117,8 @@ var sprite_h = sprite_get_height(sprite_asset);
 var half_w = sprite_w * 0.5;
 var half_h = sprite_h * 0.5;
 
-// Draw faction indicator (small colored circle)
-if (is_unlocked && faction_control > 0) {
-    var faction_color = c_white;
-    switch(faction_control) {
-        case 1: faction_color = c_blue; break;    // Human - blue
-        case 2: faction_color = c_green; break;   // Keth'mori - green
-        case 3: faction_color = c_red; break;     // Swarm - red
-    }
-    
-    draw_set_color(faction_color);
-    draw_set_alpha(0.9);
-    draw_circle(x + half_w - 8, y - half_h + 8, 3, false);
-}
 
-// Draw threat level indicators (small red circles)
-if (is_unlocked && threat_level > 1) {
-    draw_set_color(c_red);
-    draw_set_alpha(0.8);
-    for (var i = 0; i < min(threat_level - 1, 4); i++) {
-        var indicator_x = x - half_w + 6 + (i * 8);
-        var indicator_y = y + half_h - 8;
-        draw_circle(indicator_x, indicator_y, 2, false);
-    }
-}
 
-// Draw visited marker (small green circle)
-if (is_visited) {
-    draw_set_color(c_lime);
-    draw_set_alpha(0.8 + 0.2 * sin(glow_timer * 4));
-    draw_circle(x - half_w + 8, y - half_h + 8, 2.5, false);
-}
 
 // No locked click feedback animation - removed for cleaner experience
 

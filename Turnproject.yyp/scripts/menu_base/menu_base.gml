@@ -71,9 +71,9 @@ function init_base_menu(context, options_array) {
     
     // Menu positioning
     menu_x = room_width / 2;
-    menu_y = room_height / 2;
-    option_spacing = 16;
-    title_y_offset = -60;
+    menu_y = room_height / 2 + 60; // Move menu up to make room for title
+    option_spacing = 24; // Increased from 16 for better mouse interaction
+    title_y_offset = -120; // Title positioned above menu with more space
     
     // Font and colors
     menu_font = Font1;

@@ -17,6 +17,9 @@ bar_width = display_get_gui_width();
 bar_x = 0;
 bar_y = 0;
 
+// Make bar height globally accessible for other UI elements
+global.top_bar_height = bar_height;
+
 // Combat log variables (simplified from obj_CombatLog)
 combat_messages = [];
 max_display_messages = 4; // Fixed number for expanded top bar

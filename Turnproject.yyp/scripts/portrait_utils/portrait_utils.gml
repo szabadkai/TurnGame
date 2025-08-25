@@ -57,12 +57,26 @@ function portraits_get_sprite_for_entity(entity) {
             if (spr2 != -1) return spr2;
         }
     }
-    // Optional: generic enemy portrait hook
-    // var is_enemy = (object_get_name(entity.object_index) == "obj_Enemy");
-    // if (is_enemy) {
-    //     var enemy_spr = asset_get_index("spr_portrait_enemy");
-    //     if (enemy_spr != -1) return enemy_spr;
-    // }
+    // Handle enemy portraits using enemy portraits map
+    var is_enemy = (object_get_name(entity.object_index) == "obj_Enemy");
+    if (is_enemy && variable_instance_exists(entity.id, "character_name")) {
+        // Convert enemy name to map key (lowercase, underscores)
+        var enemy_key = string_lower(string_replace_all(entity.character_name, " ", "_"));
+        
+        // Check enemy portraits map first
+        if (variable_global_exists("enemy_portraits_map")) {
+            var enemy_map = global.enemy_portraits_map;
+            if (is_struct(enemy_map) && variable_struct_exists(enemy_map, enemy_key)) {
+                var mapped_sprite_name = variable_struct_get(enemy_map, enemy_key);
+                var enemy_spr = asset_get_index(mapped_sprite_name);
+                if (enemy_spr != -1) return enemy_spr;
+            }
+        }
+        
+        // Fallback to general crew lookup
+        var enemy_spr = portraits_get_sprite_for_crew(enemy_key);
+        if (enemy_spr != -1) return enemy_spr;
+    }
     return -1;
 }
 
