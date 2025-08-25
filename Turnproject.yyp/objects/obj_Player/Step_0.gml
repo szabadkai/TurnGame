@@ -52,6 +52,12 @@ if (!variable_global_exists("input_bindings")) {
 // Update input system
 update_input_system();
 
+// Define weapon special type early for use throughout step event
+var weapon_special_type = "";
+if (!is_undefined(equipped_weapon_id) && equipped_weapon_id < array_length(global.weapons)) {
+    weapon_special_type = global.weapons[equipped_weapon_id].special_type;
+}
+
 //Mouse Click Attack (for Ranged Weapons) or Movement
 // === MOUSE CLICK INPUT ===
 if (state == TURNSTATE.active && moves > 0 && !is_anim && global.input_mouse.clicked) {
@@ -286,7 +292,25 @@ if (anim_state == State.ATTACK && is_anim) {
         
         scr_log(character_name + " attacks with " + weapon_name + ": d20+" + string(attack_bonus) + " = [" + string(attack_roll) + "] + " + string(attack_bonus) + " = " + string(attack_total) + " vs Defense " + string(self.target_enemy.defense_score) + (hit ? " - HIT!" : " - MISS!"));
         
+        // Play weapon attack sound based on weapon type
+        if (weapon_special_type == "ranged" || string_pos("gun", string_lower(weapon_name)) > 0 || string_pos("pistol", string_lower(weapon_name)) > 0) {
+            play_gun_attack_sound();
+        } else {
+            play_sword_attack_sound();
+        }
+        
         if (hit) {
+            // Check for critical hit (natural 20)
+            var is_critical = (attack_roll == 20);
+            if (is_critical) {
+                // Play critical hit sound based on weapon type
+                if (weapon_special_type == "ranged" || string_pos("gun", string_lower(weapon_name)) > 0 || string_pos("pistol", string_lower(weapon_name)) > 0) {
+                    play_gun_critical_sound();
+                } else {
+                    play_sword_critical_sound();
+                }
+            }
+            
             var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_name);
             var final_damage = handle_special_attack(self, self.target_enemy, attack_roll, base_damage);
             

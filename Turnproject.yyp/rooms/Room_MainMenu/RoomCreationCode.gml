@@ -11,4 +11,7 @@ if (!variable_global_exists("dialog_flags")) {
 // Set the starting room reference for "New Game" functionality  
 global.gameplay_room = Room1;
 
+// Start background music
+start_background_music("menu");
+
 show_debug_message("Main Menu room initialized");

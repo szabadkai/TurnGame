@@ -11,13 +11,15 @@ function handle_audio_settings_input(input_select, input_back) {
         switch (selected_option) {
             case AUDIO_OPTION.MASTER_VOLUME:
                 global.game_settings.master_volume = clamp(global.game_settings.master_volume + change, 0, 1);
-                audio_set_master_gain(0, global.game_settings.master_volume);
+                set_master_volume(global.game_settings.master_volume);
                 break;
             case AUDIO_OPTION.SFX_VOLUME:
                 global.game_settings.sfx_volume = clamp(global.game_settings.sfx_volume + change, 0, 1);
+                set_sfx_volume(global.game_settings.sfx_volume);
                 break;
             case AUDIO_OPTION.MUSIC_VOLUME:
                 global.game_settings.music_volume = clamp(global.game_settings.music_volume + change, 0, 1);
+                set_music_volume(global.game_settings.music_volume);
                 break;
         }
         save_settings();
@@ -240,7 +242,9 @@ function load_settings() {
         ini_close();
         
         // Apply loaded settings
-        audio_set_master_gain(0, global.game_settings.master_volume);
+        set_master_volume(global.game_settings.master_volume);
+        set_music_volume(global.game_settings.music_volume);
+        set_sfx_volume(global.game_settings.sfx_volume);
         window_set_fullscreen(global.game_settings.fullscreen);
     }
 }

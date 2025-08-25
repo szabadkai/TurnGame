@@ -198,3 +198,55 @@ When encountering GameMaker errors related to undefined or missing object proper
 ### **When to Use Each Approach:**
 - **Create Event Initialization**: When you control the object creation (preferred 99% of the time)
 - **Defensive Checks**: Only for external data or when interfacing with unreliable third-party systems
+
+## Audio System Architecture
+
+The game uses a comprehensive, easily extendable audio system located in `scripts/menu_audio/menu_audio.gml`.
+
+### **Key Features:**
+- **Centralized track database** - All audio assets defined in one location
+- **Volume control system** - Master, Music, and SFX volume settings
+- **Automatic fade transitions** - Smooth background music changes
+- **Type separation** - Background music vs sound effects
+- **Resource validation** - Graceful fallback when assets aren't imported
+
+### **Adding New Audio:**
+
+#### **Background Music:**
+1. Import sound file into GameMaker (create Sound resource)
+2. Add entry to `global.audio_tracks` in `init_audio_database()`:
+   ```gml
+   new_track: {
+       file: "GameMaker_Resource_Name",
+       type: "music",
+       loop: true,
+       volume: 0.6
+   }
+   ```
+3. Call `start_background_music("new_track")` in room creation code
+
+#### **Sound Effects:**
+1. Import sound file into GameMaker (create Sound resource)  
+2. Add entry to `global.audio_tracks`:
+   ```gml
+   new_sfx: {
+       file: "GameMaker_Resource_Name", 
+       type: "sfx",
+       loop: false,
+       volume: 0.8
+   }
+   ```
+3. Call `play_sound_effect("new_sfx")` when needed
+
+### **Current Implementation:**
+- **Main Menu**: Uses "ObservingTheStar" track
+- **Star Map**: Uses "ObservingTheStar" track  
+- **Combat/Dialog**: Placeholder tracks (easily replaceable)
+- **Menu SFX**: Placeholder entries for navigate, select, back, error sounds
+
+### **Volume Control:**
+- `set_master_volume(0.0-1.0)` - Overall volume
+- `set_music_volume(0.0-1.0)` - Background music only
+- `set_sfx_volume(0.0-1.0)` - Sound effects only
+- `toggle_music(true/false)` - Enable/disable music
+- `toggle_sfx(true/false)` - Enable/disable sound effects

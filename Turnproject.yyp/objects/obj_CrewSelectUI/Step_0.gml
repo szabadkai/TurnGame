@@ -8,8 +8,6 @@ if (!variable_global_exists("input_bindings")) {
 // Update input system
 update_input_system();
 
-// Update fade animation
-ui_alpha = lerp(ui_alpha, ui_target_alpha, fade_speed);
 
 // Hide UI when fully faded
 if (ui_target_alpha == 0 && ui_alpha < 0.01) {

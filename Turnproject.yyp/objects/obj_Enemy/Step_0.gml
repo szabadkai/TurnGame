@@ -419,6 +419,9 @@ if (anim_state == State.ATTACK && is_anim && image_index >= sprite_get_number(sp
     if (target_player != noone && instance_exists(target_player)) {
         var hit = roll_attack(self, target_player);
         
+        // Play enemy attack sound (default to sword for enemies)
+        play_sword_attack_sound();
+        
         if (hit) {
             var weapon_display_name = is_undefined(weapon_name) ? "weapon" : weapon_name;
             var base_damage = roll_weapon_damage_with_display(weapon_damage_dice, damage_modifier, weapon_display_name);
