@@ -26,9 +26,12 @@ if (!variable_instance_exists(id, "keyboard_navigation_active")) {
 // Get navigation input
 var nav = input_get_navigation();
 
-// ESC key to return to main menu
+// ESC key to show in-game menu
 if (nav.cancel) {
-    scr_nav_go(GameState.MAIN_MENU, undefined);
+    var existing_menu = instance_find(obj_InGameMenu, 0);
+    if (existing_menu == noone) {
+        instance_create_layer(0, 0, "Instances", obj_InGameMenu);
+    }
 }
 
 // Keyboard navigation for star systems

@@ -177,16 +177,60 @@ function spawn_landing_party() {
                 player_instance.wisdom = crew_member.wisdom;
                 player_instance.charisma = crew_member.charisma;
                 
-                // Recalculate combat stats based on actual ability scores
+                // Restore XP and level progression
+                if (variable_struct_exists(crew_member, "xp")) {
+                    player_instance.xp = crew_member.xp;
+                } else {
+                    player_instance.xp = 0;
+                }
+                if (variable_struct_exists(crew_member, "level")) {
+                    player_instance.level = crew_member.level;
+                } else {
+                    player_instance.level = 1;
+                }
+                if (variable_struct_exists(crew_member, "xp_to_next_level")) {
+                    player_instance.xp_to_next_level = crew_member.xp_to_next_level;
+                } else {
+                    player_instance.xp_to_next_level = 100;
+                }
+                
+                // Restore ASI data
+                if (variable_struct_exists(crew_member, "last_asi_level")) {
+                    player_instance.last_asi_level = crew_member.last_asi_level;
+                } else {
+                    player_instance.last_asi_level = 0;
+                }
+                if (variable_struct_exists(crew_member, "needs_asi")) {
+                    player_instance.needs_asi = crew_member.needs_asi;
+                } else {
+                    player_instance.needs_asi = false;
+                }
+                
+                // Restore weapon selection (if tracked in crew system)
+                if (variable_struct_exists(crew_member, "equipped_weapon_id")) {
+                    player_instance.equipped_weapon_id = crew_member.equipped_weapon_id;
+                }
+                
+                // Update proficiency bonus based on restored level
+                player_instance.proficiency_bonus = get_proficiency_bonus(player_instance.level);
+                
+                // Recalculate XP display based on current total XP
+                player_instance.xp_to_next_level = get_xp_needed_for_next_level(player_instance.xp);
+                
+                // Recalculate combat stats based on actual ability scores and restored level
                 with (player_instance) {
                     update_combat_stats();
                 }
                 
-                // Initialize sprite system
-                init_character_sprite_matrix(player_instance.character_index);
+                // Initialize sprite system with correct weapon type
+                var weapon_special_type = "none";
+                if (player_instance.equipped_weapon_id < array_length(global.weapons)) {
+                    weapon_special_type = global.weapons[player_instance.equipped_weapon_id].special_type;
+                }
+                player_instance.spr_matrix = init_character_sprite_matrix(player_instance.character_index, weapon_special_type);
                 player_instance.sprite_index = player_instance.spr_matrix[0][0]; // idle down
                 
-                show_debug_message("Created " + crew_member.full_name + " with " + string(crew_member.hp) + " HP and ID " + crew_member.id);
+                show_debug_message("Created " + crew_member.full_name + " with " + string(crew_member.hp) + " HP, Level " + string(player_instance.level) + ", " + string(player_instance.xp) + " XP, Weapon: " + string(player_instance.equipped_weapon_id) + " (" + weapon_special_type + "), ID " + crew_member.id);
             }
         } else {
             show_debug_message("ERROR: Could not find crew member with ID: " + string(crew_id));

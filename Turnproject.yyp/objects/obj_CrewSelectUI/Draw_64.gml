@@ -121,21 +121,35 @@ var launch_button_x = x + ui_width/2 - button_width/2;
 // Check if launch button is keyboard-selected
 var is_button_selected = (variable_instance_exists(id, "selected_button") && selected_button == 1);
 
-// Draw keyboard selection highlight for button
-if (is_button_selected) {
+// Check if launch is enabled (crew selected)
+var launch_enabled = (array_length(landing_party) > 0);
+
+// Draw keyboard selection highlight for button (only if enabled)
+if (is_button_selected && launch_enabled) {
     draw_set_alpha(0.3 * ui_alpha);
     draw_set_color(c_yellow);
     draw_rectangle(launch_button_x - 5, button_y - 3, launch_button_x + button_width + 5, button_y + 38, false);
     draw_set_alpha(ui_alpha);
 }
 
-draw_set_color(c_green);
+// Draw button background - green if enabled, dark gray if disabled
+draw_set_color(launch_enabled ? c_green : c_dkgray);
 draw_rectangle(launch_button_x, button_y, launch_button_x + button_width, button_y + 35, false);
-draw_set_color(is_button_selected ? c_yellow : c_white);
+
+// Draw button border - white/yellow if enabled, gray if disabled  
+if (launch_enabled) {
+    draw_set_color(is_button_selected ? c_yellow : c_white);
+} else {
+    draw_set_color(c_gray);
+}
 draw_rectangle(launch_button_x, button_y, launch_button_x + button_width, button_y + 35, true);
+
+// Draw button text - white if enabled, gray if disabled
+draw_set_color(launch_enabled ? c_white : c_ltgray);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-draw_text(launch_button_x + button_width/2, button_y + 17, "Launch");
+var button_text = launch_enabled ? "Launch" : "Select Crew";
+draw_text(launch_button_x + button_width/2, button_y + 17, button_text);
 
 // Draw selected count
 draw_set_color(c_yellow);

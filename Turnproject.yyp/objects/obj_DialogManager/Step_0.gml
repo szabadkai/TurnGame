@@ -188,16 +188,20 @@ if (global.dialog_state == 0) { // DialogState.INACTIVE
 // Handle ESC for all states (except scene selection which is handled above)
 if (!global.dialog_scene_selection && global.dialog_state != 0) {
     if (keyboard_check_pressed(vk_escape)) {
-        show_debug_message("Exiting dialog...");
-        end_dialog_scene();
-        transition_alpha = 0;
+        // Show in-game menu instead of immediately ending dialog
+        var existing_menu = instance_find(obj_InGameMenu, 0);
+        if (existing_menu == noone) {
+            instance_create_layer(0, 0, "Instances", obj_InGameMenu);
+        }
     }
 } else if (!global.dialog_scene_selection && global.dialog_state == 0) {
     // No UI visible (no selection, dialog inactive). If we are in the dialog room,
-    // pressing ESC should always transition to overworld.
+    // pressing ESC should show in-game menu.
     if (keyboard_check_pressed(vk_escape) && room == Room_Dialog) {
-        show_debug_message("ESC pressed with no UI; transitioning to overworld");
-        scr_nav_go(GameState.OVERWORLD, undefined);
+        var existing_menu = instance_find(obj_InGameMenu, 0);
+        if (existing_menu == noone) {
+            instance_create_layer(0, 0, "Instances", obj_InGameMenu);
+        }
     }
 }
 

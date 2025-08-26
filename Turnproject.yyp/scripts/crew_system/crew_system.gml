@@ -2,8 +2,11 @@
 // Central crew management system for persistent characters across combat and dialog
 
 // Initialize the global crew roster
-function init_crew_system() {
-    if (!variable_global_exists("crew_roster")) {
+function init_crew_system(force_reset = false) {
+    if (!variable_global_exists("crew_roster") || force_reset) {
+        if (force_reset) {
+            show_debug_message("Force resetting crew roster to baseline (new game)");
+        }
         global.crew_roster = [
             {
                 id: "torres",

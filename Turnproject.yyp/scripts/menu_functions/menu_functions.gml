@@ -132,6 +132,9 @@ function get_option_display_text(option_index) {
         case MENUSTATE.SAVE_LOAD:
             if (option_index < 3) {
                 var slot_index = option_index + 1; // Convert 0-2 to slots 1-3
+                var is_active_slot = (variable_global_exists("active_save_slot") && global.active_save_slot == slot_index);
+                var active_indicator = is_active_slot ? " [ACTIVE]" : "";
+                
                 if (save_slot_exists(slot_index)) {
                     var save_info = get_save_slot_info(slot_index);
                     var delete_hint = "";
@@ -145,9 +148,9 @@ function get_option_display_text(option_index) {
                         }
                     }
                     
-                    return base_text + " - " + save_info + delete_hint;
+                    return base_text + " - " + save_info + active_indicator + delete_hint;
                 } else {
-                    return base_text + " - Empty";
+                    return base_text + " - Empty" + active_indicator;
                 }
             }
             break;
@@ -164,7 +167,8 @@ function get_instruction_text() {
         case MENUSTATE.MAIN:
             return base_instructions;
         case MENUSTATE.SAVE_LOAD:
-            return base_instructions + " • X Delete • Esc Back";
+            var active_slot = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
+            return base_instructions + " • S Save to Slot " + string(active_slot) + " • X Delete • Esc Back";
         case MENUSTATE.SETTINGS_AUDIO:
         case MENUSTATE.SETTINGS_GRAPHICS:
         case MENUSTATE.SETTINGS_GAMEPLAY:
@@ -256,8 +260,8 @@ function start_new_game() {
     init_star_map();
     show_debug_message("Initialized fresh star map system");
     
-    // Create initial save in the new slot
-    save_game_to_slot(new_slot);
+    // Create initial save in the new slot (allow from any context for new game)
+    save_game_to_slot(new_slot, true);
     show_debug_message("Created initial save in slot " + string(new_slot));
     
     // Go to star map for fresh start
@@ -268,9 +272,9 @@ function start_new_game() {
 function reset_all_global_state() {
     show_debug_message("Resetting all global game state...");
     
-    // Initialize the crew
-    initialize_crew();
-    show_debug_message("Initialized crew");
+    // Initialize the crew (force reset to baseline)
+    init_crew_system(true);  // Force reset crew roster to baseline
+    show_debug_message("Reset crew roster to baseline XP/levels");
     // Reset dialog system state
     if (variable_global_exists("dialog_flags")) {
         global.dialog_flags = {};

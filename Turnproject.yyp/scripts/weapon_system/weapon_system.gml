@@ -89,6 +89,17 @@ function update_combat_stats() {
     }
 }
 
+// Helper function to get entity display name
+function get_entity_name(inst) {
+    if (instance_exists(inst) && variable_instance_exists(inst, "character_name")) {
+        return inst.character_name;
+    }
+    if (instance_exists(inst)) {
+        return object_get_name(inst.object_index);
+    }
+    return "Unknown";
+}
+
 function handle_special_attack(attacker, target, attack_roll, damage_roll) {
     var special = attacker.weapon_special_type;
     var weapon_name = attacker.weapon_name;
@@ -144,7 +155,7 @@ function handle_special_attack(attacker, target, attack_roll, damage_roll) {
             
         case "self_harm":
             attacker.hp -= 1;
-            var attacker_name = global.entity_name(attacker);
+            var attacker_name = get_entity_name(attacker);
             scr_log("BERSERKER RAGE! " + attacker_name + " takes 1 damage from fury! (HP: " + string(attacker.hp) + "/" + string(attacker.max_hp) + ")");
             // Warning if attacker is getting low on health
             if (attacker.hp <= 3 && object_get_name(attacker.object_index) == "obj_Player") {
@@ -183,7 +194,7 @@ function chain_attack(attacker, target) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
         scr_log("Chain " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        scr_log(global.entity_name(target) + " takes " + string(damage) + " chain damage!");
+        scr_log(get_entity_name(target) + " takes " + string(damage) + " chain damage!");
     }
 }
 
@@ -192,7 +203,7 @@ function area_attack(attacker, target) {
         var damage = roll_weapon_damage(attacker.weapon_damage_dice) + attacker.damage_modifier;
         scr_log("Area " + attacker.weapon_damage_dice + "+" + string(attacker.damage_modifier) + " = " + string(damage) + " damage");
         target.hp -= damage;
-        scr_log(global.entity_name(target) + " takes " + string(damage) + " area damage!");
+        scr_log(get_entity_name(target) + " takes " + string(damage) + " area damage!");
     }
 }
 
@@ -224,7 +235,7 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
                 scr_log("COUNTER-ATTACK! " + defender.weapon_name + " strikes back!");
                 var counter_damage = roll_damage_simple(1, "Counter");
                 attacker.hp -= counter_damage;
-                    scr_log(global.entity_name(attacker) + " takes " + string(counter_damage) + " counter damage!");
+                    scr_log(get_entity_name(attacker) + " takes " + string(counter_damage) + " counter damage!");
             }
             break;
             
@@ -234,7 +245,7 @@ function handle_defensive_abilities(defender, attacker, incoming_damage, attack_
                 if (reflected > 0) {
                     scr_log("PARRY! " + defender.weapon_name + " reflects " + string(reflected) + " damage back!");
                     attacker.hp -= reflected;
-                    scr_log(global.entity_name(attacker) + " takes " + string(reflected) + " reflected damage!");
+                    scr_log(get_entity_name(attacker) + " takes " + string(reflected) + " reflected damage!");
                 }
             }
             break;

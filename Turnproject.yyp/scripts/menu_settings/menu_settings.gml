@@ -126,6 +126,22 @@ function handle_gameplay_settings_input(input_select, input_back) {
 
 // Handle save/load input
 function handle_save_load_input(input_select, input_back) {
+    // S key to save to current active slot (not selected slot)
+    if (keyboard_check_pressed(ord("S"))) {
+        // Use the current active save slot instead of allowing save to any slot
+        var slot_index = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
+        show_debug_message("Saving game to active slot " + string(slot_index));
+        var success = save_game_to_slot(slot_index, false); // Manual save
+        if (success) {
+            show_debug_message("Game saved successfully to slot " + string(slot_index));
+            play_menu_select_sound();
+        } else {
+            show_debug_message("Save failed - make sure you're on the star map");
+            play_menu_error_sound();
+        }
+        return;
+    }
+    
     if (input_select) {
         if (selected_option < 3) {
             var slot_index = selected_option + 1; // Convert 0-2 to slots 1-3

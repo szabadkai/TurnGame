@@ -1,14 +1,46 @@
 // obj_StarMapManager Create Event
 // Initialize and coordinate star map systems
 
+// Initialize system management arrays first
+star_systems = [];
+current_system_id = "system_001"; // Default starting system
+
+// Define unlock_system function early to avoid execution order issues
+unlock_system = function(system_id) {
+    var system = find_system_by_id(system_id);
+    if (system != noone) {
+        system.is_unlocked = true;
+        system.update_visual_state();
+        
+        // Save to global state
+        if (variable_global_exists("star_map_state")) {
+            var state = global.star_map_state;
+            
+            if (!variable_struct_exists(state, "systems")) {
+                state.systems = {};
+            }
+            
+            if (!variable_struct_exists(state.systems, system_id)) {
+                state.systems[$ system_id] = {
+                    unlocked: false,
+                    visited: false,
+                    faction_control: 0
+                };
+            }
+            
+            state.systems[$ system_id].unlocked = true;
+        }
+        
+        show_debug_message("Unlocked system: " + system_id);
+        return true;
+    }
+    return false;
+};
+
 // Initialize global star map state if it doesn't exist
 if (!variable_global_exists("star_map_state")) {
     init_star_map();
 }
-
-// System management
-star_systems = [];
-current_system_id = "system_001"; // Default starting system
 tooltip_manager = noone;
 
 // Create essential UI components
@@ -195,37 +227,6 @@ function find_system_by_id(system_id) {
     return noone;
 }
 
-// Unlock system for exploration
-function unlock_system(system_id) {
-    var system = find_system_by_id(system_id);
-    if (system != noone) {
-        system.is_unlocked = true;
-        system.update_visual_state();
-        
-        // Save to global state
-        if (variable_global_exists("star_map_state")) {
-            var state = global.star_map_state;
-            
-            if (!variable_struct_exists(state, "systems")) {
-                state.systems = {};
-            }
-            
-            if (!variable_struct_exists(state.systems, system_id)) {
-                state.systems[$ system_id] = {
-                    unlocked: false,
-                    visited: false,
-                    faction_control: 0
-                };
-            }
-            
-            state.systems[$ system_id].unlocked = true;
-        }
-        
-        show_debug_message("Unlocked system: " + system_id);
-        return true;
-    }
-    return false;
-}
 
 // Load saved star map progress from active save slot
 function load_saved_star_map_progress() {

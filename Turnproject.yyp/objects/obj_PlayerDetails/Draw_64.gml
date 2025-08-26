@@ -86,7 +86,14 @@ draw_set_color(c_white);
 
 draw_text(left_column_x + 20, left_y, "Level: " + string(player.level));
 left_y += line_height;
-draw_text(left_column_x + 20, left_y, "Experience: " + string(player.xp) + "/" + string(player.xp_to_next_level));
+// Calculate total XP needed for next level
+var current_level = get_level_from_xp(player.xp);
+var next_level_total_xp = get_xp_needed_for_level(current_level + 1);
+if (current_level >= 20) {
+    draw_text(left_column_x + 20, left_y, "Experience: " + string(player.xp) + " (MAX LEVEL)");
+} else {
+    draw_text(left_column_x + 20, left_y, "Experience: " + string(player.xp) + "/" + string(next_level_total_xp) + " (+" + string(player.xp_to_next_level) + " needed)");
+}
 left_y += line_height;
 draw_text(left_column_x + 20, left_y, "Proficiency Bonus: +" + string(player.proficiency_bonus));
 left_y += line_height;

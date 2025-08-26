@@ -166,7 +166,7 @@ function auto_save_progress() {
         save_in_progress = true;
         // Use active save slot instead of hardcoded slot 0
         var slot_to_use = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
-        var success = save_game_to_slot(slot_to_use);
+        var success = save_game_to_slot(slot_to_use, true);
         
         if (success) {
             progress_dirty = false;
@@ -187,6 +187,12 @@ function auto_save_progress() {
 function mark_progress_dirty() {
     progress_dirty = true;
     show_debug_message("Progress marked as dirty - needs saving");
+}
+
+// Ensure active save slot is set if not already
+if (!variable_global_exists("active_save_slot")) {
+    global.active_save_slot = 1; // Default to slot 1
+    show_debug_message("Initialized default active save slot to 1");
 }
 
 // Initialize systems after brief delay

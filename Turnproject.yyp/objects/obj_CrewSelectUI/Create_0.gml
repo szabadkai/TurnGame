@@ -40,6 +40,12 @@ function hide_ui() {
 }
 
 function launch_mission() {
+    // Prevent launch if no crew is selected
+    if (array_length(landing_party) == 0) {
+        show_debug_message("Launch blocked - no crew members selected!");
+        return;
+    }
+    
     show_debug_message("launch_mission() called - pending_travel_room: " + string(pending_travel_room) + ", pending_system_id: " + string(pending_system_id));
     hide_ui();
     
@@ -53,11 +59,6 @@ function launch_mission() {
             if (crew_index >= 0 && crew_index < array_length(available_crew)) {
                 selected_crew_ids[array_length(selected_crew_ids)] = available_crew[crew_index].id;
             }
-        }
-        
-        // Use default if none selected
-        if (array_length(selected_crew_ids) == 0) {
-            selected_crew_ids = get_default_landing_party();
         }
         
         global.landing_party = selected_crew_ids;

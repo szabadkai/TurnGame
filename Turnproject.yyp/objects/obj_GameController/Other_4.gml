@@ -39,9 +39,18 @@ function handle_star_map_entry() {
         init_star_map();
     }
     
-    // If we have a saved game, apply it
-    if (file_exists("save_slot_0.sav")) {
-        global.should_load_star_map_state = true;
+    // Apply any pending save data via event bus (for loading saves)
+    if (variable_global_exists("pending_save_data") && variable_global_exists("loading_save")) {
+        if (global.loading_save) {
+            show_debug_message("GameController: Loading save data to star map");
+            // Emit save data loaded event with slight delay
+            alarm[1] = game_get_speed(gamespeed_fps) * 0.5; // 0.5 second delay
+        }
+    } else {
+        // If we have an auto-save, check for state loading
+        if (file_exists("save_slot_0.sav")) {
+            global.should_load_star_map_state = true;
+        }
     }
     
     // Update last checkpoint

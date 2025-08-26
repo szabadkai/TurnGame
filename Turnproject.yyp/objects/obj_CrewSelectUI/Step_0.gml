@@ -102,11 +102,13 @@ if (ui_visible && ui_alpha > 0.5) {
     
     // Submit input (Enter key) - Launches on button, toggles on crew
     if (keyboard_check_pressed(vk_enter)) {
-        if (selected_button == 1) {
-            // Launch button is selected
+        if (selected_button == 1 && array_length(landing_party) > 0) {
+            // Launch button is selected and crew is selected
             show_debug_message("Enter key pressed on launch button - launching mission...");
             launch_mission();
-        } 
+        } else if (selected_button == 1 && array_length(landing_party) == 0) {
+            show_debug_message("Cannot launch - no crew members selected!");
+        }
     }
     
     // Use GUI mouse coordinates since UI is drawn in Draw_64
@@ -161,7 +163,11 @@ if (ui_visible && ui_alpha > 0.5) {
     var launch_button_x = x + ui_width/2 - button_width/2;
     
     if (mouse_check_button_pressed(mb_left) && gui_mouse_x >= launch_button_x && gui_mouse_x <= launch_button_x + button_width && gui_mouse_y >= button_y && gui_mouse_y <= button_y + 35) {
-        show_debug_message("Launch button clicked!");
-        launch_mission();
+        if (array_length(landing_party) > 0) {
+            show_debug_message("Launch button clicked!");
+            launch_mission();
+        } else {
+            show_debug_message("Launch button clicked but no crew selected!");
+        }
     }
 }

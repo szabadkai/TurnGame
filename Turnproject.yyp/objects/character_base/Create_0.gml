@@ -5,10 +5,10 @@
 character_name = "Unknown";  // Will be overridden in child objects
 
 
-// Experience system
-xp = 0;
+// Experience system (using accumulating total XP)
+xp = 0;  // Total XP accumulated (never decreases)
 level = 1;
-xp_to_next_level = 100;  // XP needed for next level
+xp_to_next_level = 100;  // XP needed for next level (calculated dynamically)
 
 // === ABILITY SCORES SYSTEM ===
 // Core D&D ability scores (will be overridden in child objects)

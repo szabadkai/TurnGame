@@ -69,6 +69,9 @@ damage_flash = 0;
 init_weapons();
 update_combat_stats();
 
+// Initialize XP system with proper calculations
+xp_to_next_level = get_xp_needed_for_next_level(xp);
+
 is_anim = false;
 target_enemy = 0;
 
