@@ -3,14 +3,6 @@
 
 // Update animation timers
 glow_timer += 0.05;
-if (locked_click_timer > 0) {
-    locked_click_timer--;
-}
-
-// Debug: Show system info once per second
-if (floor(glow_timer) % 60 == 0 && glow_timer - floor(glow_timer) < 0.05) {
-    show_debug_message("Drawing system: " + system_name + " at (" + string(x) + "," + string(y) + ") unlocked: " + string(is_unlocked));
-}
 
 // Determine visual state and colors
 var base_color = c_white;
@@ -39,11 +31,8 @@ if (!is_unlocked) {
 
 // No old circle feedback - outlines handle all visual feedback now
 
-// Get the star sprite asset (the Stars layer sprites provide the base visuals)
-var sprite_asset = asset_get_index(star_sprite);
-if (sprite_asset == -1) {
-    sprite_asset = asset_get_index("star1"); // Fallback
-}
+// Use cached sprite asset for better performance
+var sprite_asset = cached_sprite_asset;
 
 // Draw glow effects around the star sprite
 // The base star sprite is already drawn by the asset layer
@@ -111,11 +100,9 @@ if (show_outline && glow_intensity > 0) {
     gpu_set_blendmode(original_blend);
 }
 
-// Get sprite dimensions for positioning indicators
-var sprite_w = sprite_get_width(sprite_asset);
-var sprite_h = sprite_get_height(sprite_asset);
-var half_w = sprite_w * 0.5;
-var half_h = sprite_h * 0.5;
+// Use cached sprite dimensions
+var half_w = sprite_center_x;
+var half_h = sprite_center_y;
 
 
 

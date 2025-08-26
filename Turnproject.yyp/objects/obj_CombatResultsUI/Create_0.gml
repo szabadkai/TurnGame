@@ -72,11 +72,11 @@ function handle_return_button() {
     target_alpha = 0;
     ui_visible = false;
     
-    // Force save current progress before returning to star map
-    if (variable_global_exists("game_manager") && instance_exists(global.game_manager)) {
-        show_debug_message("Forcing save before returning to star map...");
-        global.game_manager.force_save();
-    }
+    // Save progress before returning to star map
+    var slot_to_use = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
+    try {
+        save_game_to_slot(slot_to_use, true);
+    } catch (e) { /* ignore */ }
     
     // Initialize star map system if needed
     if (!variable_global_exists("star_map_state")) {

@@ -23,17 +23,9 @@ if (crew_ui != noone && crew_ui.ui_visible) {
     exit; // Skip all interaction logic
 }
 
-// Get sprite asset for calculating center position
-var sprite_asset = asset_get_index(star_sprite);
-if (sprite_asset == -1) {
-    sprite_asset = asset_get_index("star1"); // Fallback
-}
-
-// Calculate sprite center position (accounting for origin at 0,0)
-var sprite_w = sprite_get_width(sprite_asset);
-var sprite_h = sprite_get_height(sprite_asset);
-var center_x = x + sprite_w * 0.5;
-var center_y = y + sprite_h * 0.5;
+// Use cached sprite values for better performance
+var center_x = x + sprite_center_x;
+var center_y = y + sprite_center_y;
 
 // Check if mouse is within interaction range (from sprite center)
 var mouse_distance = point_distance(center_x, center_y, mouse_x, mouse_y);
@@ -57,7 +49,7 @@ if (mouse_distance <= interaction_radius) {
                 status: "LOCKED",
                 threat: threat_level,
                 scene_id: "Requires progression to unlock",
-                locked_hint: get_unlock_hint()
+                locked_hint: get_system_unlock_hint(system_id)
             };
         }
         
@@ -106,7 +98,7 @@ if (mouse_distance <= interaction_radius) {
                 faction: get_faction_name(faction_control),
                 status: "LOCKED SYSTEM",
                 threat: threat_level,
-                scene_id: get_unlock_hint(),
+                scene_id: get_system_unlock_hint(system_id),
                 locked_hint: "Complete prerequisite missions to unlock"
             };
             tooltip_manager.show_tooltip(mouse_x, mouse_y, locked_feedback);
@@ -162,7 +154,7 @@ function trigger_keyboard_selection() {
                 faction: get_faction_name(faction_control),
                 status: "LOCKED SYSTEM",
                 threat: threat_level,
-                scene_id: get_unlock_hint(),
+                scene_id: get_system_unlock_hint(system_id),
                 locked_hint: "Complete prerequisite missions to unlock"
             };
             tooltip_manager.show_tooltip(x, y, locked_feedback);

@@ -76,17 +76,12 @@ function launch_mission() {
             star_system.is_visited = true;
             star_system.update_visual_state();
             
-            var starmap_manager = instance_find(obj_StarMapManager, 0);
-            if (starmap_manager != noone) {
-                starmap_manager.mark_system_visited(pending_system_id);
-            }
+            // Mark system as visited using global function
+            mark_star_system_visited(pending_system_id);
         }
         
-        // Update current location
-        var starmap_manager = instance_find(obj_StarMapManager, 0);
-        if (starmap_manager != noone) {
-            starmap_manager.set_current_system(pending_system_id);
-        }
+        // Update current location using global function
+        set_current_star_system(pending_system_id);
         
         // Set dialog exit room
         set_dialog_exit_room(Room_StarMap);
