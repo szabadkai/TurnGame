@@ -357,8 +357,14 @@ function set_active_save_slot(slot_index) {
 
 // Check if specific save slot exists
 function save_slot_exists(slot_index) {
-    var save_file = "save_slot_" + string(slot_index) + ".sav";
-    return file_exists(save_file);
+    // Check both persistent and temp locations (same logic as save system)
+    var persistent_path = get_persistent_save_file_path(slot_index);
+    var temp_path = get_save_file_path(slot_index);
+    
+    var exists = (persistent_path != "" && file_exists(persistent_path)) || file_exists(temp_path);
+    show_debug_message("save_slot_exists(" + string(slot_index) + "): " + string(exists) + " (persistent: " + string(persistent_path != "" && file_exists(persistent_path)) + ", temp: " + string(file_exists(temp_path)) + ")");
+    
+    return exists;
 }
 
 // Get save slot info string

@@ -460,7 +460,9 @@ function refresh_star_system_instances_from_state() {
 // Load save data from active save slot
 function load_star_map_save_data_internal() {
     var slot_to_use = variable_global_exists("active_save_slot") ? global.active_save_slot : 1;
-    var save_file = "save_slot_" + string(slot_to_use) + ".sav";
+    // Prefer persistent location if available
+    var persistent_path = get_persistent_save_file_path(slot_to_use);
+    var save_file = (persistent_path != "" && file_exists(persistent_path)) ? persistent_path : ("saves/save_slot_" + string(slot_to_use) + ".sav");
     
     if (!file_exists(save_file)) {
         show_debug_message("StarMapCore: No save file found - using defaults");
